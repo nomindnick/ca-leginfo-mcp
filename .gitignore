@@ -1,0 +1,26 @@
+# Data artifacts — rebuilt from source, never committed
+*.zip
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+*.lob
+*.dat
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+
+# Environment / secrets
+.env
+.env.*
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
