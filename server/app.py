@@ -158,6 +158,22 @@ def chapter_to_bill(year: int, chapter: int, kind: str = "statutes",
                                  ex_session)
 
 
+@mcp.custom_route("/health", methods=["GET"])
+async def health(request):
+    """Liveness + freshness for platform checks and monitoring."""
+    from starlette.responses import JSONResponse
+
+    dbs = _get_dbs()
+    try:
+        with dbs.current() as con:
+            meta = dict(con.execute(
+                "SELECT key, value FROM meta WHERE key IN "
+                "('law_extract_date', 'bill_extract_date', 'build_utc')"))
+    except Exception as e:  # noqa: BLE001 — health must answer, not raise
+        return JSONResponse({"ok": False, "error": repr(e)}, status_code=503)
+    return JSONResponse({"ok": True, "archive": dbs.has_archive, **meta})
+
+
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(
         prog="ca-leginfo-server",
@@ -195,9 +211,29 @@ def main(argv: list[str] | None = None) -> None:
 
     if args.transport == "stdio":
         mcp.run(transport="stdio")
-    else:
-        mcp.run(transport="streamable-http", host=args.host, port=args.port,
-                stateless_http=True, json_response=True)
+        return
+
+    # HTTP: build the Starlette app ourselves so we can add rate limiting
+    # (SPEC §3). Behind Railway's proxy the Host header is the public
+    # domain — enable DNS-rebinding protection only when ALLOWED_HOSTS
+    # names it; local direct binds don't need it for public data.
+    import uvicorn
+    from mcp.server.transport_security import TransportSecuritySettings
+
+    from server.ratelimit import RateLimitMiddleware
+
+    allowed = [h.strip() for h in
+               os.environ.get("ALLOWED_HOSTS", "").split(",") if h.strip()]
+    security = TransportSecuritySettings(
+        enable_dns_rebinding_protection=bool(allowed),
+        allowed_hosts=allowed)
+    http_app = mcp.streamable_http_app(
+        json_response=True, stateless_http=True,
+        transport_security=security)
+    wrapped = RateLimitMiddleware(
+        http_app,
+        per_minute=int(os.environ.get("RATE_LIMIT_PER_MIN", "120")))
+    uvicorn.run(wrapped, host=args.host, port=args.port, log_level="info")
 
 
 if __name__ == "__main__":
