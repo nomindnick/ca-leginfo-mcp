@@ -70,6 +70,18 @@ deployment follows.
   Fallback if Railway disk/bandwidth is awkward: GitHub Actions nightly.
 - **Server:** follows the user's existing FPPC-project deployment pattern
   (Railway + R2). Read-only public legal data; simple rate limiting.
+- *As deployed (Phase 4):* Railway project `ca-leginfo-mcp`, two services
+  from one Dockerfile — `server` (`deploy/boot.py`: R2 sync on boot,
+  6-hourly conditional refresh, `/health`; artifacts on container disk —
+  Railway volumes cap at 5 GB via API, and R2 egress is free, so
+  redeploys just re-download) and `nightly` (`deploy/nightly.py`, cron
+  10:00 UTC, 5 GB `/data` volume caching the Sunday law zip and last
+  night's artifact for the sanity gate's non-regression checks). The
+  daily zip is chosen by HEAD-probing all seven day names for the newest
+  Last-Modified; the law zip name is auto-detected from the site index
+  (session-rollover-proof). R2 bucket `ca-leginfo` (S3 API, private):
+  `current.db`, `archive.db`, dated build/sanity reports under
+  `reports/`.
 
 ## 4. Database schema
 

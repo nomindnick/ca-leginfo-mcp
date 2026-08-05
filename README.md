@@ -15,8 +15,11 @@ Lets an attorney's AI tool:
 
 ## Status
 
-Phases 1–3 complete (ingest pipeline, archives, MCP server). Next per
-[SPEC.md](SPEC.md): deployment (Phase 4, Railway + R2).
+All four build phases complete (ingest pipeline, archives, MCP server,
+deployment). The server runs on Railway with artifacts in Cloudflare R2,
+rebuilt nightly ([`deploy/`](deploy/)):
+
+    https://server-production-602d.up.railway.app/mcp   (streamable HTTP)
 
 - [`ingest/`](ingest/) builds both corpus artifacts from the pubinfo
   bulk zips: `current.db` (~40 s nightly: current law + session, FTS,
@@ -32,6 +35,11 @@ Phases 1–3 complete (ingest pipeline, archives, MCP server). Next per
   explicit coverage statements. Run locally:
   `ca-leginfo-server --current-db … --archive-db …` (stdio; `--transport
   http` for streamable HTTP).
+- [`deploy/`](deploy/) is the Railway + R2 layer: `boot.py` syncs the
+  artifacts from R2 and serves (`/health` reports freshness); a nightly
+  cron (`nightly.py`, 10:00 UTC) rebuilds current.db from the freshest
+  pubinfo daily zip, gates it against last night's artifact, and
+  uploads only on PASS. Simple per-client rate limiting on HTTP.
 
 The feasibility spike that preceded the build is preserved in
 [`spike/`](spike/) — see [SPIKE_FINDINGS.md](SPIKE_FINDINGS.md).
