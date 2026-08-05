@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?><caml:MeasureDoc version="1.0" xsi:schemaLocation="http://lc.ca.gov/legalservices/schemas/caml.1# xca.1.xsd" xmlns:caml="http://lc.ca.gov/legalservices/schemas/caml.1#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<!-- Copyright © Legislative Counsel Bureau, State of California. -->
+
+  <caml:Description>
+    
+    <caml:Id>CHR198900088</caml:Id>
+    <caml:VersionNum>96</caml:VersionNum>
+    <caml:History>
+      <caml:Action>
+        <caml:ActionText>FILED</caml:ActionText>
+        <caml:ActionDate>1989-07-26</caml:ActionDate>
+      </caml:Action>
+      <caml:Action>
+        <caml:ActionText>PASSED_ASSEMBLY</caml:ActionText>
+        <caml:ActionDate>1989-07-20</caml:ActionDate>
+      </caml:Action>
+      <caml:Action>
+        <caml:ActionText>PASSED_SENATE</caml:ActionText>
+        <caml:ActionDate>1989-07-10</caml:ActionDate>
+      </caml:Action>
+      <caml:Action>
+        <caml:ActionText>INTRODUCED</caml:ActionText>
+        <caml:ActionDate>1989-03-30</caml:ActionDate>
+      </caml:Action>
+    </caml:History>
+    <caml:LegislativeInfo>
+      <caml:SessionYear>1989</caml:SessionYear>
+      <caml:SessionNum>0</caml:SessionNum>
+      <caml:MeasureType>SJR</caml:MeasureType>
+      <caml:MeasureNum>27</caml:MeasureNum>
+      <caml:MeasureState>CHP</caml:MeasureState>
+      <caml:ChapterYear>1989</caml:ChapterYear>
+      <caml:ChapterType>CHR</caml:ChapterType>
+      <caml:ChapterSessionNum>0</caml:ChapterSessionNum>
+      <caml:ChapterNum>88</caml:ChapterNum>
+    </caml:LegislativeInfo>
+    <caml:Authors>
+      <caml:Legislator>
+        <caml:Contribution>LEAD_AUTHOR</caml:Contribution>
+        <caml:House>SENATE</caml:House>
+        <caml:Name>Mello</caml:Name>
+      </caml:Legislator>
+      <caml:Legislator>
+        <caml:Contribution>PRINCIPAL_COAUTHOR</caml:Contribution>
+        <caml:House>ASSEMBLY</caml:House>
+        <caml:Name>Farr</caml:Name>
+      </caml:Legislator>
+      <caml:Legislator>
+        <caml:Contribution>PRINCIPAL_COAUTHOR</caml:Contribution>
+        <caml:House>ASSEMBLY</caml:House>
+        <caml:Name>Hauser</caml:Name>
+      </caml:Legislator>
+      <caml:Legislator>
+        <caml:Contribution>COAUTHOR</caml:Contribution>
+        <caml:House>SENATE</caml:House>
+        <caml:Name>Keene</caml:Name>
+      </caml:Legislator>
+      <caml:Legislator>
+        <caml:Contribution>COAUTHOR</caml:Contribution>
+        <caml:House>SENATE</caml:House>
+        <caml:Name>Maddy</caml:Name>
+      </caml:Legislator>
+      <caml:Legislator>
+        <caml:Contribution>COAUTHOR</caml:Contribution>
+        <caml:House>SENATE</caml:House>
+        <caml:Name>Marks</caml:Name>
+      </caml:Legislator>
+    </caml:Authors>
+    <caml:Title>Relative to the operation and maintenance of low-use harbors and marinas.</caml:Title>
+    <caml:GeneralSubject>
+      <caml:Subject>Harbors:  dredging and maintenance.</caml:Subject>
+    </caml:GeneralSubject>
+    <caml:DigestText>
+      <p>The measure would urge the Army Corps of Engineers to reevaluate its proposed reduction in funding for the dredging and maintenance of low-use harbors and marinas, and to consider as its first alternative a proportionate reduction of the funding for the dredging and maintenance of all harbors and marinas.</p>
+    </caml:DigestText>
+  </caml:Description>
+  <caml:Resolution id="id_79e34657-f113-11d8-bea5-c227ce4476df">
+    <caml:Whereas id="id_79e34658-f113-11d8-bea5-c227ce4476df">
+      <caml:Content>
+        <p>WHEREAS, The Army Corps of Engineers has announced a reduction in funding for the dredging and maintenance of low-use harbors and marinas which land less than 25,000 tons of fish; and</p>
+      </caml:Content>
+    </caml:Whereas>
+    <caml:Whereas id="id_79e34659-f113-11d8-bea5-c227ce4476df">
+      <caml:Content>
+        <p>WHEREAS, This reduction will require state and local governments to contribute substantial funds to dredge and maintain harbors throughout the state, an estimated annual amount of at least $8,000,000 in California; and</p>
+      </caml:Content>
+    </caml:Whereas>
+    <caml:Whereas id="id_79e3465a-f113-11d8-bea5-c227ce4476df">
+      <caml:Content>
+        <p>WHEREAS, Failure to fund these essential dredging and maintenance operations could close the entire commercial fishing industry in California, particularly in light of the efforts of the Department of Fish and Game to reduce the quantity of certain fish being taken and thereby replenishing the resource; and</p>
+      </caml:Content>
+    </caml:Whereas>
+    <caml:Whereas id="id_79e3465b-f113-11d8-bea5-c227ce4476df">
+      <caml:Content>
+        <p>WHEREAS, A continuance of the essential dredging and maintenance activities conducted by the Army Corps of Engineers for California’s harbors and marinas is vital to the welfare of all of California’s maritime-related industries; now, therefore, be it</p>
+      </caml:Content>
+    </caml:Whereas>
+    <caml:Resolved id="id_79e5b75c-f113-11d8-bea5-c227ce4476df">
+      <caml:Content>
+        <p>
+          <i>Resolved by the Senate and Assembly of the State of California, jointly,</i> That the Legislature of the State of California urges the United States Army Corps of Engineers to reevaluate its proposed reduction in funding for the dredging and maintenance of low-use harbors and marinas, and to consider as its first alternative a proportionate reduction of the funding for the dredging and maintenance of all harbors and marinas; and be it further
+        </p>
+      </caml:Content>
+    </caml:Resolved>
+    <caml:Resolved id="id_79e5b75d-f113-11d8-bea5-c227ce4476df">
+      <caml:Content>
+        <p>
+          <i>Resolved,</i> That the Secretary of the Senate transmit copies of this resolution to the President and Vice President of the United States, to the Secretary of the Army, to the Speaker of the House of Representatives, and to each Senator and Representative from California in the Congress of the United States.
+        </p>
+      </caml:Content>
+    </caml:Resolved>
+  </caml:Resolution>
+</caml:MeasureDoc>

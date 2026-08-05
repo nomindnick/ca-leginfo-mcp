@@ -18,6 +18,7 @@ import logging
 import sys
 from pathlib import Path
 
+from ingest.archive import build_archive_db
 from ingest.build import build_current_db
 from ingest.sanity import check_db
 
@@ -40,6 +41,21 @@ def main(argv: list[str] | None = None) -> int:
     b.add_argument("--no-analysis-text", action="store_true")
     b.add_argument("--report", type=Path, help="write build report JSON here")
 
+    a = sub.add_parser("build-archive",
+                       help="build archive.db from session zips")
+    a.add_argument("--zips-dir", type=Path, required=True,
+                   help="directory containing pubinfo_YYYY.zip files")
+    a.add_argument("--sessions",
+                   help="comma-separated years (default: every "
+                        "pubinfo_YYYY.zip in --zips-dir)")
+    a.add_argument("--out", type=Path, required=True)
+    a.add_argument("--resume", action="store_true",
+                   help="keep completed sessions in an existing out db")
+    a.add_argument("--workers", type=int, default=4)
+    a.add_argument("--no-bill-text", action="store_true")
+    a.add_argument("--no-analysis-text", action="store_true")
+    a.add_argument("--report", type=Path)
+
     s = sub.add_parser("sanity", help="gate a built current.db")
     s.add_argument("db", type=Path)
     s.add_argument("--previous", type=Path,
@@ -61,6 +77,25 @@ def main(argv: list[str] | None = None) -> int:
             bill_zip=args.bill_zip,
             incremental_zip=args.incremental,
             fts=not args.no_fts,
+            analysis_text=not args.no_analysis_text)
+        if args.report:
+            args.report.write_text(report.to_json())
+        print(report.to_json())
+        return 0
+
+    if args.command == "build-archive":
+        zips = sorted(args.zips_dir.glob("pubinfo_[0-9][0-9][0-9][0-9].zip"))
+        if args.sessions:
+            wanted = {y.strip() for y in args.sessions.split(",")}
+            zips = [z for z in zips if z.stem.split("_")[1] in wanted]
+            missing = wanted - {z.stem.split("_")[1] for z in zips}
+            if missing:
+                parser.error(f"session zips not found: {sorted(missing)}")
+        if not zips:
+            parser.error(f"no session zips in {args.zips_dir}")
+        report = build_archive_db(
+            zips, args.out, resume=args.resume, workers=args.workers,
+            bill_text=not args.no_bill_text,
             analysis_text=not args.no_analysis_text)
         if args.report:
             args.report.write_text(report.to_json())

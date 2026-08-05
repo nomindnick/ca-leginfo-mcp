@@ -63,6 +63,7 @@ class BuildReport:
     analysis_missing_lob: int = 0
     analysis_unconverted_doc: int = 0
     analysis_extract_errors: int = 0
+    veto_texts: int = 0
     law_extract_date: str | None = None
     bill_extract_date: str | None = None
     session_year: str | None = None
@@ -106,6 +107,7 @@ def build_current_db(
                 _build_section_refs(con, report, residue_cap)
                 if analysis_text:
                     _extract_analysis_text(con, report, zf_bill or zf_law)
+                _extract_veto_text(con, report, zf_bill or zf_law)
                 _create_indexes(con)
                 if fts:
                     _build_fts(con)
@@ -324,7 +326,11 @@ def _extract_analysis_text(con, report: BuildReport, zf) -> None:
             # lob-name munging can collide, and one lob shared by two
             # analysis rows must yield text for both.
             doc_batch.append((str(aid), data))
-        elif text is not None:
+        elif text is None:
+            # rtf or other unhandled format: counted, never silent.
+            report.analysis_extract_errors += 1
+            report.warnings.append(f"analysis {aid}: unhandled format {kind}")
+        else:
             inserts.append((aid, kind, zlib.compress(text.encode(), _ZLIB_LEVEL)))
     if doc_batch:
         if analyses.soffice_available():
@@ -351,6 +357,30 @@ def _extract_analysis_text(con, report: BuildReport, zf) -> None:
     report.analysis_formats = dict(formats)
     log.info("analysis text: %d stored (%s) in %.0fs", len(inserts),
              dict(formats), time.time() - t)
+
+
+def _extract_veto_text(con, report: BuildReport, zf) -> None:
+    """Veto message text (plain-text lobs, 2015+ format) — tool 6 returns
+    veto messages for current-session bills too."""
+    con.execute("""CREATE TABLE veto_text(
+        bill_id, veto_date, format, text_zlib)""")
+    names = set(zf.namelist())
+    inserts = []
+    for bid, vdate, lob in con.execute(
+            "SELECT bill_id, veto_date, lob_file FROM veto_message"):
+        if not lob or lob not in names:
+            continue
+        try:
+            kind, text = analyses.extract_one(zf.read(lob))
+            if text is None:
+                raise ValueError(f"unhandled veto format {kind}")
+            inserts.append((bid, vdate, kind,
+                            zlib.compress(text.encode(), _ZLIB_LEVEL)))
+        except Exception as e:  # noqa: BLE001 — count, never fatal
+            report.warnings.append(f"veto {bid}: {e!r}")
+    con.executemany("INSERT INTO veto_text VALUES (?,?,?,?)", inserts)
+    report.veto_texts = len(inserts)
+    log.info("veto texts: %d", len(inserts))
 
 
 def _create_indexes(con) -> None:

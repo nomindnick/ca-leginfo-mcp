@@ -15,17 +15,21 @@ Lets an attorney's AI tool:
 
 ## Status
 
-Phase 1 (ingest pipeline) complete: the [`ingest/`](ingest/) package
-builds `current.db` from the pubinfo bulk zips (~40 s for the full
-2025–26 session + all current law), with a sanity gate that blocks bad
-artifacts (`python -m ingest build` / `python -m ingest sanity`). Tests
-run against byte-exact real-data fixtures in
-[`tests/fixtures/`](tests/fixtures/).
+Phases 1–2 (ingest pipeline + archives) complete. The
+[`ingest/`](ingest/) package builds both corpus artifacts from the
+pubinfo bulk zips:
 
-Next per [SPEC.md](SPEC.md): the archive builder (Phase 2), MCP server
-(Phase 3), deployment (Phase 4). The feasibility spike that preceded the
-build is preserved in [`spike/`](spike/) —
-see [SPIKE_FINDINGS.md](SPIKE_FINDINGS.md).
+- `current.db` (~40 s nightly): current law + 2025–26 session, FTS,
+  parsed bill→section refs, analysis text — with a sanity gate that
+  blocks bad artifacts (`python -m ingest build` / `sanity`).
+- `archive.db` (4.7 GB, 18 sessions 1989–2023, ~35 min once):
+  283k bill version texts, 371k text-extracted committee/floor analyses,
+  votes, vetoes, ~1M parsed section refs, per-session coverage matrix
+  (`python -m ingest build-archive`).
+
+Next per [SPEC.md](SPEC.md): MCP server (Phase 3), deployment (Phase 4).
+The feasibility spike that preceded the build is preserved in
+[`spike/`](spike/) — see [SPIKE_FINDINGS.md](SPIKE_FINDINGS.md).
 
 ## Data source
 

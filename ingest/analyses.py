@@ -52,7 +52,11 @@ def extract_docx(data: bytes) -> str:
 def extract_html(data: bytes) -> str:
     from bs4 import BeautifulSoup
 
-    return BeautifulSoup(data, "html.parser").get_text("\n").strip()
+    text = BeautifulSoup(data, "html.parser").get_text("\n").strip()
+    # 1990s-era analysis HTML is whitespace art: collapse trailing spaces
+    # and runs of blank lines, keep paragraph breaks.
+    text = re.sub(r"[ \t]+\n", "\n", text)
+    return re.sub(r"\n{3,}", "\n\n", text)
 
 
 def extract_text(data: bytes) -> str:
@@ -69,22 +73,29 @@ def soffice_available() -> bool:
 
 
 def extract_doc_batch(items: list[tuple[str, bytes]],
-                      timeout: int = 600) -> dict[str, str]:
+                      timeout: int = 600,
+                      profile_dir: str | None = None) -> dict[str, str]:
     """Convert legacy .doc payloads with one LibreOffice invocation.
 
     Returns {name: text}; a file LibreOffice could not convert maps to "".
     Batching matters: one soffice start-up amortized over ~30 files ran at
     30 files / 2.4 s in the spike.
+
+    profile_dir: a distinct LibreOffice user-profile directory per
+    concurrent caller — soffice instances sharing a profile refuse to run
+    in parallel; with distinct profiles they parallelize cleanly.
     """
     out: dict[str, str] = {}
     with tempfile.TemporaryDirectory() as td:
         tdp = Path(td)
         for name, data in items:
             (tdp / f"{name}.doc").write_bytes(data)
-        subprocess.run(
-            ["soffice", "--headless", "--convert-to", "txt:Text",
-             "--outdir", td] + [str(tdp / f"{n}.doc") for n, _ in items],
-            capture_output=True, timeout=timeout, check=False)
+        cmd = ["soffice", "--headless"]
+        if profile_dir:
+            cmd.append(f"-env:UserInstallation=file://{profile_dir}")
+        cmd += (["--convert-to", "txt:Text", "--outdir", td]
+                + [str(tdp / f"{n}.doc") for n, _ in items])
+        subprocess.run(cmd, capture_output=True, timeout=timeout, check=False)
         for name, _ in items:
             txt = tdp / f"{name}.txt"
             out[name] = (txt.read_text(errors="replace").strip()

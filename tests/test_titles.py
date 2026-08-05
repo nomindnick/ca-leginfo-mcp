@@ -262,6 +262,44 @@ def test_welfare_and_institution_code_typo():
     assert r.refs == [Ref("amend", "WIC", "14005.27")]
 
 
+# Real title of SB 198 (1999-2000), version 19990SB19895CHP: a
+# three-target compound — an uncodified district act (lowercase-connector
+# name), a session-law chapter (add-form "to Chapter M of the Statutes"),
+# and one genuine Public Resources Code section.
+SB198_1999 = (
+    "An act to amend Article 6.1 (commencing with Section 105) of the Lake "
+    "Cuyamaca Recreation and Park District Act (added by Chapter 1982 of "
+    "the Statutes of 1963), to add Section 76.5 to Chapter 1654 of the "
+    "Statutes of 1961, and to add Section 5782.5.1 to the Public Resources "
+    "Code, relating to recreation and park districts, and declaring the "
+    "urgency thereof, to take effect immediately."
+)
+
+
+def test_mixed_uncodified_sessionlaw_and_code_targets():
+    refs = {(r.action, r.code, r.section)
+            for r in parse_title(SB198_1999).refs}
+    # District-act struct ref: not misattributed to PRC.
+    assert ("amend", "PRC", "105") not in refs
+    # Session-law add-form: not a code ref.
+    assert ("add", "PRC", "76.5") not in refs
+    # The genuine code ref survives.
+    assert ("add", "PRC", "5782.5.1") in refs
+
+
+def test_whole_constitutional_article_both_forms():
+    # Real 1999 resolution: adding a whole article, no section list.
+    base = (
+        "A resolution to propose to the people of the State of California "
+        "an amendment to the Constitution of the State, by adding Article "
+        "XXII {}, relating to public contracts.")
+    for form in ("thereof", "thereto"):
+        result = parse_title(base.format(form))
+        assert result.status == "ok"
+        assert any(r.code == "CONS" and r.section == "Art. XXII"
+                   for r in result.refs)
+
+
 def test_appropriations_boilerplate_ignored():
     r = parse_title(
         "An act making appropriations for the support of the government "

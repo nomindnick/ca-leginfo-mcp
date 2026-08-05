@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="UTF-8"?><caml:MeasureDoc version="1.0" xsi:schemaLocation="http://lc.ca.gov/legalservices/schemas/caml.1# xca.1.xsd" xmlns:caml="http://lc.ca.gov/legalservices/schemas/caml.1#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<!-- Copyright © Legislative Counsel Bureau, State of California. -->
+
+  <caml:Description>
+    
+    <caml:Id>CHP199910001</caml:Id>
+    <caml:VersionNum>92</caml:VersionNum>
+    <caml:History>
+      <caml:Action>
+        <caml:ActionText>FILED</caml:ActionText>
+        <caml:ActionDate>1999-03-29</caml:ActionDate>
+      </caml:Action>
+      <caml:Action>
+        <caml:ActionText>APPROVED</caml:ActionText>
+        <caml:ActionDate>1999-03-29</caml:ActionDate>
+      </caml:Action>
+      <caml:Action>
+        <caml:ActionText>PASSED_SENATE</caml:ActionText>
+        <caml:ActionDate>1999-03-23</caml:ActionDate>
+      </caml:Action>
+      <caml:Action>
+        <caml:ActionText>PASSED_ASSEMBLY</caml:ActionText>
+        <caml:ActionDate>1999-03-22</caml:ActionDate>
+      </caml:Action>
+      <caml:Action>
+        <caml:ActionText>INTRODUCED</caml:ActionText>
+        <caml:ActionDate>1999-01-19</caml:ActionDate>
+      </caml:Action>
+    </caml:History>
+    <caml:LegislativeInfo>
+      <caml:SessionYear>1999</caml:SessionYear>
+      <caml:SessionNum>1</caml:SessionNum>
+      <caml:MeasureType>SB</caml:MeasureType>
+      <caml:MeasureNum>2</caml:MeasureNum>
+      <caml:MeasureState>CHP</caml:MeasureState>
+      <caml:ChapterYear>1999</caml:ChapterYear>
+      <caml:ChapterType>CHP</caml:ChapterType>
+      <caml:ChapterSessionNum>1</caml:ChapterSessionNum>
+      <caml:ChapterNum>1</caml:ChapterNum>
+    </caml:LegislativeInfo>
+    <caml:Authors>
+      <caml:Legislator>
+        <caml:Contribution>LEAD_AUTHOR</caml:Contribution>
+        <caml:House>SENATE</caml:House>
+        <caml:Name>O'Connell</caml:Name>
+      </caml:Legislator>
+      <caml:Legislator>
+        <caml:Contribution>PRINCIPAL_COAUTHOR</caml:Contribution>
+        <caml:House>ASSEMBLY</caml:House>
+        <caml:Name>Maldonado</caml:Name>
+      </caml:Legislator>
+      <caml:Legislator>
+        <caml:Contribution>COAUTHOR</caml:Contribution>
+        <caml:House>SENATE</caml:House>
+        <caml:Name>Polanco</caml:Name>
+      </caml:Legislator>
+      <caml:Legislator>
+        <caml:Contribution>COAUTHOR</caml:Contribution>
+        <caml:House>SENATE</caml:House>
+        <caml:Name>Solis</caml:Name>
+      </caml:Legislator>
+      <caml:Legislator>
+        <caml:Contribution>COAUTHOR</caml:Contribution>
+        <caml:House>ASSEMBLY</caml:House>
+        <caml:Name>Alquist</caml:Name>
+      </caml:Legislator>
+      <caml:Legislator>
+        <caml:Contribution>COAUTHOR</caml:Contribution>
+        <caml:House>ASSEMBLY</caml:House>
+        <caml:Name>Calderon</caml:Name>
+      </caml:Legislator>
+      <caml:Legislator>
+        <caml:Contribution>COAUTHOR</caml:Contribution>
+        <caml:House>ASSEMBLY</caml:House>
+        <caml:Name>Campbell</caml:Name>
+      </caml:Legislator>
+      <caml:Legislator>
+        <caml:Contribution>COAUTHOR</caml:Contribution>
+        <caml:House>ASSEMBLY</caml:House>
+        <caml:Name>Correa</caml:Name>
+      </caml:Legislator>
+      <caml:Legislator>
+        <caml:Contribution>COAUTHOR</caml:Contribution>
+        <caml:House>ASSEMBLY</caml:House>
+        <caml:Name>Cunneen</caml:Name>
+      </caml:Legislator>
+      <caml:Legislator>
+        <caml:Contribution>COAUTHOR</caml:Contribution>
+        <caml:House>ASSEMBLY</caml:House>
+        <caml:Name>Honda</caml:Name>
+      </caml:Legislator>
+    </caml:Authors>
+    <caml:Title>An act to amend Sections 37252 and 48980 of, to add Chapter 8 (commencing with Section 60850) to Part 33 of, and to repeal Article 2.5 (commencing with Section 51215) of Chapter 2 of Part 28 of, the Education Code, relating to education accountability, and making an appropriation therefor.</caml:Title>
+    <caml:GeneralSubject>
+      <caml:Subject>Education accountability:  high school exit examination.</caml:Subject>
+    </caml:GeneralSubject>
+    <caml:DigestText>
+      <p>(1)
+        <span class="EnSpace"/>Existing law requires the governing board of each school district maintaining any or all of grades 7 to 12, inclusive, to offer summer school instructional programs for pupils enrolled in those grades who were assessed as not meeting the district’s adopted standards of proficiency in basic skills.  Existing law requires the summer school programs also to be offered to pupils who were enrolled in grade 12 during the prior school year after the completion of grade 12, and upon the successful completion of the summer program, authorizes these pupils to be reassessed for purposes of meeting the district’s standards of proficiency.
+      </p>
+      <p>This bill would instead require these school districts to offer summer school instruction for pupils who do not demonstrate sufficient progress toward passing the exit examination required for high school graduation.  The bill would delete the authorization for the reassessment of pupils who were enrolled in grade 12 during the prior school year and successfully completed the summer program after the completion of grade 12.  The bill would provide that these provisions become operative on January 1, 2000.</p>
+      <p>(2)
+        <span class="EnSpace"/>Existing law requires the governing board of each school district maintaining a junior or senior high school to adopt standards of proficiency in basic skills for pupils and requires the governing board of each school district maintaining grade 6 or 8, or the equivalent, to adopt standards of proficiency in basic skills for pupils attending these grades.  These standards are required to be directly related to the district’s instructional program and to include reading comprehension, writing, and computation skills, in the English language.  Existing law requires the governing board of each school district to take appropriate steps to ensure that the progress towards proficiency in basic skills is assessed in the English language during the regular instructional program at least once during the 4th through 6th grade, inclusive, once during the 7th through 9th grade, inclusive, and twice during the 10th through 11th grade, inclusive.  Proficiency assessments are required to be used to determine whether pupils need additional assistance in basic skills and if so, the appropriate content and mode of any additional assistance.  Existing law prohibits an English-speaking pupil or limited-English-proficient pupil from receiving a high school diploma unless he or she passes the English language proficiency assessment normally required for graduation.  If a pupil does not demonstrate sufficient progress toward mastery of basic skills to meet prescribed standards upon exit from the 6th, 8th, or 12th grade, whichever is appropriate, existing law authorizes the principal to arrange a conference between the parent or guardian of the pupil and a certificated employee familiar with the pupil’s progress to discuss the results of the individual pupil assessment and recommended actions to further the pupil’s progress.  Notices to pupils in grades 9 to 12, inclusive, are required to inform the parent or guardian that the pupil will not receive a high school diploma unless the prescribed standards are met.  Instruction in basic skills is required to be provided for any pupil who does not demonstrate sufficient progress toward mastery of basic skills and continue until the pupil has been given numerous opportunities to achieve mastery.  Existing law allows that instruction to be provided in summer school programs.  Existing law prohibits a pupil who was enrolled in the 9th grade, or the equivalent thereof, from receiving a diploma of graduation from high school if he or she has not met the standards of proficiency in basic skills prescribed by the secondary school district governing board and the school district has developed and made available to the pupil remedial instruction programs in basic skills for at least 2 consecutive sessions.
+      </p>
+      <p>This bill would make these provisions inoperative on July 31, 1999, and repeal the provisions on January 1, 2000.</p>
+      <p>(3)
+        <span class="EnSpace"/>Existing law requires pupils to complete certain coursework as a condition to graduation from high school.  Existing law, the Standardized Testing and Reporting Program, requires school districts, charter schools, and county offices of education to administer to each of its pupils in grades 2 to 11, inclusive, an achievement test.
+      </p>
+      <p>This bill would require the Superintendent of Public Instruction, with a High School Exit Examination Standards Panel established by the Superintendent of Public Instruction and with the approval of the State Board of Education, to develop a high school exit examination in language arts and mathematics in accordance with the statewide academically rigorous content standards adopted by the State Board of Education.  The bill would require the State Board of Education to adopt a high school exit examination that is aligned with statewide academically rigorous content standards.  Commencing with the 2003–04 school year and each school year thereafter, the bill would require each pupil completing grade 12 to successfully complete the exit examination as a condition of receiving a diploma of graduation, thereby imposing a state-mandated local program.  The bill would require the State Board of Education, in consultation with the Superintendent of Public Instruction, to study the appropriateness of other criteria by which pupils may demonstrate their competency and receive a diploma.</p>
+      <p>This bill would impose a state-mandated local program by requiring that the exit examination be offered in each public school and state special school that provides instruction in grade 9, 10, 11, or 12 on the dates designated by the Superintendent of Public Instruction, requiring that the results of the examination be returned to each pupil taking the test within 8 weeks of the administration of the exit examination, and requiring provision of supplemental instruction to any pupil who does not demonstrate sufficient progress toward passing of the examination.</p>
+      <p>This bill would, notwithstanding any other provision of law, require a school district to use regularly available resources, general funds appropriated for after school programs, the Student Academic Partnership Program, funds appropriated to prevent social promotion, and funds for other similar supplemental remedial programs to prepare pupils to succeed on the exit examination.  To the extent this would permit expenditure of existing funds for purposes not currently authorized, it would make an appropriation.</p>
+      <p>This bill would appropriate $2,000,000 from the Federal Trust Fund, from GOALS 2000 funds, to the Superintendent of Public Instruction for the purpose of developing the exit examination.  The bill would also appropriate $250,000 from the General Fund to the Superintendent of Public Instruction to provide support services therefor.</p>
+      <p>(4)
+        <span class="EnSpace"/>Existing law requires, at the beginning of the first semester or quarter of the regular school term, the governing board of each school district to notify the parent or guardian of its minor pupils regarding the right or responsibility of the parent or guardian under certain provisions of law.
+      </p>
+      <p>This bill would additionally require that notice to include notice that, commencing in the 2003–04 school year, and each school year thereafter, each pupil completing the 12th grade will be required to successfully  pass the high school exit examination, and would be required to include, at a minimum, the date of the examination, the requirements for passing the examination, and the consequences of not passing the examination and to inform parents and guardians that passing the examination is a condition of graduation, thereby imposing a state-mandated local program.
+   
+        
+        (5)
+        <span class="EnSpace"/>The California Constitution requires the state to reimburse local agencies and school districts for certain costs mandated by the state. Statutory provisions establish procedures for making that reimbursement, including the creation of a State Mandates Claims Fund to pay the costs of mandates that do not exceed $1,000,000 statewide and other procedures for claims whose statewide costs exceed $1,000,000.
+      </p>
+      <p>This bill would provide that, if the Commission on State Mandates determines that the bill contains costs mandated by the state, reimbursement for those costs shall be made pursuant to these statutory provisions.</p>
+    </caml:DigestText>
+    <caml:DigestKey>
+      <caml:Appropriation>YES</caml:Appropriation>
+    <caml:Urgency>NO</caml:Urgency><caml:TaxLevy>NO</caml:TaxLevy></caml:DigestKey>
+  </caml:Description>
+  <caml:Bill id="id_c3f8d4c3-eff5-11d8-a321-9d7424cb6a2a">
+    <caml:Preamble>The people of the State of California do enact as follows:</caml:Preamble>
+    <caml:BillSection id="id_c3f8d4c4-eff5-11d8-a321-9d7424cb6a2a">
+      <caml:Num>SECTION 1.</caml:Num>
+      <caml:Content>
+        <p>The Legislature finds and declares both of the following:</p>
+        <p>(a)
+          <span class="EnSpace"/>Local proficiency standards established pursuant to Section 51215 of the Education Code are generally set below a high school level and are not consistent with state adopted academic content standards.
+        </p>
+        <p>(b)
+          <span class="EnSpace"/>In order to significantly improve pupil achievement in high school and to ensure that pupils who graduate from high school can demonstrate grade level competency in reading, writing, and mathematics, the state must set higher standards for high school graduation.
+        </p>
+      </caml:Content>
+    </caml:BillSection>
+    <caml:BillSection id="id_c404bba5-eff5-11d8-a321-9d7424cb6a2a">
+      <caml:Num>SEC. 2.</caml:Num>
+      <caml:ActionLine action="IS_AMENDED" xlink:href="urn:caml:codes:EDC:caml#xpointer(%2F%2Fcaml%3ALawSection%5Bcaml%3ANum%3D'37252.'%5D)">Section 37252 of the Education Code is amended to read:</caml:ActionLine>
+      <caml:Fragment>
+        <caml:LawSection id="id_c404bba6-eff5-11d8-a321-9d7424cb6a2a">
+          <caml:Num>37252.</caml:Num>
+          <caml:LawSectionVersion id="id_c4072ca7-eff5-11d8-a321-9d7424cb6a2a">
+            <caml:Content>
+              <p>(a)
+                <span class="EnSpace"/>The governing board of each district maintaining any or all of grades 7 to 12, inclusive, shall offer summer school instructional programs, using the amount computed pursuant to Section 42239, for pupils enrolled in grades 7 to 12, inclusive, who  do not demonstrate sufficient progress toward passing the exit examination required for high school graduation pursuant to Chapter 8 (commencing with Section 60850) of Part 33.   Sufficient progress shall be determined on the basis of either of the following:
+              </p>
+              <p>(1)
+                <span class="EnSpace"/>The results of the assessments administered pursuant to Article 4 (commencing with Section 60640) of Chapter 5 of Part 33 and the minimum levels of proficiency recommended by the State Board of Education pursuant to Section 60648.
+              </p>
+              <p>(2)
+                <span class="EnSpace"/>The pupils’ grades and other indicators of academic achievement designated by the district.
+              </p>
+              <p>(b)
+                <span class="EnSpace"/>The summer school programs shall also be offered to pupils who were enrolled in grade 12 during the prior school year after the completion of grade 12.
+              </p>
+              <p>(c)
+                <span class="EnSpace"/>(1)
+                <span class="EnSpace"/>For purposes of this section a pupil shall be considered to be enrolled in a grade immediately upon completion of the preceding grade.
+              </p>
+              <p>(2)
+                <span class="EnSpace"/>For purposes of this section a school district offering a year-round educational program may offer the summer school instructional program authorized by this section during the intersessions of the year-round education program.
+              </p>
+              <p>(3)
+                <span class="EnSpace"/>For the purposes of this section, pupils who do not possess sufficient English language skills to be assessed as set forth in Sections 60850 and 60853, shall be considered pupils who do not demonstrate sufficient progress towards passing the exit examination required for high school graduation and shall receive supplemental instruction  designed to assist the pupils succeed on the high school exit examination.
+              </p>
+              
+            </caml:Content>
+          </caml:LawSectionVersion>
+        </caml:LawSection>
+      </caml:Fragment>
+    </caml:BillSection>
+    <caml:BillSection id="id_c4072ca8-eff5-11d8-a321-9d7424cb6a2a">
+      <caml:Num>SEC. 3.</caml:Num>
+      <caml:ActionLine action="IS_AMENDED" xlink:href="urn:caml:codes:EDC:caml#xpointer(%2F%2Fcaml%3ALawSection%5Bcaml%3ANum%3D'48980.'%5D)">Section 48980 of the Education Code is amended to read:</caml:ActionLine>
+      <caml:Fragment>
+        <caml:LawSection id="id_c4072ca9-eff5-11d8-a321-9d7424cb6a2a">
+          <caml:Num>48980.</caml:Num>
+          <caml:LawSectionVersion id="id_c4072caa-eff5-11d8-a321-9d7424cb6a2a">
+            <caml:Content>
+              <p>(a)
+                <span class="EnSpace"/>At the beginning of the first semester or quarter of the regular school term, the governing board of each school district shall notify the parent or guardian of its minor pupils regarding the right or responsibility of the parent or guardian under Sections 35291, 46014, 48205, 48207, 48208, 49403, 49423, 49451, 49472, 51240, and 51550 and Chapter 2.3 (commencing with Section 32255) of Part 19.
+              </p>
+              <p>(b)
+                <span class="EnSpace"/>The notification also shall advise the parent or guardian of the availability of individualized instruction as prescribed by Section 48206.3, and of the program prescribed by Article 9 (commencing with Section 49510) of Chapter 9.
+              </p>
+              <p>(c)
+                <span class="EnSpace"/>The notification shall also advise the parents and guardians of all pupils attending a school within the district of the schedule of minimum days and pupil-free staff development days, and if any minimum or pupil-free staff development days are scheduled thereafter, the governing board shall notify parents and guardians of the affected pupils as early as possible, but not later than one month before the scheduled minimum or pupil-free day.
+              </p>
+              <p>(d)
+                <span class="EnSpace"/>The notification also may advise the parent or guardian of the importance of investing for future college or university education for their children and of considering appropriate investment options including, but not limited to, United States Savings Bonds.
+              </p>
+              <p>(e)
+                <span class="EnSpace"/>Commencing with the 2000–01 school year, and each school year thereafter, the notification shall advise the parent or guardian of the pupil that, commencing with the 2003–04 school year, and each school year thereafter, each pupil completing 12th grade will be required to successfully pass the high school exit examination administered pursuant to Chapter 8 (commencing with Section 60850) of Part 33.  The notification shall include, at a minimum, the date of the examination, the requirements for passing the examination, and shall inform the parents and guardians regarding the consequences of not passing the examination and shall inform parents and guardians that passing the examination is a condition of graduation.
+              </p>
+              <p>(f)
+                <span class="EnSpace"/>Each school district that elects to provide a fingerprinting program pursuant to Article 10 (commencing with Section 32390) shall inform parents or guardians of the program as specified in Section 32390.
+              </p>
+              <p>(g)
+                <span class="EnSpace"/>Until July 1, 1998, the notification shall also advise the parent or guardian of the availability of the employment-based school attendance options pursuant to subdivision (f) of Section 48204.
+              </p>
+              <p>(h)
+                <span class="EnSpace"/>The notification shall also include a copy of the district’s written policy on sexual harassment established pursuant to Section 212.6, as it relates to pupils.
+              </p>
+              <p>(i)
+                <span class="EnSpace"/>Commencing July 1, 1998, the notification shall include a copy of the written policy of the school district adopted pursuant to Section 51870.5 regarding access by pupils to Internet and online sites.
+              </p>
+              <p>(j)
+                <span class="EnSpace"/>The notification shall advise the parent or guardian of all current statutory attendance options and local attendance options available in the school district.  That notification shall include all options for meeting residency requirements for school attendance, programmatic options offered within the local attendance areas, and any special programmatic options available on both an interdistrict and intradistrict basis.  That notification shall also include a description of all options, a description of the procedure for application for alternative attendance areas or programs, an application form from the district for requesting a change of attendance, and a description of the appeals process available, if any, for a parent or guardian denied a change of attendance.  The notification shall also include an explanation of the current statutory attendance options including, but not limited to, those available under Section 35160.5, Chapter 5 (commencing with Section 46600) of Part 26, subdivision (f) of Section 48204, and Article 1.5 (commencing with Section 48209) of Chapter 2 of Part 27.  The State Department of Education shall produce this portion of the notification and shall distribute it to all school districts.
+              </p>
+              <p>(k)
+                <span class="EnSpace"/>It is the intent of the Legislature that the governing board of each school district annually review the enrollment options available to the pupils within their districts and that the school districts strive to make available enrollment options that meet the diverse needs, potential, and interests of California’s pupils.
+              </p>
+              <p>(
+                <i>l</i>)
+                <span class="EnSpace"/>The notification shall advise the parent or guardian that no pupil may have his or her grade reduced or lose academic credit for any absence or absences excused pursuant to Section 48205 when missed assignments and tests that can reasonably be provided are satisfactorily completed within a reasonable period of time, and shall include the full text of Section 48205.
+              </p>
+              
+            </caml:Content>
+          </caml:LawSectionVersion>
+        </caml:LawSection>
+      </caml:Fragment>
+    </caml:BillSection>
+    <caml:BillSection id="id_c409769b-eff5-11d8-a321-9d7424cb6a2a">
+      <caml:Num>SEC. 4.</caml:Num>
+      <caml:ActionLine action="IS_REPEALED" xlink:href="urn:caml:codes:EDC:caml#xpointer(%2F%2Fcaml%3ALawHeading%5B%40type%3D'PART'%20and%20caml%3ANum%3D'28.'%5D%2Fcaml%3ALawHeading%5B%40type%3D'CHAPTER'%20and%20caml%3ANum%3D'2.'%5D%2Fcaml%3ALawHeading%5B%40type%3D'ARTICLE'%20and%20caml%3ANum%3D'2.5.'%5D)">Article 2.5 (commencing with Section 51215) of Chapter 2 of Part 28 of the Education Code shall become inoperative on July 31, 1999, and as of January 1, 2000, is repealed.</caml:ActionLine>
+      <caml:Fragment/>
+    </caml:BillSection>
+    <caml:BillSection id="id_c40be79c-eff5-11d8-a321-9d7424cb6a2a">
+      <caml:Num>SEC. 5.</caml:Num>
+      <caml:ActionLine action="IS_ADDED" xlink:href="urn:caml:codes:EDC:caml#xpointer(%2F%2Fcaml%3ALawHeading%5B%40type%3D'PART'%20and%20caml%3ANum%3D'33.'%5D%2Fcaml%3ALawHeading%5B%40type%3D'CHAPTER'%20and%20caml%3ANum%3D'8.'%5D)">Chapter 8 (commencing with Section 60850) is added to Part 33 of the Education Code, to read:</caml:ActionLine>
+      <caml:Fragment>
+        <caml:LawHeading id="id_c40be79d-eff5-11d8-a321-9d7424cb6a2a" type="CHAPTER">
+          <caml:Num>8.</caml:Num>
+          <caml:LawHeadingVersion id="id_c40be79e-eff5-11d8-a321-9d7424cb6a2a">
+            <caml:LawHeadingText>High School Exit Examination</caml:LawHeadingText>
+          </caml:LawHeadingVersion>
+          <caml:LawSection id="id_c40e589f-eff5-11d8-a321-9d7424cb6a2a">
+            <caml:Num>60850.</caml:Num>
+            <caml:LawSectionVersion id="id_c40e58a0-eff5-11d8-a321-9d7424cb6a2a">
+              <caml:Content>
+                <p>(a)
+                  <span class="EnSpace"/>The Superintendent of Public Instruction, with the approval of the State Board of Education, shall develop a high school exit examination in language arts and mathematics in accordance with the statewide academically rigorous content standards adopted by the State Board of Education pursuant to Section 60605.  To facilitate the development of the examination, the superintendent shall review any existing high school subject matter examinations that are linked to, or can be aligned with, the statewide academically rigorous content standards for language arts and mathematics adopted by the State Board of Education.  By October 1, 2000, the State Board of Education shall adopt a high school exit examination that is aligned with statewide academically rigorous content standards.
+                </p>
+                <p>(b)
+                  <span class="EnSpace"/>The Superintendent of Public Instruction, with the approval of the State Board of Education, shall establish a High School Exit Examination Standards Panel to assist in the design and composition of the exit examination and to ensure that the examination is aligned with statewide academically rigorous content standards.  Members of the panel shall include, but are not limited to, teachers, administrators, school board members, parents, and the general public.  Members of the panel shall serve without compensation for a term of two years and shall be representative of the state’s ethnic and cultural diversity and gender balance.  The Superintendent shall also make the best effort to ensure representation of the state’s diversity relative to urban, suburban, and rural areas.  The State Department of Education shall provide staff to the panel.
+                </p>
+                <p>(c)
+                  <span class="EnSpace"/>The Superintendent of Public Instruction shall require that the examination be field tested before actual implementation to ensure that the examination is free from bias and that its content is valid and reliable.
+                </p>
+                <p>(d)
+                  <span class="EnSpace"/>Before the State Board of Education adopts the exit examination, the Superintendent of Public Instruction shall submit the examination to the Statewide Pupil Assessment Review Panel established pursuant to Section 60606. The panel shall review all items or questions to ensure that the content of the examination complies with the requirements of Section 60614.
+                </p>
+                <p>(e)
+                  <span class="EnSpace"/>The exit examination prescribed in subdivision (a) shall conform to the following standards or it shall not be required as a condition of graduation:
+                </p>
+                <p>(1)
+                  <span class="EnSpace"/>The examination may not be administered to a pupil who did not receive adequate notice as provided for in paragraph (1) of subdivision (f) regarding the test.
+                </p>
+                <p>(2)
+                  <span class="EnSpace"/>The examination, regardless of federal financial participation, shall comply with Title VI of the Civil Rights Act (42 U.S.C. Sec. 2000d et seq.), its implementing regulations (34 C.F.R. Part 100), and the Equal Educational Opportunities Act of 1974 (20 U.S.C. Sec. 1701).
+                </p>
+                <p>(3)
+                  <span class="EnSpace"/>The examination shall have instructional and curricular validity.
+                </p>
+                <p>(4)
+                  <span class="EnSpace"/>The examination shall be scored as a criterion referenced examination.
+                </p>
+                <p>(f)
+                  <span class="EnSpace"/>For purposes of this section, the following terms have the following meanings:
+                </p>
+                <p>(1)
+                  <span class="EnSpace"/>“Adequate notice” means that the pupil and his or her parent or guardian have received written notice, at the commencement of the pupil’s 9th grade, and each year thereafter through the annual notification process established pursuant to Section 48980, or if a transfer pupil, at the time the pupil transfers.  A pupil who has taken the exit examination  in the 10th grade is deemed to have had “adequate notice” as defined in this paragraph.
+                </p>
+                <p>(2)
+                  <span class="EnSpace"/>“Curricular validity” means that the examination tests for content found in the instructional textbooks.  For the purposes of this section, any textbook or other instructional material adopted pursuant to this code and consistent with the state’s adopted curriculum frameworks shall be deemed to satisfy this definition.
+                </p>
+                <p>(3)
+                  <span class="EnSpace"/>“Instructional validity” means that the examination is consistent with what is expected to be taught.  For the purposes of this section, instruction that is consistent with the state’s adopted curriculum frameworks for the subjects tested shall be deemed to satisfy this definition.
+                </p>
+                <p>(g)
+                  <span class="EnSpace"/>The examination shall be offered to individuals with exceptional needs, as defined in Section 56026, in accordance with paragraph (17) of subsection (a) of Section 1412 of Title 20 of the United States Code and Section 794 and following of Title 29 of the United States Code.  Individuals with exceptional needs shall be administered the examination with appropriate accommodations, where necessary. 
+                </p>
+                <p>(h)
+                  <span class="EnSpace"/>Nothing in this chapter shall prohibit a school district from requiring pupils to pass additional exit examinations approved by the governing board of the school district as a condition for graduation.
+                </p>
+              </caml:Content>
+            </caml:LawSectionVersion>
+          </caml:LawSection>
+          <caml:LawSection id="id_c40e58a1-eff5-11d8-a321-9d7424cb6a2a">
+            <caml:Num>60851.</caml:Num>
+            <caml:LawSectionVersion id="id_c40e58a2-eff5-11d8-a321-9d7424cb6a2a">
+              <caml:Content>
+                <p>(a)
+                  <span class="EnSpace"/>Commencing with the 2003–04 school year and each school year thereafter, each pupil completing grade 12 shall successfully pass the exit examination as a condition of receiving a diploma of graduation or a condition of graduation from high school.  Funding for the administration of the exit examination shall be provided for in the annual Budget Act.  The Superintendent of Public Instruction shall apportion funds appropriated for this purpose to enable school districts to meet the requirements of subdivisions (a), (b), and (c).  The State Board of Education shall establish the amount of funding to be apportioned per test administered, based on a review of the cost per test.
+                </p>
+                <p>(b)
+                  <span class="EnSpace"/>A pupil may take the high school exit examination in grade 9 beginning in the 2000–01 school year.  Each pupil shall take the high school exit examination in grade 10 beginning in the 2001–02 school year and may take the examination during each subsequent administration, until each section of the examination has been passed.
+                </p>
+                <p>(c)
+                  <span class="EnSpace"/>The exit examination shall be offered in each public school and state special school that provides instruction in grades 10, 11, or 12, on the dates designated by the Superintendent of Public Instruction.  An exit examination may not be administered on any date other than those designated by the Superintendent of Public Instruction as examination days or makeup days.
+                </p>
+                <p>(d)
+                  <span class="EnSpace"/>The results of the exit examination shall be provided to each pupil taking the examination within eight weeks of the examination administration and in time for the pupil to take any section of the examination not passed at the next administration.  A pupil shall take again only those parts of the examination he or she has not previously passed and may not retake any portion of the exam that he or she has previously passed.
+                </p>
+                <p>(e)
+                  <span class="EnSpace"/>Supplemental instruction shall be provided to any pupil who does not demonstrate sufficient progress toward passing the exit examination.  To the extent that school districts have aligned their curriculum with the state academic content standards adopted by the State Board of Education, the curriculum for supplemental instruction shall reflect those standards and shall be designed to assist the pupils to succeed on the exit examination.  Nothing in this chapter shall be construed to require the provision of supplemental services using resources that are not regularly available to a school or school district, including summer school instruction provided pursuant to Section 37252.  In no event shall any action taken as a result of this subdivision cause or require reimbursement by the Commission on State Mandates.  Sufficient progress shall be determined on the basis of either of the following:
+                </p>
+                <p>(1)
+                  <span class="EnSpace"/>The results of the assessments administered pursuant to Article 4 (commencing with Section 60640) of Chapter 5 of Part 33 and the minimum levels of proficiency recommended by the State Board of Education pursuant to Section 60648.
+                </p>
+                <p>(2)
+                  <span class="EnSpace"/>The pupils’ grades and other indicators of academic achievement designated by the district.
+                </p>
+              </caml:Content>
+            </caml:LawSectionVersion>
+          </caml:LawSection>
+          <caml:LawSection id="id_c410a293-eff5-11d8-a321-9d7424cb6a2a">
+            <caml:Num>60852.</caml:Num>
+            <caml:LawSectionVersion id="id_c410a294-eff5-11d8-a321-9d7424cb6a2a">
+              <caml:Content>
+                <p>Notwithstanding Section 60851, if a school district determines that a pupil does not possess sufficient English language skills to be assessed pursuant to Section 60850, the district may defer the requirement that the pupil pass the high school exit examination for a period of up to 24 calendar months of enrollment in the California public school system until the pupil has completed six months of instruction in reading, writing, and comprehension in the English language.  Nothing in this section shall be construed to allow any pupil to receive a diploma of graduation from high school without passing the exit examination, in English, prescribed by Section 60850.</p>
+              </caml:Content>
+            </caml:LawSectionVersion>
+          </caml:LawSection>
+          <caml:LawSection id="id_c410a295-eff5-11d8-a321-9d7424cb6a2a">
+            <caml:Num>60853.</caml:Num>
+            <caml:LawSectionVersion id="id_c410a296-eff5-11d8-a321-9d7424cb6a2a">
+              <caml:Content>
+                <p>(a)
+                  <span class="EnSpace"/>In order to prepare pupils to succeed on the exit examination, a school district shall use regularly available resources and any available supplemental remedial resources, including, but not limited to, funds available for programs established by Chapter 320 of the Statutes of 1998, Chapter 811 of the Statutes of 1997, Chapter 743 of the Statutes of 1998, and funds available for other similar supplemental remedial programs.
+                </p>
+                <p>(b)
+                  <span class="EnSpace"/>It is the intent of the Legislature that a school district consider restructuring its academic offerings reducing the electives available to any pupil who has not demonstrated the skills necessary to succeed on the exit examination, so that the pupil can be provided supplemental instruction during the regularly scheduled academic year.
+                </p>
+                <p>(c)
+                  <span class="EnSpace"/>A school district should prepare pupils to succeed on the exit examination.  In preparing pupils to succeed, school districts are encouraged to use existing resources to ensure that all pupils succeed.  The state has created programs such as the Class Size Reduction Program, staff development programs, after school programs, and others, in addition to providing general purpose funding, in order to assist school districts in providing an education that will help all pupils succeed.
+                </p>
+              </caml:Content>
+            </caml:LawSectionVersion>
+          </caml:LawSection>
+          <caml:LawSection id="id_c410a297-eff5-11d8-a321-9d7424cb6a2a">
+            <caml:Num>60855.</caml:Num>
+            <caml:LawSectionVersion id="id_c410a298-eff5-11d8-a321-9d7424cb6a2a">
+              <caml:Content>
+                <p>(a)
+                  <span class="EnSpace"/>By January 15, 2000, the Superintendent of Public Instruction shall contract for a multiyear independent evaluation of the high school exit examination that is established pursuant to this chapter.  The evaluation shall be based upon information gathered in field testing and annual administrations of the examination and shall include all of the following:
+                </p>
+                <p>(1)
+                  <span class="EnSpace"/>Analysis of pupil performance, broken down by grade level, gender, race or ethnicity, and subject matter of the examination, including any trends that become apparent over time.
+                </p>
+                <p>(2)
+                  <span class="EnSpace"/>Analysis of the exit examination’s effects, if any, on college attendance, pupil retention, graduation, and dropout rates, including analysis of these effects on the population subgroups described in subdivision (b).
+                </p>
+                <p>(3)
+                  <span class="EnSpace"/>Analysis of whether the exit examination is likely to have, or has, differential effects, whether beneficial or detrimental, on population subgroups described in subdivision (b).
+                </p>
+                <p>(b)
+                  <span class="EnSpace"/>Evaluations conducted pursuant to this section shall separately consider test results for each of the following population subgroups, provided that information concerning individuals shall not be gathered or disclosed in the process of preparing this evaluation.
+                </p>
+                <p>(1)
+                  <span class="EnSpace"/>English language learners and non-English language learners.
+                </p>
+                <p>(2)
+                  <span class="EnSpace"/>Individuals with exceptional needs and individuals without exceptional needs.
+                </p>
+                <p>(3)
+                  <span class="EnSpace"/>Pupils that qualify for free or reduced price meals and are enrolled in schools that qualify for assistance under Title 1 of the Improving America’s Schools Act of 1994 (P.L. 103-382) and pupils that do not qualify for free or reduced price meals and are not enrolled in schools that quality for assistance under Title 1 of the Improving America’s Schools Act of 1994 (P.L. 103-382) Act.
+                </p>
+                <p>(4)
+                  <span class="EnSpace"/>Any group of pupils that has been determined by the independent evaluator to be differentially affected by the exit examination established pursuant to this chapter.
+                </p>
+                <p>(c)
+                  <span class="EnSpace"/>Evaluation reports shall include recommendations to improve the quality, fairness, validity, and reliability of the examination.  The independent evaluator may also make recommendations for revisions in design, administration, scoring, processing, or use of the examination.
+                </p>
+                <p>(d)
+                  <span class="EnSpace"/>The independent evaluator shall report to the Governor, the Office of the Legislative Analyst, the Superintendent of Public Instruction, the State Board of Education, the Secretary for Education, and the chairs of the education policy committees in both houses of the Legislature, in accordance with the following schedule:
+                </p>
+                <p>(1)
+                  <span class="EnSpace"/>Preliminary report on field testing by July 1, 2000.
+                </p>
+                <p>(2)
+                  <span class="EnSpace"/>First annual report by February 1, 2002.
+                </p>
+                <p>(3)
+                  <span class="EnSpace"/>Regular biennial reports by February 1 of even-numbered years following 2002.
+                </p>
+              </caml:Content>
+            </caml:LawSectionVersion>
+          </caml:LawSection>
+          <caml:LawSection id="id_c4131399-eff5-11d8-a321-9d7424cb6a2a">
+            <caml:Num>60856.</caml:Num>
+            <caml:LawSectionVersion id="id_c413139a-eff5-11d8-a321-9d7424cb6a2a">
+              <caml:Content>
+                <p>After adoption and the initial administrations of the high school exit examination the State Board of Education, in consultation with the Superintendent of Public Instruction, shall study the appropriateness of other criteria by which high school pupils who are regarded as highly proficient but unable to pass the high school exit examination may demonstrate their competency and receive a high school diploma.  This criteria shall include, but is not limited to, an exemplary academic record as evidenced by transcripts and alternative tests of equal rigor in the academic areas covered by the high school exit examination.  If the State Board of Education determines that other criteria are appropriate and do not undermine the intent of this chapter that all high school graduates demonstrate satisfactory academic proficiency, the board shall forward its recommendations to the Legislature for enactment.</p>
+              </caml:Content>
+            </caml:LawSectionVersion>
+          </caml:LawSection>
+        </caml:LawHeading>
+      </caml:Fragment>
+    </caml:BillSection>
+    <caml:BillSection id="id_c413139b-eff5-11d8-a321-9d7424cb6a2a">
+      <caml:Num>SEC. 6.</caml:Num>
+      <caml:Content>
+        <p>The sum of two million two hundred fifty thousand dollars ($2,250,000) is hereby appropriated to the Superintendent of Public Instruction in accordance with the following schedule:</p>
+        <p>(a)
+          <span class="EnSpace"/>The sum of two million dollars ($2,000,000) is hereby appropriated from the Federal Trust Fund, from GOALS 2000 funds, for the purpose of developing a high school exit examination pursuant to Section 60850 of the Education Code.
+        </p>
+        <p>(b)
+          <span class="EnSpace"/>The sum of two hundred fifty thousand dollars ($250,000) is hereby appropriated from the General Fund to provide support services related to the high school exit examination established pursuant to Section 60850 of the Education Code.
+        </p>
+      </caml:Content>
+    </caml:BillSection>
+    <caml:BillSection id="id_c413139c-eff5-11d8-a321-9d7424cb6a2a">
+      <caml:Num>SEC. 7.</caml:Num>
+      <caml:Content>
+        <p>Sections 1 and 2 of the act adding this section shall become operative on January 1, 2000.</p>
+      </caml:Content>
+    </caml:BillSection>
+    
+    <caml:BillSection id="id_c4155d8d-eff5-11d8-a321-9d7424cb6a2a">
+      <caml:Num>SEC. 8.</caml:Num>
+      <caml:Content>
+        <p>Notwithstanding Section 17610 of the Government Code, if the Commission on State Mandates determines that this act contains costs mandated by the state, reimbursement to local agencies and school districts for those costs shall be made pursuant to Part 7 (commencing with Section 17500) of Division 4 of Title 2 of the Government Code.  If the statewide cost of the claim for reimbursement does not exceed one million dollars ($1,000,000), reimbursement shall be made from the State Mandates Claims Fund.</p>
+      </caml:Content>
+    </caml:BillSection>
+    
+  </caml:Bill>
+</caml:MeasureDoc>

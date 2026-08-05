@@ -88,11 +88,16 @@ archive-only for now (§2's "votes" is served from archives; add to
 current.db when a tool needs them — nightly rebuilds make schema changes
 free).
 
-`archive.db`: per-session `bill`, `bill_version` (+ text, zstd-compressed
-if size warrants), `bill_history`, `bill_analysis` + `analysis_text`
-(extracted text keyed by analysis_id), `bill_detail_vote`/`bill_summary_vote`,
-`veto_message`, `bill_section_ref` (parsed from archived titles), `meta`
-(per-session coverage matrix so tools can state limits honestly).
+`archive.db` (as built, 1989–2023, 4.7 GB): `bill`, `bill_version`,
+`bill_version_authors`, `bill_version_text` (title + zlib-compressed full
+text per version — zlib chosen over zstd for stdlib-only builds),
+`bill_history`, `bill_analysis` + `analysis_text` (extracted text keyed by
+analysis_id, zlib), `bill_detail_vote`/`bill_summary_vote`/`bill_motion`
+(motion text makes votes interpretable), `veto_message` + `veto_text`
+(lobs exist 2011+), `bill_section_ref` (parsed from archived titles, +
+session_year), `session_coverage` (per-session matrix: row counts, title
+coverage, analysis formats/errors — so tools can state limits honestly),
+`meta`.
 
 Indexes: `(law_code, section_num_norm)`; `(chapter_year, chapter_num)`;
 `bill_id` on history/analyses/refs; `(law_code, section)` on refs.

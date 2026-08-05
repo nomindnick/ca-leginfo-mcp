@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?><caml:MeasureDoc version="1.0" xsi:schemaLocation="http://lc.ca.gov/legalservices/schemas/caml.1# xca.1.xsd" xmlns:caml="http://lc.ca.gov/legalservices/schemas/caml.1#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<!-- Copyright © Legislative Counsel Bureau, State of California. -->
+
+  <caml:Description>
+    
+    <caml:Id>CHR198900087</caml:Id>
+    <caml:VersionNum>97</caml:VersionNum>
+    <caml:History>
+      <caml:Action>
+        <caml:ActionText>FILED</caml:ActionText>
+        <caml:ActionDate>1989-07-26</caml:ActionDate>
+      </caml:Action>
+      <caml:Action>
+        <caml:ActionText>PASSED_ASSEMBLY</caml:ActionText>
+        <caml:ActionDate>1989-07-20</caml:ActionDate>
+      </caml:Action>
+      <caml:Action>
+        <caml:ActionText>PASSED_SENATE</caml:ActionText>
+        <caml:ActionDate>1989-05-11</caml:ActionDate>
+      </caml:Action>
+      <caml:Action>
+        <caml:ActionText>INTRODUCED</caml:ActionText>
+        <caml:ActionDate>1989-04-04</caml:ActionDate>
+      </caml:Action>
+    </caml:History>
+    <caml:LegislativeInfo>
+      <caml:SessionYear>1989</caml:SessionYear>
+      <caml:SessionNum>0</caml:SessionNum>
+      <caml:MeasureType>SCR</caml:MeasureType>
+      <caml:MeasureNum>39</caml:MeasureNum>
+      <caml:MeasureState>CHP</caml:MeasureState>
+      <caml:ChapterYear>1989</caml:ChapterYear>
+      <caml:ChapterType>CHR</caml:ChapterType>
+      <caml:ChapterSessionNum>0</caml:ChapterSessionNum>
+      <caml:ChapterNum>87</caml:ChapterNum>
+    </caml:LegislativeInfo>
+    <caml:Authors>
+      <caml:Legislator>
+        <caml:Contribution>LEAD_AUTHOR</caml:Contribution>
+        <caml:House>SENATE</caml:House>
+        <caml:Name>Presley</caml:Name>
+      </caml:Legislator>
+    </caml:Authors>
+    <caml:Title>Relative to Department of Justice training.</caml:Title>
+    <caml:GeneralSubject>
+      <caml:Subject>Department of Justice training.</caml:Subject>
+    </caml:GeneralSubject>
+    <caml:DigestText>
+      <p>Under existing law, there is in the Department of Justice, the Commission on Peace Officer Standards and Training which is responsible for administrating numerous law enforcement training and certification programs.</p>
+      <p>This measure would set forth various declarations concerning postpartum psychosis, a phenomenon affecting new mothers, and would request the Commission on Peace Officer Standards and Training to adopt standards, as specified, to include training on the recognition and handling of women possibly suffering from postpartum psychosis.</p>
+    </caml:DigestText>
+  </caml:Description>
+  <caml:Resolution id="id_78bbb6ed-f113-11d8-8295-91d8b2823128">
+    <caml:Whereas id="id_78bbb6ee-f113-11d8-8295-91d8b2823128">
+      <caml:Content>
+        <p>WHEREAS, Certain mental illnesses have been shown to be related to recent childbirth and are commonly referred to as postpartum psychosis; and</p>
+      </caml:Content>
+    </caml:Whereas>
+    <caml:Whereas id="id_78be00df-f113-11d8-8295-91d8b2823128">
+      <caml:Content>
+        <p>WHEREAS, Postpartum psychosis is not a new illness and has been documented throughout history, being first recognized by Hippocrates 2,300 years ago; and</p>
+      </caml:Content>
+    </caml:Whereas>
+    <caml:Whereas id="id_78be00e0-f113-11d8-8295-91d8b2823128">
+      <caml:Content>
+        <p>WHEREAS, The Parliament of Great Britain recognized the existence of the illness which affects new mothers and addressed it in their criminal statutes in 1922; and</p>
+      </caml:Content>
+    </caml:Whereas>
+    <caml:Whereas id="id_78be00e1-f113-11d8-8295-91d8b2823128">
+      <caml:Content>
+        <p>WHEREAS, Postpartum psychosis may gravely impair a woman’s thoughts and behavior because the symptoms of postpartum psychosis include confusion, delusions, and hallucinations; and</p>
+      </caml:Content>
+    </caml:Whereas>
+    <caml:Whereas id="id_78be00e2-f113-11d8-8295-91d8b2823128">
+      <caml:Content>
+        <p>WHEREAS, There is growing recognition of the illness and the tragedies that can ensue when the illness is left untreated; and</p>
+      </caml:Content>
+    </caml:Whereas>
+    <caml:Whereas id="id_78be00e3-f113-11d8-8295-91d8b2823128">
+      <caml:Content>
+        <p>WHEREAS, A task force consisting of representatives of law enforcement, prosecutors, health researchers, and psychiatric care providers has studied violent crimes of new mothers, including infanticides; and</p>
+      </caml:Content>
+    </caml:Whereas>
+    <caml:Whereas id="id_78be00e4-f113-11d8-8295-91d8b2823128">
+      <caml:Content>
+        <p>WHEREAS, Peace officers are often the first individuals to come into contact with women who may be suffering from postpartum psychosis and have committed a crime; and</p>
+      </caml:Content>
+    </caml:Whereas>
+    <caml:Whereas id="id_78c070e5-f113-11d8-8295-91d8b2823128">
+      <caml:Content>
+        <p>WHEREAS, Existing law provides for special consideration and treatment of persons with certain mental illnesses; and</p>
+      </caml:Content>
+    </caml:Whereas>
+    <caml:Whereas id="id_78c070e6-f113-11d8-8295-91d8b2823128">
+      <caml:Content>
+        <p>WHEREAS, The Legislature has enacted Section 13519.2 of the Penal Code which requires adequate instruction in the handling of persons with developmental disabilities or mental illness, or both, in the basic training course for peace officers; and</p>
+      </caml:Content>
+    </caml:Whereas>
+    <caml:Whereas id="id_78c070e7-f113-11d8-8295-91d8b2823128">
+      <caml:Content>
+        <p>WHEREAS, Chapter 2 (commencing with Section 1001) of Title 11 of the California Code of Regulations addresses the basic training courses for peace officers, which is incorporated into Sections D-1-3 of the Peace Officer Standards and Training Administrative Manual; and</p>
+      </caml:Content>
+    </caml:Whereas>
+    <caml:Whereas id="id_78c070e8-f113-11d8-8295-91d8b2823128">
+      <caml:Content>
+        <p>WHEREAS, The actual basic training course descriptions and goals are found in the PERFORMANCE OBJECTIVES FOR THE POST BASIC COURSE; and</p>
+      </caml:Content>
+    </caml:Whereas>
+    <caml:Whereas id="id_78c070e9-f113-11d8-8295-91d8b2823128">
+      <caml:Content>
+        <p>WHEREAS, In compliance with Section 13519.2 of the Penal Code, the Commission on Peace Officer Standards and Training is considering amendments to its PERFORMANCE OBJECTIVES FOR THE POST BASIC COURSE to include training regarding procedures for dealing with the developmentally disabled and the mentally ill; and</p>
+      </caml:Content>
+    </caml:Whereas>
+    <caml:Whereas id="id_78c070ea-f113-11d8-8295-91d8b2823128">
+      <caml:Content>
+        <p>WHEREAS, The PERFORMANCE OBJECTIVES FOR THE POST BASIC COURSE is also the appropriate vehicle for including training of law enforcement officers in recognizing and handling women who may be suffering from postpartum psychosis; and</p>
+      </caml:Content>
+    </caml:Whereas>
+    <caml:Whereas id="id_78c070eb-f113-11d8-8295-91d8b2823128">
+      <caml:Content>
+        <p>WHEREAS, A peace officer’s familiarity with the signs of postpartum psychosis, will expedite assessment and appropriate treatment for a woman who may be suffering from this illness; and</p>
+      </caml:Content>
+    </caml:Whereas>
+    <caml:Whereas id="id_78c070ec-f113-11d8-8295-91d8b2823128">
+      <caml:Content>
+        <p>WHEREAS, Such recognition by a peace officer will assist the criminal justice system in determining appropriate custody, and assuring appropriate adjudication and treatment; now, therefore, be it</p>
+      </caml:Content>
+    </caml:Whereas>
+    <caml:Resolved id="id_78c070ed-f113-11d8-8295-91d8b2823128">
+      <caml:Content>
+        <p>
+          <i>Resolved by the Senate of the State of California, the Assembly thereof concurring,</i> That the Commission on Peace Officer Standards and Training is requested to adopt standards in their PERFORMANCE OBJECTIVES FOR THE POST BASIC COURSE, based on its authority pursuant to Section 13519.2 of the Penal Code, to include training on the recognition and handling of women possibly suffering from postpartum psychosis; and be it further
+        </p>
+      </caml:Content>
+    </caml:Resolved>
+    <caml:Resolved id="id_78c2e1ee-f113-11d8-8295-91d8b2823128">
+      <caml:Content>
+        <p>
+          <i>Resolved,</i> That the course of instruction relating to the handling of women suffering from postpartum psychosis shall be developed by the commission in consultation with appropriate groups and individuals having an interest and expertise in this area; and be it further
+        </p>
+      </caml:Content>
+    </caml:Resolved>
+    <caml:Resolved id="id_78c2e1ef-f113-11d8-8295-91d8b2823128">
+      <caml:Content>
+        <p>
+          <i>Resolved,</i> That in addition to providing instruction on the handling of these women, the course also shall include information on the nature of postpartum psychosis, as well as the community resources available to serve women suffering from postpartum psychosis; and be it further
+        </p>
+      </caml:Content>
+    </caml:Resolved>
+    <caml:Resolved id="id_78c2e1f0-f113-11d8-8295-91d8b2823128">
+      <caml:Content>
+        <p>
+          <i>Resolved,</i> That the Secretary of the Senate transmit copies of this resolution to the Governor of California, the American Psychiatric Association, and the Commission on Peace Officers Standards and Training.
+        </p>
+      </caml:Content>
+    </caml:Resolved>
+  </caml:Resolution>
+</caml:MeasureDoc>

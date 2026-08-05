@@ -20,7 +20,7 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass, field
 
-from ingest.normalize import cons_key
+from ingest.normalize import cons_key, norm_article
 
 # Full code names as they appear in titles, mapped to capublic codes.
 CODE_NAMES = {
@@ -55,12 +55,49 @@ CODE_NAMES = {
     "Water Code": "WAT",
     "Welfare and Institutions Code": "WIC",
     "Welfare and Institution Code": "WIC",  # Leg Counsel typo, AB 753 (2025)
+    "Public Contracts Code": "PCC",  # extra-s typo, 1999 era
+    "Business and Professionals Code": "BPC",   # 1999-era typos
+    "Business and Profession Code": "BPC",
+    "Food and Agriculture Code": "FAC",
     "California Constitution": "CONS",
     "Constitution of the State": "CONS",
 }
 
+# Archive titles sometimes write "and" as "&" ("Streets & Highways Code",
+# 1999). Alias every and-bearing name.
+CODE_NAMES.update({n.replace(" and ", " & "): c
+                   for n, c in list(CODE_NAMES.items()) if " and " in n})
+
+# Inter-word spaces are optional/flexible: archive titles contain glued
+# names ("the GovernmentCode", AB 1909 of 1989) and case slips ("the
+# education Code", "the Revenue and Taxation code"). Lookup goes through
+# _code_of, which despaces and lowercases the matched text.
 _CODE_RE = re.compile("|".join(
-    re.escape(n) for n in sorted(CODE_NAMES, key=len, reverse=True)))
+    r"\s*".join(re.escape(w) for w in n.split())
+    for n in sorted(CODE_NAMES, key=len, reverse=True)), re.IGNORECASE)
+_DESPACED_CODES = {n.replace(" ", "").lower(): c
+                   for n, c in CODE_NAMES.items()}
+
+
+def _code_of(matched: str) -> str:
+    return _DESPACED_CODES[matched.replace(" ", "").lower()]
+
+
+# Named uncodified acts ("the Monterey Peninsula Water Management District
+# Law (Chapter 527 of the Statutes of 1977)") appear as targets alongside
+# real codes in compound titles, as do initiative acts ("an initiative act
+# entitled ..."). Sections aimed at them have no code section to link —
+# they classify as uncodified, not as parse failures. Suffixes
+# deliberately exclude "Code" so real code names never collide.
+# The word chain tolerates lowercase connectors and commas: real names
+# include "Lake Cuyamaca Recreation and Park District Act" and "Humboldt
+# Bay Harbor, Recreation, and Conservation District Act".
+_UNCODIFIED_TARGET = re.compile(
+    r"\bthe\s+(?:[A-Z][A-Za-z'’.\-]*,?\s+(?:(?:and|of|the|for)\s+)*)+"
+    r"(?:Act|Law|Charter)\b"
+    r"|\ban\s+initiative\s+act\b")
+
+_UNCOD = "__uncodified__"  # sentinel code for such targets
 
 _VERB_WORDS = r"(?:amend|add|repeal|renumber|amending|adding|repealing|renumbering)"
 # A verb group like "amend", "add and repeal", "amend, repeal, and add" —
@@ -70,8 +107,9 @@ _VERB_WORDS = r"(?:amend|add|repeal|renumber|amending|adding|repealing|renumberi
 # ("by amending Sections 9 and 10 of, and adding Section 7.5 to, ...") —
 # compound groups like "repeal and add" are unaffected because left-to-right
 # scanning consumes their "and <verb>" as a continuation of the first match.
+# ",?" after the anchor: "An act to, amend Section..." is a real 1989 typo.
 _VERB_GROUP = re.compile(
-    rf"\b(?:to|by|and)\s+((?:{_VERB_WORDS})(?:(?:,\s+|\s+and\s+|,\s+and\s+)"
+    rf"\b(?:to|by|and),?\s+((?:{_VERB_WORDS})(?:(?:,\s+|\s+and\s+|,\s+and\s+)"
     rf"(?:{_VERB_WORDS}))*)"
     rf"(?:\s+(?:the\s+heading(?:s)?\s+of|various\s+provisions\s+of))?\b",
     re.IGNORECASE)
@@ -96,10 +134,27 @@ _STRUCT_MENTION = re.compile(
 # so articles resolve positionally, like code_for. Usually roman, but arabic
 # appears in real titles ("Article 1", ACA 7 2025).
 _ARTICLE_MENTION = re.compile(r"\bArticle\s+([IVXLC0-9]+[\s]?[A-D]?)\b")
+# "by adding Article XIXB thereto" — a whole new constitutional article,
+# no section list at all (ACA style, e.g. 1999 transportation funding).
+# The "thereof" form is matched post-rewrite as "of the California
+# Constitution" (the thereof->Constitution rewrite runs first).
+_CONST_WHOLE_ARTICLE = re.compile(
+    rf"\b({_VERB_WORDS})\s+Article\s+([IVXLC0-9]+[\s]?[A-D]?)\s+"
+    r"(?:there(?:to|of)|of\s+the\s+California\s+Constitution)\b",
+    re.IGNORECASE)
 # Session-law refs like "Section 2 of Chapter 5 of the Statutes of 2011"
-# are not code sections.
+# are not code sections. Archive variants: "Chapter ____" (blank
+# placeholder for a not-yet-chaptered companion bill) and "Statutes of the
+# 1952, First Extraordinary Session".
+# Leading of|to: sections are amended "of" and added "to" a statutes
+# chapter — both are session-law citations.
 _STATUTES_REF = re.compile(
-    r"\bof\s+(?:Chapter\s+\d+\s+of\s+)?the\s+.{0,30}Statutes(?:\s+of\s+\d{4})?")
+    r"\b(?:of|to)\s+(?:Chapter\s+(?:\d+|_+)\s+of\s+)?the\s+"
+    r".{0,30}Statutes(?:\s+of\s+(?:the\s+)?\d{4})?")
+_STATUTES_YEAR = re.compile(r"\bStatutes of (?:the )?\d{4}")
+# "Sections 32 and 36 of Assembly Bill No. 198 of the 1989-90 Regular
+# Session" — amendments to a companion BILL, not to a code.
+_BILL_REF = re.compile(r"\s+of\s+(?:Assembly|Senate)\s+Bill\b")
 
 _NO_SECTION_STARTS = (
     "relative to", "an act relating to", "an act making appropriations",
@@ -171,7 +226,7 @@ def parse_title(title: str) -> ParseResult:
     # Amendments to uncodified session law (district enabling acts, old
     # statutes chapters): there is no code section to link.
     act_portion = t.split(", relating to")[0]
-    if re.search(r"Statutes of \d{4}", act_portion) and \
+    if _STATUTES_YEAR.search(act_portion) and \
             not _CODE_RE.search(act_portion):
         return ParseResult("uncodified", note="amends uncodified statute")
 
@@ -187,11 +242,20 @@ def parse_title(title: str) -> ParseResult:
 
     verb_positions = [(m.start(), m.group(1).lower())
                       for m in _VERB_GROUP.finditer(act)]
-    code_positions = [(m.start(), CODE_NAMES[m.group(0)])
+    code_positions = [(m.start(), _code_of(m.group(0)))
                       for m in _CODE_RE.finditer(act)]
+    # Named uncodified acts participate in target resolution (sentinel
+    # code), except where they overlap a real code-name match.
+    code_spans = [m.span() for m in _CODE_RE.finditer(act)]
+    for m in _UNCODIFIED_TARGET.finditer(act):
+        if not any(a <= m.start() < b or a < m.end() <= b
+                   for a, b in code_spans):
+            code_positions.append((m.start(), _UNCOD))
+    code_positions.sort()
 
     refs: list[Ref] = []
     unresolved = 0
+    skipped_uncodified = 0
     covered: list[tuple[int, int]] = []
 
     def verb_for(pos: int) -> str | None:
@@ -212,10 +276,21 @@ def parse_title(title: str) -> ParseResult:
         prior = [a for p, a in article_positions if p < pos]
         return prior[-1] if prior else None
 
+    # Whole-article constitutional add/repeal ("adding Article XIXB
+    # thereto"): a struct ref keyed by the article alone — its key is a
+    # prefix of the article's section keys, so lookups can range over it.
+    for m in _CONST_WHOLE_ARTICLE.finditer(act):
+        covered.append(m.span())
+        art = norm_article(m.group(2))
+        refs.append(Ref(m.group(1).lower(), "CONS", f"Art. {art}",
+                        struct=f"Article {art}"))
+
     for m in _STRUCT_MENTION.finditer(act):
         covered.append(m.span())
         verb, code = verb_for(m.start()), code_for(m.end())
-        if verb and code:
+        if code == _UNCOD:
+            skipped_uncodified += 1
+        elif verb and code:
             sec = m.group(3)
             if code == "CONS" and m.group(1) == "Article":
                 sec = cons_key(m.group(2), sec)
@@ -233,7 +308,9 @@ def parse_title(title: str) -> ParseResult:
         if any(a <= m.start(1) < b for a, b in covered + sec_spans):
             continue
         verb, code = verb_for(m.start(1)), code_for(m.end())
-        if verb and code and re.search(r"\d", m.group(1)):
+        if code == _UNCOD:
+            skipped_uncodified += 1
+        elif verb and code and re.search(r"\d", m.group(1)):
             refs.append(Ref(verb, code, m.group(1).rstrip(".,")))
         else:
             unresolved += 1
@@ -243,11 +320,14 @@ def parse_title(title: str) -> ParseResult:
             continue  # part of a "(commencing with Section X)" struct
         after = act[m.end(): m.end() + 60]
         if _STATUTES_REF.match(after.lstrip()) or \
-                re.match(r"\s+of\s+Chapter\s+\d", after):
-            continue  # session-law citation, not a code section
+                re.match(r"\s+(?:of|to)\s+Chapter\s+(?:\d|_)", after) or \
+                _BILL_REF.match(after):
+            continue  # session-law/companion-bill citation, not a code section
         verb, code = verb_for(m.start()), code_for(m.end())
         sections = _split_seclist(m.group(1))
-        if verb and code:
+        if code == _UNCOD:
+            skipped_uncodified += len(sections)
+        elif verb and code:
             for sec, is_range, end in sections:
                 # Constitution refs get the canonical article-scoped key so
                 # they join against law_section.section_num_norm directly.
@@ -267,6 +347,9 @@ def parse_title(title: str) -> ParseResult:
         return ParseResult("partial", refs, note=f"{unresolved} unresolved")
     if unresolved:
         return ParseResult("fail", note=f"{unresolved} unresolved mentions")
+    if skipped_uncodified:
+        return ParseResult("uncodified",
+                           note="sections target named uncodified acts")
     if _CODE_RE.search(act) or "Section" in act:
         return ParseResult("fail", note="mentions present but nothing parsed")
     return ParseResult("no_sections", note="no section refs in act portion")

@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?><caml:MeasureDoc version="1.0" xsi:schemaLocation="http://lc.ca.gov/legalservices/schemas/caml.1# xca.1.xsd" xmlns:caml="http://lc.ca.gov/legalservices/schemas/caml.1#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<!-- Copyright © Legislative Counsel Bureau, State of California. -->
+
+  <caml:Description>
+    
+    <caml:Id>CHP198900585</caml:Id>
+    <caml:VersionNum>94</caml:VersionNum>
+    <caml:History>
+      <caml:Action>
+        <caml:ActionText>FILED</caml:ActionText>
+        <caml:ActionDate>1989-09-21</caml:ActionDate>
+      </caml:Action>
+      <caml:Action>
+        <caml:ActionText>APPROVED</caml:ActionText>
+        <caml:ActionDate>1989-09-20</caml:ActionDate>
+      </caml:Action>
+      <caml:Action>
+        <caml:ActionText>PASSED_SENATE</caml:ActionText>
+        <caml:ActionDate>1989-09-01</caml:ActionDate>
+      </caml:Action>
+      <caml:Action>
+        <caml:ActionText>PASSED_ASSEMBLY</caml:ActionText>
+        <caml:ActionDate>1989-08-31</caml:ActionDate>
+      </caml:Action>
+      <caml:Action>
+        <caml:ActionText>INTRODUCED</caml:ActionText>
+        <caml:ActionDate>1989-02-28</caml:ActionDate>
+      </caml:Action>
+    </caml:History>
+    <caml:LegislativeInfo>
+      <caml:SessionYear>1989</caml:SessionYear>
+      <caml:SessionNum>0</caml:SessionNum>
+      <caml:MeasureType>SB</caml:MeasureType>
+      <caml:MeasureNum>729</caml:MeasureNum>
+      <caml:MeasureState>CHP</caml:MeasureState>
+      <caml:ChapterYear>1989</caml:ChapterYear>
+      <caml:ChapterType>CHP</caml:ChapterType>
+      <caml:ChapterSessionNum>0</caml:ChapterSessionNum>
+      <caml:ChapterNum>585</caml:ChapterNum>
+    </caml:LegislativeInfo>
+    <caml:Authors>
+      <caml:Legislator>
+        <caml:Contribution>LEAD_AUTHOR</caml:Contribution>
+        <caml:House>SENATE</caml:House>
+        <caml:Name>Mello</caml:Name>
+      </caml:Legislator>
+    </caml:Authors>
+    <caml:Title>An act to amend Section 20200 of the Water Code, and to amend Sections 451, 453, 454, 473, 476, 494, 603, and 605 of, and to add Section 333 to, the Monterey Peninsula Water Management District Law (Chapter 527 of the Statutes of 1977), relating to the water management districts, and declaring the urgency thereof, to take effect immediately.</caml:Title>
+    <caml:GeneralSubject>
+      <caml:Subject>Monterey Peninsula Water Management District.</caml:Subject>
+    </caml:GeneralSubject>
+    <caml:DigestText>
+      <p>Under existing law, the Monterey Peninsula Water Management District Law is authorized to establish zones and to undertake various works and projects for the supply of water in accordance with prescribed procedures.</p>
+      <p>This bill would generally authorize the district to proceed with a work or project, as described, excluding dams, to provide additional water to the district during any sudden or unexpected emergency in which the use of district water is restricted by a specified ordinance and the improvement is required to prevent the actual or the  threatened loss or damage to life, property, or essential public services, subject to the approval of the voters at a special election within the district.  The bill would specify related matters.</p>
+      <p>The bill would revise requirements relating to the adoption of resolutions for the purpose of authorizing zone projects and works and the conduct of zone elections.</p>
+      <p>The bill would authorize the call of a special bond election by resolution, rather than by ordinance, and would make related and clarifying changes.</p>
+      <p>The bill would declare that it is to take effect immediately as an urgency statute.</p>
+    </caml:DigestText>
+  </caml:Description>
+  <caml:Bill id="id_b5bc1d9b-f10e-11d8-bc1b-9117673175d6">
+    <caml:Preamble>The people of the State of California do enact as follows:</caml:Preamble>
+    <caml:BillSection id="id_b5bc1d9c-f10e-11d8-bc1b-9117673175d6">
+      <caml:Num>SECTION 1.</caml:Num>
+      <caml:ActionLine action="IS_AMENDED" xlink:href="urn:caml:codes:WAT:caml#xpointer(%2F%2Fcaml%3ALawSection%5Bcaml%3ANum%3D'20200.'%5D)">Section  20200 of the Water Code is amended to read:</caml:ActionLine>
+      <caml:Fragment>
+        <caml:LawSection id="id_b5ca4e6d-f10e-11d8-bc1b-9117673175d6">
+          <caml:Num>20200.</caml:Num>
+          <caml:LawSectionVersion id="id_b5ca4e6e-f10e-11d8-bc1b-9117673175d6">
+            <caml:Content>
+              <p>As used in this chapter, “water district” means any district or other political subdivision, other than a city or county, a primary function of which is the irrigation, reclamation, or drainage of land or the diversion, storage, or distribution of water primarily for domestic, municipal, agricultural, industrial, recreation, fish and wildlife enhancement, flood control, or power production purposes.  “Water districts” include, but are not limited to, irrigation districts, county water districts, California water districts, water storage districts, reclamation districts, county waterworks districts, drainage districts, water replenishment districts, levee districts, municipal water districts, water conservation districts, community services districts, water management districts, flood control districts, flood control and floodwater conservation districts, flood control and water conservation districts, and water agencies.</p>
+            </caml:Content>
+          </caml:LawSectionVersion>
+        </caml:LawSection>
+      </caml:Fragment>
+    </caml:BillSection>
+    <caml:BillSection id="id_b5ca4e6f-f10e-11d8-bc1b-9117673175d6">
+      <caml:Num>SEC. 1.5.</caml:Num>
+      <caml:Content>
+        <p>Section 333 is added to the Monterey Peninsula Water Management District Law (Chapter 527 of the Statutes of 1977), to read:</p>
+        <p>Sec. 333.
+          <span class="EmSpace"/>The board may authorize improvements to provide additional water to the district during any sudden or unexpected emergency in which the use of district water is restricted by an ordinance adopted pursuant to Section 332, and where the emergency improvement is required to prevent the actual or threatened loss or damage to life, property, or essential public services.  If, after the conclusion of a public hearing, the board determines to proceed with a work or project to provide additional water during any such emergency, it shall adopt a resolution which calls an election to be held in the district on the question of proceeding with and financing the work or project.  The resolution shall further establish election precincts in accordance with Section 603.  A copy of any resolution proposed for approval at the conclusion of this hearing shall be published together with the hearing notice pursuant to Section 6066 of the Government Code. The resolution shall specify the work or project and contain an estimate of costs.  The resolution shall also set forth whether bonds, tax proceeds, assessments, or fees are to be used to finance the work or project and the amounts to be raised from each.  The resolution shall refer to a map or maps showing the general location and general construction of the work or project and the areas benefited by the work or project.  Improvements which may be authorized pursuant to this section shall be limited to pipes, mains, pumping facilities, wells, transmission facilities, filtration facilities, and treatment facilities.  Emergency improvements shall not include the construction of dams, reservoirs, or river diversion structures.  Assessments or fees to fund an emergency work or project shall not exceed costs related to the emergency improvement.  The election shall be called and conducted in the manner prescribed in Article 2 (commencing with Section 471) of Chapter 8 as nearly as the same may be applicable, except that the election shall be conducted in the entire portion of the district benefited by the emergency improvement.  If the emergency improvements are proposed to be funded by means other than a special tax levy or assessment upon real property, Chapters 7 (commencing with Section 431) and 8 (commencing with Section 451) shall be otherwise inapplicable to a district work or project authorized pursuant to this section.
+        </p>
+      </caml:Content>
+    </caml:BillSection>
+    <caml:BillSection id="id_b5ca4e70-f10e-11d8-bc1b-9117673175d6">
+      <caml:Num>SEC. 2.</caml:Num>
+      <caml:Content>
+        <p>Section 451 of the Monterey Peninsula Water Management District Law (Chapter 527 of the Statutes of 1977) is amended to read:</p>
+        <p>Sec. 451.
+          <span class="EmSpace"/>(a)
+          <span class="EnSpace"/>The board may employ competent registered civil engineers, under the supervision of the chief engineer, to investigate and carefully devise a plan or plans for the accomplishment of any of the purposes of this law, and to obtain such other information in regard thereto as may be determined to be necessary or useful for carrying out the purposes of this law. The board may direct the engineer or engineers to make and file reports from time to time with the board.
+        </p>
+        <p>(b)
+          <span class="EnSpace"/>The reports may contain, among other things, the following:
+        </p>
+        <p>(1)
+          <span class="EnSpace"/>A general description of the work proposed to be done, together with general plans, profiles, cross sections, and general specifications relating thereto, on each project or work.
+        </p>
+        <p>(2)
+          <span class="EnSpace"/>A general description of the lands, rights-of-way, easements, and property proposed to be taken, acquired, or injured in carrying out the project or work. 
+        </p>
+        <p>(3)
+          <span class="EnSpace"/>A map or maps which shall show the location and zones, as may be required, of each project or work, which shall show the lands, rights-of-way, easements, and property to be taken, acquired, or injured in carrying out the project or work, and which shall show any other information in regard to the project or work that may be determined to be necessary or useful.
+        </p>
+        <p>(4)
+          <span class="EnSpace"/>An estimate of the cost of each project or work, including the cost of lands, rights-of-way, easements, and property proposed to be taken, acquired, or injured in carrying out the project or work, and all incidental expenses incurred or likely to be incurred in connection therewith, including legal, clerical, engineering, superintendence, inspection, printing, and advertising expenses.  The estimate shall also state the total amount of bonds, if any, necessary to be issued to pay for the project or work.
+        </p>
+        <p>(c)
+          <span class="EnSpace"/>The engineer or engineers shall, from time to time and as directed by the board, file with the board supplementary, amendatory, and additional reports and recommendations as necessity and convenience may require.
+        </p>
+      </caml:Content>
+    </caml:BillSection>
+    <caml:BillSection id="id_b5ccbf71-f10e-11d8-bc1b-9117673175d6">
+      <caml:Num>SEC. 3.</caml:Num>
+      <caml:Content>
+        <p>Section 453 of the Monterey Peninsula Water Management District Law (Chapter 527 of the Statutes of 1977) is amended to read:</p>
+        <p>Sec. 453.
+          <span class="EmSpace"/>The board may institute works or projects for single zones, and joint works or projects for participating zones, for the financing, construction, maintaining, operating, extending, repairing, or otherwise improving any work or improvement of common benefit to the zone or participating zones.  For the purpose of acquiring authority to proceed with any such work or project, the board shall adopt a resolution specifying its intention to undertake the work or project, incorporating estimates of cost of the work or project to be borne by the zone or participating zones.  The resolution shall also set forth whether bonds, taxes, or assessments are to be used to finance the work or project, and the amounts to be raised for the project.  If taxes or assessments are to be used to finance the project, the resolution shall specify the procedure to be followed, provided in Section 435, in order to levy the taxes or assessments.  The resolution shall fix a time and place for public hearing on the resolution and shall refer to a map or maps showing the general location and general construction of the work or project.  Notice of the hearing shall be given by publication pursuant to Section 6066 of the Government Code in a newspaper of general circulation published or circulated in the zone or participating zones.  A  copy of any resolution proposed for approval at the conclusion of this hearing shall be published together with the hearing notice pursuant to Section 6066 of the Government Code.
+        </p>
+      </caml:Content>
+    </caml:BillSection>
+    <caml:BillSection id="id_b5ccbf72-f10e-11d8-bc1b-9117673175d6">
+      <caml:Num>SEC. 4.</caml:Num>
+      <caml:Content>
+        <p>Section 454 of the Monterey Peninsula Water Management District Law (Chapter 527 of the Statutes of 1977) is amended to read:</p>
+        <p>Sec. 454.
+          <span class="EmSpace"/>(a)
+          <span class="EnSpace"/>At the time and place fixed for the hearing, or at any time to which the hearing may be continued, the board shall consider all written and oral objections to the proposed work or project, to the proposed methods and amounts of financing the work or project, and to the inclusion or exclusion of property within the proposed zone or participating zones.
+        </p>
+        <p>(b)
+          <span class="EnSpace"/>If, in the judgment of the board, evidence given at the public hearing indicates that changes in the proposed work or project or the methods and amounts of financing the work or project are necessary or desirable, the board may, at the conclusion of the hearing, adopt a resolution making changes in the proposed work or project and the methods and amounts of financing the work or project.
+        </p>
+        <p>(c)
+          <span class="EnSpace"/>At the conclusion of the hearing, unless the board abandons the proposed work or project, it shall exclude from the zone or participating zones all property which, in the judgment of the board, will not be benefited by the proposed work or project.
+        </p>
+        <p>(d)
+          <span class="EnSpace"/>At the conclusion of the public hearing, the board may adopt any of those resolutions required by Section 431, 471, 476, 601, or 603.
+        </p>
+      </caml:Content>
+    </caml:BillSection>
+    <caml:BillSection id="id_b5cf3073-f10e-11d8-bc1b-9117673175d6">
+      <caml:Num>SEC. 5.</caml:Num>
+      <caml:Content>
+        <p>Section 473 of the Monterey Peninsula Water Management District Law (Chapter 527 of the Statutes of 1977) is amended to read:</p>
+        <p>Sec. 473.
+          <span class="EmSpace"/>(a)
+          <span class="EnSpace"/>The ballot for the election shall contain the following ballot measure:
+        </p>
+        <span class="NCTTable">
+          <br/>       ______________________________________________________
+          <br/>      '                                           '      _  '
+          <br/>      '                                           ' Yes '_' '
+          <br/>      ' Shall the proposed work or project for    '      _  '
+          <br/>      ' Zones No. ___ in the Monterey Peninsula   ' No  '_' '
+          <br/>      ' Water Management District be approved?    '         '
+          <br/>      '                                           '         '
+          <br/>      '-----------------------------------------------------'
+          <br/>
+        </span>
+        <p>(b)
+          <span class="EnSpace"/>The ballot measure may further include the question of bond financing as may be required pursuant to Section 476.
+        </p>
+      </caml:Content>
+    </caml:BillSection>
+    <caml:BillSection id="id_b5d17a64-f10e-11d8-bc1b-9117673175d6">
+      <caml:Num>SEC. 6.</caml:Num>
+      <caml:Content>
+        <p>Section 476 of the Monterey Peninsula Water Management District Law (Chapter 527 of the Statutes of 1977) is amended to read:</p>
+        <p>Sec. 476.
+          <span class="EmSpace"/>(a)
+          <span class="EnSpace"/>If the board determines that bonded indebtedness should be incurred to pay for any portion of the cost of a proposed work or project, the election required under this chapter shall be fully consolidated with the bond election without complying with the procedures for consolidation of elections set forth in the Elections Code, and the procedures for calling and conducting the bond election shall be applicable to both elections, and both propositions shall be included on the ballot for that election.  In the case of a consolidated election, the resolution required under Section 603 shall constitute the notice of election required under this chapter and shall contain the information required under this chapter.  If a majority of the voters voting in all of the zones participating in the election, considering the zones as a single unit rather than separately, vote in favor of approving the project, but the bond election fails, the board may proceed to pay the costs of the project out of the taxes or assessments levied under this act or from other sources excluding bonds.
+        </p>
+        <p>(b)
+          <span class="EnSpace"/>The board may consolidate in a single ballot measure both the project approval required pursuant to Section 473 and the bond approval required by Article 1 (commencing with Section 601) of Chapter 3 of Part 5.
+        </p>
+      </caml:Content>
+    </caml:BillSection>
+    <caml:BillSection id="id_b5d17a65-f10e-11d8-bc1b-9117673175d6">
+      <caml:Num>SEC. 7.</caml:Num>
+      <caml:Content>
+        <p>Section 494 of the Monterey Peninsula Water Management District Law (Chapter 527 of the Statutes of 1977) is amended to read:</p>
+        <p>Sec. 494.
+          <span class="EmSpace"/>Any improvement for which bonds are approved in an election under the provisions of this law, shall be made in conformity with the report and map as provided in Article 1 (commencing with Section 451), except when the doing of any of such work described in the report is prohibited by law or is rendered contrary to the best interests of the district, in which event the board may order necessary changes made in the proposed work or improvements and may cause any plans and specifications to be made and adopted therefor.
+        </p>
+      </caml:Content>
+    </caml:BillSection>
+    <caml:BillSection id="id_b5d3eb66-f10e-11d8-bc1b-9117673175d6">
+      <caml:Num>SEC. 8.</caml:Num>
+      <caml:Content>
+        <p>Section 603 of the Monterey Peninsula Water Management District Law (Chapter 527 of the Statutes of 1977) is amended to read:</p>
+        <p>Sec. 603.
+          <span class="EmSpace"/> (a)
+          <span class="EnSpace"/>The board shall call the special bond election by resolution and submit to the qualified electors of the zone or participating zones the proposition of incurring a bonded debt in the zone or participating zones in the amount and for the purposes stated in the resolution and shall recite therein the objects and purposes for which the indebtedness is proposed to be incurred; provided, that it shall be sufficient to give a brief, general description of those objects and purposes, and refer to the recorded copy of the resolution adopted by the board and on file pursuant to Section 601 for particulars.  The resolution shall also state the estimated cost of the proposed work and improvements, the amount of the principal of the indebtedness to be incurred therefor, and the maximum rate of interest to be paid on that indebtedness, and shall fix the date on which the special election shall be held, and the form and contents of the ballot to be used.  For the purposes of the election, the board shall in the resolution establish special bond election precincts within the boundaries of each zone or participating zones and may form election precincts by consolidating the precincts established for general elections in the district to a number not exceeding six general precincts for each special bond election precinct, and shall designate a polling place and appoint one inspector, one judge, and one clerk for each of the special bond election precincts.
+        </p>
+        <p>(b)
+          <span class="EnSpace"/>In all particulars not recited in the resolution, the special bond election shall be held as nearly as practicable in conformity with the general election laws of the state.
+        </p>
+      </caml:Content>
+    </caml:BillSection>
+    <caml:BillSection id="id_b5d3eb67-f10e-11d8-bc1b-9117673175d6">
+      <caml:Num>SEC. 9.</caml:Num>
+      <caml:Content>
+        <p>Section 605 of the Monterey Peninsula Water Management District Law (Chapter 527 of the Statutes of 1977) is amended to read:</p>
+        <p>Sec. 605.
+          <span class="EmSpace"/>The resolution calling for a special bond election shall, prior to the date set for the election, be published in a newspaper of general circulation circulated in each zone or participating zones affected in accordance with Section 6064 of the Government Code.  No other notice of the election need be given nor need sample ballots or polling place cards be issued.
+        </p>
+      </caml:Content>
+    </caml:BillSection>
+    <caml:BillSection id="id_b5d3eb68-f10e-11d8-bc1b-9117673175d6">
+      <caml:Num>SEC. 10.</caml:Num>
+      <caml:Content>
+        <p>This act is an urgency statute necessary for the immediate preservation of the public peace, health, or safety within the meaning of Article IV of the Constitution and shall go into immediate effect.  The facts constituting the necessity are:</p>
+        <p>In order to ensure that the Monterey Peninsula Water Management District will be able to provide critically needed additional water supply during the current drought emergency, it is necessary that this act take effect immediately.</p>
+      </caml:Content>
+    </caml:BillSection>
+  </caml:Bill>
+</caml:MeasureDoc>

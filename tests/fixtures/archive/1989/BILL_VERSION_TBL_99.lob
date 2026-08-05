@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?><caml:MeasureDoc version="1.0" xsi:schemaLocation="http://lc.ca.gov/legalservices/schemas/caml.1# xca.1.xsd" xmlns:caml="http://lc.ca.gov/legalservices/schemas/caml.1#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<!-- Copyright © Legislative Counsel Bureau, State of California. -->
+
+  <caml:Description>
+    
+    <caml:Id>CHR198900090</caml:Id>
+    <caml:VersionNum>96</caml:VersionNum>
+    <caml:History>
+      <caml:Action>
+        <caml:ActionText>FILED</caml:ActionText>
+        <caml:ActionDate>1989-08-23</caml:ActionDate>
+      </caml:Action>
+      <caml:Action>
+        <caml:ActionText>PASSED_ASSEMBLY</caml:ActionText>
+        <caml:ActionDate>1989-08-21</caml:ActionDate>
+      </caml:Action>
+      <caml:Action>
+        <caml:ActionText>PASSED_SENATE</caml:ActionText>
+        <caml:ActionDate>1989-07-20</caml:ActionDate>
+      </caml:Action>
+      <caml:Action>
+        <caml:ActionText>INTRODUCED</caml:ActionText>
+        <caml:ActionDate>1989-04-10</caml:ActionDate>
+      </caml:Action>
+    </caml:History>
+    <caml:LegislativeInfo>
+      <caml:SessionYear>1989</caml:SessionYear>
+      <caml:SessionNum>0</caml:SessionNum>
+      <caml:MeasureType>ACR</caml:MeasureType>
+      <caml:MeasureNum>65</caml:MeasureNum>
+      <caml:MeasureState>CHP</caml:MeasureState>
+      <caml:ChapterYear>1989</caml:ChapterYear>
+      <caml:ChapterType>CHR</caml:ChapterType>
+      <caml:ChapterSessionNum>0</caml:ChapterSessionNum>
+      <caml:ChapterNum>90</caml:ChapterNum>
+    </caml:LegislativeInfo>
+    <caml:Authors>
+      <caml:Legislator>
+        <caml:Contribution>LEAD_AUTHOR</caml:Contribution>
+        <caml:House>ASSEMBLY</caml:House>
+        <caml:Name>Connelly</caml:Name>
+      </caml:Legislator>
+      <caml:Legislator>
+        <caml:Contribution>PRINCIPAL_COAUTHOR</caml:Contribution>
+        <caml:House>ASSEMBLY</caml:House>
+        <caml:Name>Isenberg</caml:Name>
+      </caml:Legislator>
+      <caml:Legislator>
+        <caml:Contribution>PRINCIPAL_COAUTHOR</caml:Contribution>
+        <caml:House>SENATE</caml:House>
+        <caml:Name>Stirling</caml:Name>
+      </caml:Legislator>
+    </caml:Authors>
+    <caml:Title>Relative to Meet Your Judges Week.</caml:Title>
+    <caml:GeneralSubject>
+      <caml:Subject>Meet Your Judges Week.</caml:Subject>
+    </caml:GeneralSubject>
+    <caml:DigestText>
+      <p>This measure urges the participation of judges, attorneys, educators, and the people of this state in Meet Your Judges Week, March 4th through 10th, 1990.  It also urges all presiding judges to report to the Legislature no later than July 1, 1990, on actions undertaken during Meet Your Judges Week.</p>
+    </caml:DigestText>
+  </caml:Description>
+  <caml:Resolution id="id_7c328d55-f113-11d8-95dd-e87c920cbf95">
+    <caml:Whereas id="id_7c328d56-f113-11d8-95dd-e87c920cbf95">
+      <caml:Content>
+        <p>WHEREAS, The people of the State of California are entitled to have access to a judicial process that ensures fair and equal treatment for those participating; and</p>
+      </caml:Content>
+    </caml:Whereas>
+    <caml:Whereas id="id_7c328d57-f113-11d8-95dd-e87c920cbf95">
+      <caml:Content>
+        <p>WHEREAS, Understanding of court operations, and respect for our system of justice are central to our democratic society; and</p>
+      </caml:Content>
+    </caml:Whereas>
+    <caml:Whereas id="id_7c328d58-f113-11d8-95dd-e87c920cbf95">
+      <caml:Content>
+        <p>WHEREAS, The demystification of the workings of the courts in our communities and of the role of judges in our court system will help to ensure access to justice for the people and respect of the people for the judicial branch of government; and</p>
+      </caml:Content>
+    </caml:Whereas>
+    <caml:Whereas id="id_7c328d59-f113-11d8-95dd-e87c920cbf95">
+      <caml:Content>
+        <p>WHEREAS, Judges who understand the perceptions and concerns of the citizenry regarding local court operations will be better able to fulfill their responsibilities; and</p>
+      </caml:Content>
+    </caml:Whereas>
+    <caml:Whereas id="id_7c328d5a-f113-11d8-95dd-e87c920cbf95">
+      <caml:Content>
+        <p>WHEREAS, The California Judges Association, the California Young Lawyers Association of the State Bar of California, and the educational community have committed their efforts to the planning and implementation of Meet Your Judges Week, March 4th through 10th, 1990, for the purpose of increasing communication between residents of local communities throughout the state and their judges; and</p>
+      </caml:Content>
+    </caml:Whereas>
+    <caml:Whereas id="id_7c34fe5b-f113-11d8-95dd-e87c920cbf95">
+      <caml:Content>
+        <p>WHEREAS, During Meet Your Judges Week, community forums will be held in local jurisdictions throughout the state to enable students, parents, and the general public to meet with their local judges and learn about the role of judges in the legal system; now, therefore, be it</p>
+      </caml:Content>
+    </caml:Whereas>
+    <caml:Resolved id="id_7c34fe5c-f113-11d8-95dd-e87c920cbf95">
+      <caml:Content>
+        <p>
+          <i>Resolved by the Assembly of the State of California, the Senate thereof concurring,</i> That the Legislature hereby commends participating judges, attorneys, and educators for their efforts to demystify the judicial process; and be it further
+        </p>
+      </caml:Content>
+    </caml:Resolved>
+    <caml:Resolved id="id_7c34fe5d-f113-11d8-95dd-e87c920cbf95">
+      <caml:Content>
+        <p>
+          <i>Resolved,</i> That the Legislature urges the people of California to participate in Meet Your Judges Week during the week of March 4th through 10th, 1990; and be it further
+        </p>
+      </caml:Content>
+    </caml:Resolved>
+    <caml:Resolved id="id_7c34fe5e-f113-11d8-95dd-e87c920cbf95">
+      <caml:Content>
+        <p>
+          <i>Resolved,</i> That presiding judges, superior and municipal, and other judges be strongly urged to participate in community outreach programs during that week; and be it further
+        </p>
+      </caml:Content>
+    </caml:Resolved>
+    <caml:Resolved id="id_7c34fe5f-f113-11d8-95dd-e87c920cbf95">
+      <caml:Content>
+        <p>
+          <i>Resolved,</i> That all presiding judges, superior and municipal, be urged to report to the Legislature no later than July 1, 1990, on actions undertaken during this week; and be it further
+        </p>
+      </caml:Content>
+    </caml:Resolved>
+    <caml:Resolved id="id_7c34fe60-f113-11d8-95dd-e87c920cbf95">
+      <caml:Content>
+        <p>
+          <i>Resolved,</i> That the Chief Clerk of the Assembly transmit copies of this resolution to the California Judges Association, the California Young Lawyers Association of the State Bar of California, and to the Superintendent of Public Instruction.
+        </p>
+      </caml:Content>
+    </caml:Resolved>
+  </caml:Resolution>
+</caml:MeasureDoc>

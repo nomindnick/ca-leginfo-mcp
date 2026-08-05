@@ -115,6 +115,39 @@ BILL_TABLES: tuple[Table, ...] = (
     ),
 )
 
+# Vote data lives only in archive.db for now (SPEC §4); bill_motion is
+# included so summary/detail votes are interpretable (motion_id -> text).
+ARCHIVE_ONLY_TABLES: tuple[Table, ...] = (
+    Table(
+        "BILL_DETAIL_VOTE_TBL",
+        "bill_detail_vote",
+        (
+            "bill_id", "location_code", "legislator_name", "vote_date_time",
+            "vote_date_seq", "vote_code", "motion_id", "trans_uid",
+            "trans_update", "member_order", "session_date", "speaker",
+        ),
+    ),
+    Table(
+        "BILL_SUMMARY_VOTE_TBL",
+        "bill_summary_vote",
+        (
+            "bill_id", "location_code", "vote_date_time", "vote_date_seq",
+            "motion_id", "ayes", "noes", "abstain", "vote_result",
+            "trans_uid", "trans_update", "file_item_num", "file_location",
+            "display_lines", "session_date",
+        ),
+    ),
+    Table(
+        "BILL_MOTION_TBL",
+        "bill_motion",
+        ("motion_id", "motion_text", "trans_uid", "trans_update"),
+    ),
+)
+
+# Everything a session archive can carry (loaders tolerate absences —
+# eras differ; the per-session coverage matrix records reality).
+ARCHIVE_TABLES: tuple[Table, ...] = BILL_TABLES + ARCHIVE_ONLY_TABLES
+
 ALL_TABLES: tuple[Table, ...] = LAW_TABLES + BILL_TABLES
 
 LAW_DAT_NAMES = frozenset(f"{t.dat}.dat" for t in LAW_TABLES)

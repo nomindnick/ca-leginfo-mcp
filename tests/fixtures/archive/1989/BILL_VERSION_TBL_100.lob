@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?><caml:MeasureDoc version="1.0" xsi:schemaLocation="http://lc.ca.gov/legalservices/schemas/caml.1# xca.1.xsd" xmlns:caml="http://lc.ca.gov/legalservices/schemas/caml.1#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<!-- Copyright © Legislative Counsel Bureau, State of California. -->
+
+  <caml:Description>
+    
+    <caml:Id>CHR198900089</caml:Id>
+    <caml:VersionNum>95</caml:VersionNum>
+    <caml:History>
+      <caml:Action>
+        <caml:ActionText>FILED</caml:ActionText>
+        <caml:ActionDate>1989-07-26</caml:ActionDate>
+      </caml:Action>
+      <caml:Action>
+        <caml:ActionText>PASSED_ASSEMBLY</caml:ActionText>
+        <caml:ActionDate>1989-07-20</caml:ActionDate>
+      </caml:Action>
+      <caml:Action>
+        <caml:ActionText>PASSED_SENATE</caml:ActionText>
+        <caml:ActionDate>1989-06-12</caml:ActionDate>
+      </caml:Action>
+      <caml:Action>
+        <caml:ActionText>INTRODUCED</caml:ActionText>
+        <caml:ActionDate>1989-05-03</caml:ActionDate>
+      </caml:Action>
+    </caml:History>
+    <caml:LegislativeInfo>
+      <caml:SessionYear>1989</caml:SessionYear>
+      <caml:SessionNum>0</caml:SessionNum>
+      <caml:MeasureType>SJR</caml:MeasureType>
+      <caml:MeasureNum>31</caml:MeasureNum>
+      <caml:MeasureState>CHP</caml:MeasureState>
+      <caml:ChapterYear>1989</caml:ChapterYear>
+      <caml:ChapterType>CHR</caml:ChapterType>
+      <caml:ChapterSessionNum>0</caml:ChapterSessionNum>
+      <caml:ChapterNum>89</caml:ChapterNum>
+    </caml:LegislativeInfo>
+    <caml:Authors>
+      <caml:Legislator>
+        <caml:Contribution>LEAD_AUTHOR</caml:Contribution>
+        <caml:House>SENATE</caml:House>
+        <caml:Name>Vuich</caml:Name>
+      </caml:Legislator>
+      <caml:Legislator>
+        <caml:Contribution>LEAD_AUTHOR</caml:Contribution>
+        <caml:House>SENATE</caml:House>
+        <caml:Name>Deddeh</caml:Name>
+      </caml:Legislator>
+      <caml:Legislator>
+        <caml:Contribution>LEAD_AUTHOR</caml:Contribution>
+        <caml:House>SENATE</caml:House>
+        <caml:Name>Keene</caml:Name>
+      </caml:Legislator>
+      <caml:Legislator>
+        <caml:Contribution>LEAD_AUTHOR</caml:Contribution>
+        <caml:House>SENATE</caml:House>
+        <caml:Name>McCorquodale</caml:Name>
+      </caml:Legislator>
+      <caml:Legislator>
+        <caml:Contribution>LEAD_AUTHOR</caml:Contribution>
+        <caml:House>SENATE</caml:House>
+        <caml:Name>Nielsen</caml:Name>
+      </caml:Legislator>
+      <caml:Legislator>
+        <caml:Contribution>LEAD_AUTHOR</caml:Contribution>
+        <caml:House>SENATE</caml:House>
+        <caml:Name>Presley</caml:Name>
+      </caml:Legislator>
+      <caml:Legislator>
+        <caml:Contribution>COAUTHOR</caml:Contribution>
+        <caml:House>ASSEMBLY</caml:House>
+        <caml:Name>Baker</caml:Name>
+      </caml:Legislator>
+      <caml:Legislator>
+        <caml:Contribution>COAUTHOR</caml:Contribution>
+        <caml:House>ASSEMBLY</caml:House>
+        <caml:Name>Bronzan</caml:Name>
+      </caml:Legislator>
+      <caml:Legislator>
+        <caml:Contribution>COAUTHOR</caml:Contribution>
+        <caml:House>ASSEMBLY</caml:House>
+        <caml:Name>Chandler</caml:Name>
+      </caml:Legislator>
+      <caml:Legislator>
+        <caml:Contribution>COAUTHOR</caml:Contribution>
+        <caml:House>ASSEMBLY</caml:House>
+        <caml:Name>Costa</caml:Name>
+      </caml:Legislator>
+      <caml:Legislator>
+        <caml:Contribution>COAUTHOR</caml:Contribution>
+        <caml:House>ASSEMBLY</caml:House>
+        <caml:Name>Hughes</caml:Name>
+      </caml:Legislator>
+      <caml:Legislator>
+        <caml:Contribution>COAUTHOR</caml:Contribution>
+        <caml:House>ASSEMBLY</caml:House>
+        <caml:Name>Tucker</caml:Name>
+      </caml:Legislator>
+      <caml:Legislator>
+        <caml:Contribution>COAUTHOR</caml:Contribution>
+        <caml:House>ASSEMBLY</caml:House>
+        <caml:Name>Norman Waters</caml:Name>
+      </caml:Legislator>
+    </caml:Authors>
+    <caml:Title>Relative to agriculture.</caml:Title>
+    <caml:GeneralSubject>
+      <caml:Subject>Agriculture:  set-aside and conservation farm programs.</caml:Subject>
+    </caml:GeneralSubject>
+    <caml:DigestText>
+      <p>This measure would memorialize the Congress of the United States to enact legislation which permits farmers who are enrolled in government set-aside programs to grow rotation crops dedicated as feedstock for conversion to fuel sources on displaced base acreage, under specified circumstances.</p>
+    </caml:DigestText>
+  </caml:Description>
+  <caml:Resolution id="id_7b0afd91-f113-11d8-8faf-e62bb08b83fe">
+    <caml:Whereas id="id_7b0afd92-f113-11d8-8faf-e62bb08b83fe">
+      <caml:Content>
+        <p>WHEREAS, Congress is considering legislation relating to crop subsidy and deficiency payments; and</p>
+      </caml:Content>
+    </caml:Whereas>
+    <caml:Whereas id="id_7b0afd93-f113-11d8-8faf-e62bb08b83fe">
+      <caml:Content>
+        <p>WHEREAS, The 1988 estimates of the Agricultural Stabilization and Conservation Service indicate that 53.3 million acres were taken out of production in the United States, and 3,084,714 acres were enrolled in California resulting in payments in excess of $285,560,000; and</p>
+      </caml:Content>
+    </caml:Whereas>
+    <caml:Whereas id="id_7b0afd94-f113-11d8-8faf-e62bb08b83fe">
+      <caml:Content>
+        <p>WHEREAS, Farmers may participate under current law in a conservation or set-aside farming program in which a portion of a farmer’s base acreage, which is based on farming history, is removed from production for which a subsidy is received; and</p>
+      </caml:Content>
+    </caml:Whereas>
+    <caml:Whereas id="id_7b0afd95-f113-11d8-8faf-e62bb08b83fe">
+      <caml:Content>
+        <p>WHEREAS, The farm conservation or set-aside farming program under current law includes no provision for growing rotation crops on the set-aside ground; and</p>
+      </caml:Content>
+    </caml:Whereas>
+    <caml:Whereas id="id_7b0afd96-f113-11d8-8faf-e62bb08b83fe">
+      <caml:Content>
+        <p>WHEREAS, Emerging technology exists which demonstrate the potential for farmers to farm crops dedicated to producing alcohol for the production of ethanol or  biomass as fuel for electrical production; and</p>
+      </caml:Content>
+    </caml:Whereas>
+    <caml:Whereas id="id_7b0d4787-f113-11d8-8faf-e62bb08b83fe">
+      <caml:Content>
+        <p>WHEREAS, A 25 percent reduction in carbon monoxide can be demonstrated by substituting 10 percent ethanol in unleaded gasoline; and</p>
+      </caml:Content>
+    </caml:Whereas>
+    <caml:Whereas id="id_7b0d4788-f113-11d8-8faf-e62bb08b83fe">
+      <caml:Content>
+        <p>WHEREAS, The production of electricity from renewable plant resources limits the need for increased usage of nonrenewable carbon monoxide-producing fossil fuels; and</p>
+      </caml:Content>
+    </caml:Whereas>
+    <caml:Whereas id="id_7b0d4789-f113-11d8-8faf-e62bb08b83fe">
+      <caml:Content>
+        <p>WHEREAS, Growing plants on formerly plowed “down acreage” increases the number of plants taking in carbon dioxide and giving off oxygen through photosynthesis, thus creating a natural carbon filter effect and providing a net decrease in the collective contribution to the greenhouse effect; and</p>
+      </caml:Content>
+    </caml:Whereas>
+    <caml:Whereas id="id_7b0d478a-f113-11d8-8faf-e62bb08b83fe">
+      <caml:Content>
+        <p>WHEREAS, Scientists in the United States have developed effective and competitive biomass systems and related technologies which could impact favorably on the balance of trade problems facing this country, now, therefore, be it</p>
+      </caml:Content>
+    </caml:Whereas>
+    <caml:Resolved id="id_7b0d478b-f113-11d8-8faf-e62bb08b83fe">
+      <caml:Content>
+        <p>
+          <i>Resolved by the Senate and Assembly of the State of California, jointly,</i> That the Legislature of the State of California respectfully memorializes the Congress of the United States to enact legislation which permits farmers who are enrolled in government set-aside programs to grow rotation crops dedicated as feedstock for conversion to fuel sources on displaced base acreage, and which provides the following:
+        </p>
+        <p>(1)
+          <span class="EnSpace"/>The acreage dedicated to a fuel rotation crop is not deducted from the base acreage of a farmer’s program crop in the farm conservation and set-aside program administered by the Department of Agriculture.
+        </p>
+        <p>(2)
+          <span class="EnSpace"/>Farmers who plant “fuel rotation crops” market these crops solely as fuel crops.
+        </p>
+        <p>(3)
+          <span class="EnSpace"/>Farmers maintain displaced base acreage as a part of family farming history and do not receive any other form of governmental subsidy for this acreage; and be it further
+        </p>
+      </caml:Content>
+    </caml:Resolved>
+    <caml:Resolved id="id_7b0d478c-f113-11d8-8faf-e62bb08b83fe">
+      <caml:Content>
+        <p>
+          <i>Resolved,</i> That the Secretary of the Senate transmit copies of this resolution to the President and Vice President of the United States, to the Speaker of the House of Representatives, to the Secretary of Agriculture, and to each Senator and Representative from California in the Congress of the United States.
+        </p>
+      </caml:Content>
+    </caml:Resolved>
+  </caml:Resolution>
+</caml:MeasureDoc>
