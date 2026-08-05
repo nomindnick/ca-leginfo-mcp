@@ -140,7 +140,11 @@ def build_archive_db(
                 report.failed_sessions.append([session, repr(e)])
         _write_meta(con, report)
         con.commit()
+        # Ship the artifact in rollback-journal mode: a WAL-mode file
+        # can't be opened by the server's read-only connections on a
+        # read-only filesystem (WAL needs the -shm sidecar writable).
         con.execute("PRAGMA wal_checkpoint(TRUNCATE)")
+        con.execute("PRAGMA journal_mode=DELETE")
     finally:
         con.close()
     report.db_bytes = out.stat().st_size
@@ -171,6 +175,7 @@ def _create_schema(con) -> None:
 def _create_indexes(con) -> None:
     """Deferred to the end of a full build (cheap to re-run on resume)."""
     ix = [
+        "CREATE INDEX IF NOT EXISTS ax_bill_id ON bill(bill_id)",
         "CREATE INDEX IF NOT EXISTS ax_chapter ON bill(chapter_year, chapter_num)",
         "CREATE INDEX IF NOT EXISTS ax_measure ON bill(session_year, measure_type, measure_num)",
         "CREATE INDEX IF NOT EXISTS ax_ver ON bill_version(bill_id)",

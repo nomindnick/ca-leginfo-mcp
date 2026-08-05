@@ -100,11 +100,20 @@ coverage, analysis formats/errors — so tools can state limits honestly),
 `meta`.
 
 Indexes: `(law_code, section_num_norm)`; `(chapter_year, chapter_num)`;
-`bill_id` on history/analyses/refs; `(law_code, section)` on refs.
+`bill_id` on bill/history/analyses/refs; `(law_code, section)` on refs.
+Both artifacts ship in rollback-journal mode (the archive's WAL is
+checkpointed and reset at end of build — WAL can't be read from a
+read-only filesystem).
 
 ## 5. MCP tool surface
 
-Every response includes: `law_extract_date`, `bill_extract_date`, and a
+*As built (`server/`, Phase 3): the SDK is `mcp` 2.0 (`MCPServer` — the
+API formerly named FastMCP); tool logic lives in `server/tools.py` as
+plain functions so tests run without a client. Deltas from the plan are
+marked below.*
+
+Every response includes: `law_extract_date`, `bill_extract_date`,
+`current_session`, optional `notes` (coverage/limit statements), and a
 `source` note (data derived from the Legislature's public bulk downloads;
 not the official publication).
 
@@ -122,15 +131,31 @@ not the official publication).
 4. `get_bill(measure, session?)` — accepts "AB 831" style or bill_id;
    returns status, chapter (if enacted), authors, history actions,
    version list, parsed sections affected.
-5. `get_bill_analyses(measure_or_bill_id, session?)` — analysis index
+5. `get_bill_analyses(measure?, session?, analysis_id?)` — analysis index
    (committee, house, date) + full extracted text on request
    (`analysis_id` fetch). Works across current + archive.
 6. `get_legislative_history(code, section)` — the flagship: parse the
-   section's history note citation(s) (Stats. YYYY, Ch. N), resolve each
-   chapter → bill via archive/current `bill` tables, return per-chapter:
-   bill, authors, analyses index, veto messages. For pre-1993 citations
-   return an explicit "predates electronic records (1993)" marker.
-7. `chapter_to_bill(year, chapter)` — direct pivot, any session ≥1989.
+   section's history note citation(s), resolve each chapter → bill via
+   archive/current `bill` tables, return per-chapter: bill, authors,
+   analyses index, veto messages. As built, events carry a `role`
+   (operative vs the "(as amended by …)" prior-version parenthetical)
+   and three extra branches: voter initiatives ("by initiative
+   Proposition 47" and the Constitution's "by Prop. N. Initiative
+   measure." form) return an adopted-by-initiative marker; Constitution
+   "Res.Ch. N, YYYY" citations resolve via resolution chapters to the
+   proposing SCA/ACA; extraordinary-session citations resolve via
+   `chapter_session_num`. Pre-1989 citations return an explicit marker
+   (bill data begins 1989, analyses 1993 — more precise than the
+   planned flat 1993 cutoff). A supplementary
+   `enacted_bills_citing_section` list reconstructs the earlier lineage
+   from archived bill titles (1989→present, title-based).
+7. `chapter_to_bill(year, chapter, kind?, ex_session?)` — direct pivot,
+   any session ≥1989; `kind="resolution"` for Res.Ch. citations. The
+   chapter key is not unique in real pubinfo data (adjacent sessions'
+   organizing resolutions share "Res. Ch. 1"; a few duplicate chapter
+   records exist) — multiple matches return the first deterministically
+   plus a warning naming the others. `get_bill` additionally returns
+   floor/committee vote summaries (with motion text) for archive bills.
 
 Error behavior: never empty-and-silent. Unknown section → nearest-match
 suggestions (same code, prefix match). Archive gaps → explicit coverage

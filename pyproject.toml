@@ -6,6 +6,7 @@ requires-python = ">=3.12"
 license = { file = "LICENSE" }
 dependencies = [
     "beautifulsoup4>=4.12",
+    "mcp>=2.0",
 ]
 
 [project.optional-dependencies]
@@ -16,13 +17,14 @@ dev = [
 
 [project.scripts]
 ca-leginfo-ingest = "ingest.cli:main"
+ca-leginfo-server = "server.app:main"
 
 [build-system]
 requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
-packages = ["ingest"]
+packages = ["ingest", "server"]
 
 [tool.ruff]
 line-length = 88

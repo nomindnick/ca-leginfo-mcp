@@ -384,6 +384,7 @@ def _extract_veto_text(con, report: BuildReport, zf) -> None:
 
 
 def _create_indexes(con) -> None:
+    con.execute("CREATE INDEX ix_bill_id ON bill(bill_id)")
     con.execute("CREATE INDEX ix_law ON law_section(law_code, section_num_norm)")
     con.execute("CREATE INDEX ix_chapter ON bill(chapter_year, chapter_num)")
     con.execute("CREATE INDEX ix_measure ON bill(measure_type, measure_num)")

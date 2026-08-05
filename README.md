@@ -15,19 +15,24 @@ Lets an attorney's AI tool:
 
 ## Status
 
-Phases 1–2 (ingest pipeline + archives) complete. The
-[`ingest/`](ingest/) package builds both corpus artifacts from the
-pubinfo bulk zips:
+Phases 1–3 complete (ingest pipeline, archives, MCP server). Next per
+[SPEC.md](SPEC.md): deployment (Phase 4, Railway + R2).
 
-- `current.db` (~40 s nightly): current law + 2025–26 session, FTS,
-  parsed bill→section refs, analysis text — with a sanity gate that
-  blocks bad artifacts (`python -m ingest build` / `sanity`).
-- `archive.db` (4.7 GB, 18 sessions 1989–2023, ~35 min once):
-  283k bill version texts, 371k text-extracted committee/floor analyses,
-  votes, vetoes, ~1M parsed section refs, per-session coverage matrix
-  (`python -m ingest build-archive`).
+- [`ingest/`](ingest/) builds both corpus artifacts from the pubinfo
+  bulk zips: `current.db` (~40 s nightly: current law + session, FTS,
+  parsed bill→section refs, analysis text, sanity gate) and
+  `archive.db` (4.7 GB, 18 sessions 1989–2023: 283k bill version texts,
+  371k text-extracted analyses, votes, vetoes, ~1M parsed section refs,
+  per-session coverage matrix).
+- [`server/`](server/) serves both over MCP (`mcp` 2.0): seven tools —
+  section text/search, pending-bill flagging, bill lookup, analyses
+  with full text, legislative history (initiative and
+  constitutional-amendment aware), chapter→bill pivot. Every response
+  carries extract dates and a source note; era gaps come back as
+  explicit coverage statements. Run locally:
+  `ca-leginfo-server --current-db … --archive-db …` (stdio; `--transport
+  http` for streamable HTTP).
 
-Next per [SPEC.md](SPEC.md): MCP server (Phase 3), deployment (Phase 4).
 The feasibility spike that preceded the build is preserved in
 [`spike/`](spike/) — see [SPIKE_FINDINGS.md](SPIKE_FINDINGS.md).
 
