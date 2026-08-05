@@ -73,12 +73,20 @@ deployment follows.
 
 ## 4. Database schema
 
-`current.db` (from spike, kept): `codes`, `law_section` (+`content_text`,
-`section_num_norm`), `law_toc`, `law_toc_sections`, `bill`, `bill_version`
-(+`title_text`), `bill_history`, `bill_analysis`, `veto_message`,
-`bill_section_ref` (parsed titles: bill_version_id, bill_id, action,
-law_code, section, is_range, range_end, struct), `law_fts` (FTS5 over
-statute text), `meta` (extract dates, build time, session).
+`current.db` (from spike, kept; additions marked *): `codes`, `law_section`
+(+`content_text`, `section_num_norm`), `law_toc`, `law_toc_sections`,
+`bill`, `bill_version` (+`title_text`), `bill_version_authors`\* (tool 4
+returns authors), `bill_history`, `bill_analysis`, `analysis_text`\*
+(zlib-compressed extracted text keyed by analysis_id — tool 5 must return
+text for current-session bills; the 2025–26 session is 100% .docx, so the
+nightly build needs no LibreOffice), `veto_message`, `bill_section_ref`
+(parsed titles: bill_version_id, bill_id, action, law_code, section,
+is_range, range_end, struct, `exists_in_current_law`\* — precomputed §6
+flag), `law_fts` (FTS5 over statute text), `meta` (extract dates, build
+time, session, source zips, title-parse coverage). Vote tables stay
+archive-only for now (§2's "votes" is served from archives; add to
+current.db when a tool needs them — nightly rebuilds make schema changes
+free).
 
 `archive.db`: per-session `bill`, `bill_version` (+ text, zstd-compressed
 if size warrants), `bill_history`, `bill_analysis` + `analysis_text`

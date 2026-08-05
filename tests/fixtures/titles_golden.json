@@ -1,0 +1,632 @@
+[
+ {
+  "title": "A resolution to propose to the people of the State of California an amendment to the Constitution of the State, by adding Section 23 to Article IV thereof, and adding Section 12 to Article V thereof, relating to legislative process.",
+  "status": "ok",
+  "refs": [
+   {
+    "action": "adding",
+    "code": "CONS",
+    "section": "Art. IV, Sec. 23",
+    "is_range": false,
+    "range_end": null,
+    "struct": null
+   },
+   {
+    "action": "adding",
+    "code": "CONS",
+    "section": "Art. V, Sec. 12",
+    "is_range": false,
+    "range_end": null,
+    "struct": null
+   }
+  ]
+ },
+ {
+  "title": "An act relating to the Budget Act of 2025.",
+  "status": "budget_act",
+  "refs": []
+ },
+ {
+  "title": "An act to add Article 11 (commencing with Section 12670) to Chapter 6 of Part 2 of Division 3 of Title 2 of the Government Code, relating to state government.",
+  "status": "ok",
+  "refs": [
+   {
+    "action": "add",
+    "code": "GOV",
+    "section": "12670",
+    "is_range": false,
+    "range_end": null,
+    "struct": "Article 11"
+   }
+  ]
+ },
+ {
+  "title": "An act to add Article 2.3 (commencing with Section 66010.8) to Chapter 2 of Part 40 of Division 5 of Title 3 of the Education Code, relating to postsecondary education.",
+  "status": "ok",
+  "refs": [
+   {
+    "action": "add",
+    "code": "EDC",
+    "section": "66010.8",
+    "is_range": false,
+    "range_end": null,
+    "struct": "Article 2.3"
+   }
+  ]
+ },
+ {
+  "title": "An act to add Chapter 2.1 (commencing with Section 16780) to Part 2 of Division 7 of the Business and Professions Code, relating to business.",
+  "status": "ok",
+  "refs": [
+   {
+    "action": "add",
+    "code": "BPC",
+    "section": "16780",
+    "is_range": false,
+    "range_end": null,
+    "struct": "Chapter 2.1"
+   }
+  ]
+ },
+ {
+  "title": "An act to add Chapter 2.2 (commencing with Section 6359.1) to Part 1 of Division 5 of the Labor Code, relating to occupational safety and health.",
+  "status": "ok",
+  "refs": [
+   {
+    "action": "add",
+    "code": "LAB",
+    "section": "6359.1",
+    "is_range": false,
+    "range_end": null,
+    "struct": "Chapter 2.2"
+   }
+  ]
+ },
+ {
+  "title": "An act to add Chapter 3.3 (commencing with Section 35640) to Division 26.5 of the Public Resources Code, relating to coastal resources.",
+  "status": "ok",
+  "refs": [
+   {
+    "action": "add",
+    "code": "PRC",
+    "section": "35640",
+    "is_range": false,
+    "range_end": null,
+    "struct": "Chapter 3.3"
+   }
+  ]
+ },
+ {
+  "title": "An act to add Chapter 35.5 (commencing with Section 22948.30) to Division 8 of the Business and Professions Code, and to amend Section 6320 of the Family Code, relating to connected devices.",
+  "status": "ok",
+  "refs": [
+   {
+    "action": "add",
+    "code": "BPC",
+    "section": "22948.30",
+    "is_range": false,
+    "range_end": null,
+    "struct": "Chapter 35.5"
+   },
+   {
+    "action": "amend",
+    "code": "FAM",
+    "section": "6320",
+    "is_range": false,
+    "range_end": null,
+    "struct": null
+   }
+  ]
+ },
+ {
+  "title": "An act to add Division 27 (commencing with Section 120000) to the Financial Code, relating to business.",
+  "status": "ok",
+  "refs": [
+   {
+    "action": "add",
+    "code": "FIN",
+    "section": "120000",
+    "is_range": false,
+    "range_end": null,
+    "struct": "Division 27"
+   }
+  ]
+ },
+ {
+  "title": "An act to add Section 15008 to the Government Code, relating to state government.",
+  "status": "ok",
+  "refs": [
+   {
+    "action": "add",
+    "code": "GOV",
+    "section": "15008",
+    "is_range": false,
+    "range_end": null,
+    "struct": null
+   }
+  ]
+ },
+ {
+  "title": "An act to add Section 234.8 to the Education Code, and to amend Section 7284.6 of the Government Code, relating to immigration enforcement, and declaring the urgency thereof, to take effect immediately.",
+  "status": "ok",
+  "refs": [
+   {
+    "action": "add",
+    "code": "EDC",
+    "section": "234.8",
+    "is_range": false,
+    "range_end": null,
+    "struct": null
+   },
+   {
+    "action": "amend",
+    "code": "GOV",
+    "section": "7284.6",
+    "is_range": false,
+    "range_end": null,
+    "struct": null
+   }
+  ]
+ },
+ {
+  "title": "An act to add Section 30345 to the Public Resources Code, relating to coastal resources, and declaring the urgency thereof, to take effect immediately.",
+  "status": "ok",
+  "refs": [
+   {
+    "action": "add",
+    "code": "PRC",
+    "section": "30345",
+    "is_range": false,
+    "range_end": null,
+    "struct": null
+   }
+  ]
+ },
+ {
+  "title": "An act to add Section 43013.7 to the Health and Safety Code, relating to motor vehicle fuels, and declaring the urgency thereof, to take effect immediately.",
+  "status": "ok",
+  "refs": [
+   {
+    "action": "add",
+    "code": "HSC",
+    "section": "43013.7",
+    "is_range": false,
+    "range_end": null,
+    "struct": null
+   }
+  ]
+ },
+ {
+  "title": "An act to add Sections 17921.12 and 17921.13 to the Health and Safety Code, relating to housing.",
+  "status": "ok",
+  "refs": [
+   {
+    "action": "add",
+    "code": "HSC",
+    "section": "17921.12",
+    "is_range": false,
+    "range_end": null,
+    "struct": null
+   },
+   {
+    "action": "add",
+    "code": "HSC",
+    "section": "17921.13",
+    "is_range": false,
+    "range_end": null,
+    "struct": null
+   }
+  ]
+ },
+ {
+  "title": "An act to add and repeal Chapter 4 (commencing with Section 15210) of Part 6 of Division 3 of Title 2 of the Government Code, relating to state government, and making an appropriation therefor, to take effect immediately, bill related to the budget.",
+  "status": "ok",
+  "refs": [
+   {
+    "action": "add and repeal",
+    "code": "GOV",
+    "section": "15210",
+    "is_range": false,
+    "range_end": null,
+    "struct": "Chapter 4"
+   }
+  ]
+ },
+ {
+  "title": "An act to add and repeal Chapter 5.2 (commencing with Section 21162) of Division 13 of the Public Resources Code, relating to environmental quality.",
+  "status": "ok",
+  "refs": [
+   {
+    "action": "add and repeal",
+    "code": "PRC",
+    "section": "21162",
+    "is_range": false,
+    "range_end": null,
+    "struct": "Chapter 5.2"
+   }
+  ]
+ },
+ {
+  "title": "An act to add and repeal Section 17141.6 of the Revenue and Taxation Code, and to add and repeal Section 10007 of, and to add and repeal Chapter 9 (commencing with Section 8280) of Division 8 of, the Welfare and Institutions Code, relating to homeless pupils.",
+  "status": "ok",
+  "refs": [
+   {
+    "action": "add and repeal",
+    "code": "WIC",
+    "section": "8280",
+    "is_range": false,
+    "range_end": null,
+    "struct": "Chapter 9"
+   },
+   {
+    "action": "add and repeal",
+    "code": "RTC",
+    "section": "17141.6",
+    "is_range": false,
+    "range_end": null,
+    "struct": null
+   },
+   {
+    "action": "add and repeal",
+    "code": "WIC",
+    "section": "10007",
+    "is_range": false,
+    "range_end": null,
+    "struct": null
+   }
+  ]
+ },
+ {
+  "title": "An act to amend Section 1 of Chapter 321 of the Statutes of 2010, relating to land conservation.",
+  "status": "uncodified",
+  "refs": []
+ },
+ {
+  "title": "An act to amend Section 10 of Chapter 14 of the Statutes of 2003, and to amend Section 83 of Chapter 48 of the Statutes of 2013, relating to education finance.",
+  "status": "uncodified",
+  "refs": []
+ },
+ {
+  "title": "An act to amend Section 121 of Chapter 52 of the Statutes of 2022, relating to pupil transportation.",
+  "status": "uncodified",
+  "refs": []
+ },
+ {
+  "title": "An act to amend Section 1317.1 of the Health and Safety Code, relating to health care, and declaring the urgency thereof, to take effect immediately.",
+  "status": "ok",
+  "refs": [
+   {
+    "action": "amend",
+    "code": "HSC",
+    "section": "1317.1",
+    "is_range": false,
+    "range_end": null,
+    "struct": null
+   }
+  ]
+ },
+ {
+  "title": "An act to amend Section 13512 of the Water Code, relating to water quality.",
+  "status": "ok",
+  "refs": [
+   {
+    "action": "amend",
+    "code": "WAT",
+    "section": "13512",
+    "is_range": false,
+    "range_end": null,
+    "struct": null
+   }
+  ]
+ },
+ {
+  "title": "An act to amend Section 1367.243 of, and to add Sections 1367.2075 and 1367.2431 to, the Health and Safety Code, and to amend Section 10123.205 of, to add Sections 10123.2045 and 10123.2051 to, and to add Division 6 (commencing with Section 17000) to, the Insurance Code, relating to pharmacy benefits.",
+  "status": "ok",
+  "refs": [
+   {
+    "action": "add",
+    "code": "INS",
+    "section": "17000",
+    "is_range": false,
+    "range_end": null,
+    "struct": "Division 6"
+   },
+   {
+    "action": "amend",
+    "code": "HSC",
+    "section": "1367.243",
+    "is_range": false,
+    "range_end": null,
+    "struct": null
+   },
+   {
+    "action": "add",
+    "code": "HSC",
+    "section": "1367.2075",
+    "is_range": false,
+    "range_end": null,
+    "struct": null
+   },
+   {
+    "action": "add",
+    "code": "HSC",
+    "section": "1367.2431",
+    "is_range": false,
+    "range_end": null,
+    "struct": null
+   },
+   {
+    "action": "amend",
+    "code": "INS",
+    "section": "10123.205",
+    "is_range": false,
+    "range_end": null,
+    "struct": null
+   },
+   {
+    "action": "add",
+    "code": "INS",
+    "section": "10123.2045",
+    "is_range": false,
+    "range_end": null,
+    "struct": null
+   },
+   {
+    "action": "add",
+    "code": "INS",
+    "section": "10123.2051",
+    "is_range": false,
+    "range_end": null,
+    "struct": null
+   }
+  ]
+ },
+ {
+  "title": "An act to amend Section 4 of Chapter 97 of the Statutes of 2025, relating to elections, and making an appropriation therefor, to take effect immediately, bill related to the budget.",
+  "status": "uncodified",
+  "refs": []
+ },
+ {
+  "title": "An act to amend Section 52 of the Metropolitan Water District Act (Chapter 209 of the Statutes of 1969), relating to metropolitan water districts.",
+  "status": "uncodified",
+  "refs": []
+ },
+ {
+  "title": "An act to amend Section 54221 of the Government Code, relating to land use.",
+  "status": "ok",
+  "refs": [
+   {
+    "action": "amend",
+    "code": "GOV",
+    "section": "54221",
+    "is_range": false,
+    "range_end": null,
+    "struct": null
+   }
+  ]
+ },
+ {
+  "title": "An act to amend Section 5977 of the Welfare and Institutions Code, relating to courts, and declaring the urgency thereof, to take effect immediately.",
+  "status": "ok",
+  "refs": [
+   {
+    "action": "amend",
+    "code": "WIC",
+    "section": "5977",
+    "is_range": false,
+    "range_end": null,
+    "struct": null
+   }
+  ]
+ },
+ {
+  "title": "An act to amend Section 65589.9 of the Government Code, relating to housing.",
+  "status": "ok",
+  "refs": [
+   {
+    "action": "amend",
+    "code": "GOV",
+    "section": "65589.9",
+    "is_range": false,
+    "range_end": null,
+    "struct": null
+   }
+  ]
+ },
+ {
+  "title": "An act to amend Section 83 of Chapter 48 of the Statutes of 2013, relating to education finance.",
+  "status": "uncodified",
+  "refs": []
+ },
+ {
+  "title": "An act to amend Sections 12800 and 65050 of, and to add Article 15 (commencing with Section 12839) to Chapter 1 of Part 2.5 of Division 3 of Title 2 of, the Government Code, relating to state government.",
+  "status": "ok",
+  "refs": [
+   {
+    "action": "add",
+    "code": "GOV",
+    "section": "12839",
+    "is_range": false,
+    "range_end": null,
+    "struct": "Article 15"
+   },
+   {
+    "action": "amend",
+    "code": "GOV",
+    "section": "12800",
+    "is_range": false,
+    "range_end": null,
+    "struct": null
+   },
+   {
+    "action": "amend",
+    "code": "GOV",
+    "section": "65050",
+    "is_range": false,
+    "range_end": null,
+    "struct": null
+   }
+  ]
+ },
+ {
+  "title": "An act to amend Sections 733, 4052, 4052.3, and 4064.5 of the Business and Professions Code, relating to healing arts, and declaring the urgency thereof, to take effect immediately.",
+  "status": "ok",
+  "refs": [
+   {
+    "action": "amend",
+    "code": "BPC",
+    "section": "733",
+    "is_range": false,
+    "range_end": null,
+    "struct": null
+   },
+   {
+    "action": "amend",
+    "code": "BPC",
+    "section": "4052",
+    "is_range": false,
+    "range_end": null,
+    "struct": null
+   },
+   {
+    "action": "amend",
+    "code": "BPC",
+    "section": "4052.3",
+    "is_range": false,
+    "range_end": null,
+    "struct": null
+   },
+   {
+    "action": "amend",
+    "code": "BPC",
+    "section": "4064.5",
+    "is_range": false,
+    "range_end": null,
+    "struct": null
+   }
+  ]
+ },
+ {
+  "title": "An act to amend Sections 871.20 and 871.24 of, and to add Sections 871.29 and 871.30 to, the Code of Civil Procedure, relating to civil actions, and declaring the urgency thereof, to take effect immediately.",
+  "status": "ok",
+  "refs": [
+   {
+    "action": "amend",
+    "code": "CCP",
+    "section": "871.20",
+    "is_range": false,
+    "range_end": null,
+    "struct": null
+   },
+   {
+    "action": "amend",
+    "code": "CCP",
+    "section": "871.24",
+    "is_range": false,
+    "range_end": null,
+    "struct": null
+   },
+   {
+    "action": "add",
+    "code": "CCP",
+    "section": "871.29",
+    "is_range": false,
+    "range_end": null,
+    "struct": null
+   },
+   {
+    "action": "add",
+    "code": "CCP",
+    "section": "871.30",
+    "is_range": false,
+    "range_end": null,
+    "struct": null
+   }
+  ]
+ },
+ {
+  "title": "An act to amend the Budget Act of 2024 (Chs. 22, 35, and 994, Stats. 2024), by amending Items 2240-001-0001 and 7760-001-0001 of Section 2.00 of, by amending Sections 39.00 and 99.50 of, and by adding Section 90.01 to, that act, relating to the state budget, and making an appropriation therefor, to take effect immediately, budget bill.",
+  "status": "budget_act",
+  "refs": []
+ },
+ {
+  "title": "An act to amend the Budget Act of 2024 (Chs. 22, 35, and 994, Stats. 2024), by amending Section 99.50 of, and by adding Section 11.40 to, that act, relating to the state budget, and to take effect immediately, budget bill.",
+  "status": "budget_act",
+  "refs": []
+ },
+ {
+  "title": "An act to amend the Budget Act of 2024 (Chs. 22, 35, and 994, Stats. 2024), by amending Section 99.50 of, and by adding Section 5.26 to, that act, relating to the state budget, and making an appropriation therefor, to take effect immediately, budget bill.",
+  "status": "budget_act",
+  "refs": []
+ },
+ {
+  "title": "An act to amend the Budget Act of 2024 (Chs. 22, 35, and 994, Stats. 2024), by amending Sections 39.00 and 99.50 of, and by adding Section 90.00 to, that act, relating to the state budget, and making an appropriation therefor, to take effect immediately, budget bill.",
+  "status": "budget_act",
+  "refs": []
+ },
+ {
+  "title": "An act to amend the Budget Act of 2024 (Chs. 22, 35, and 994, Stats. 2024), by amending Sections 39.10 and 99.50 of, and by adding Section 5.26 to, that act, relating to the state budget, and making an appropriation therefor, to take effect immediately, budget bill.",
+  "status": "budget_act",
+  "refs": []
+ },
+ {
+  "title": "An act to amend the Budget Act of 2024 (Chs. 22, 35, and 994, Stats. 2024), by amending Sections 5.25 and 39.10 of that act, relating to the state budget, and making an appropriation therefor, to take effect immediately, budget bill.",
+  "status": "budget_act",
+  "refs": []
+ },
+ {
+  "title": "An act to amend the Budget Act of 2024 (Chs. 22, 35, and 994, Stats. 2024), by amending Sections 5.25, 39.00, and 39.10 of that act, relating to the state budget, and making an appropriation therefor, to take effect immediately, budget bill.",
+  "status": "budget_act",
+  "refs": []
+ },
+ {
+  "title": "An act to amend the heading of Article 8 (commencing with Section 801) of, and to add Sections 802 and 803 to, the North Fork Kings Groundwater Sustainability Agency (Chapter 392 of the Statutes of 2016), relating to groundwater agencies.",
+  "status": "uncodified",
+  "refs": []
+ },
+ {
+  "title": "An act to amend, repeal, and add Section 52 of the Metropolitan Water District Act (Chapter 209 of the Statutes of 1969), relating to metropolitan water districts.",
+  "status": "uncodified",
+  "refs": []
+ },
+ {
+  "title": "Relative to holdover Senators.",
+  "status": "no_sections",
+  "refs": []
+ },
+ {
+  "title": "Relative to notifying the Governor of the organization of the Senate.",
+  "status": "no_sections",
+  "refs": []
+ },
+ {
+  "title": "Relative to the Standing Rules of the Assembly for the 2025\u201326 Regular Session.",
+  "status": "no_sections",
+  "refs": []
+ },
+ {
+  "title": "Relative to the Standing Rules of the Senate for the 2025\u201326 Regular Session.",
+  "status": "no_sections",
+  "refs": []
+ },
+ {
+  "title": "Relative to the adoption of the Joint Rules of the Senate and Assembly for the 2025\u201326 Regular Session.",
+  "status": "no_sections",
+  "refs": []
+ },
+ {
+  "title": "Relative to the election of members of the Senate Committee on Rules.",
+  "status": "no_sections",
+  "refs": []
+ },
+ {
+  "title": "Relative to the election of officers.",
+  "status": "no_sections",
+  "refs": []
+ },
+ {
+  "title": "Relative to the selection of the Legislative Counsel of California.",
+  "status": "no_sections",
+  "refs": []
+ }
+]

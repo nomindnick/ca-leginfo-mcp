@@ -1,0 +1,32 @@
+[project]
+name = "ca-leginfo-mcp"
+version = "0.1.0"
+description = "MCP server and ingest pipeline for California statutes and legislation (pubinfo bulk data)"
+requires-python = ">=3.12"
+license = { file = "LICENSE" }
+dependencies = [
+    "beautifulsoup4>=4.12",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8",
+    "ruff>=0.4",
+]
+
+[project.scripts]
+ca-leginfo-ingest = "ingest.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["ingest"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -7,6 +7,10 @@
 *.lob
 *.dat
 
+# ...except the small real-data test fixtures
+!tests/fixtures/**/*.dat
+!tests/fixtures/**/*.lob
+
 # Python
 __pycache__/
 *.pyc

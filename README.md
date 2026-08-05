@@ -15,9 +15,17 @@ Lets an attorney's AI tool:
 
 ## Status
 
-Feasibility spike complete and successful — see
-[SPIKE_FINDINGS.md](SPIKE_FINDINGS.md). Full build in progress per
-[SPEC.md](SPEC.md). Spike prototype code is in [`spike/`](spike/).
+Phase 1 (ingest pipeline) complete: the [`ingest/`](ingest/) package
+builds `current.db` from the pubinfo bulk zips (~40 s for the full
+2025–26 session + all current law), with a sanity gate that blocks bad
+artifacts (`python -m ingest build` / `python -m ingest sanity`). Tests
+run against byte-exact real-data fixtures in
+[`tests/fixtures/`](tests/fixtures/).
+
+Next per [SPEC.md](SPEC.md): the archive builder (Phase 2), MCP server
+(Phase 3), deployment (Phase 4). The feasibility spike that preceded the
+build is preserved in [`spike/`](spike/) —
+see [SPIKE_FINDINGS.md](SPIKE_FINDINGS.md).
 
 ## Data source
 
