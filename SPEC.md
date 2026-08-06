@@ -216,3 +216,156 @@ This is an unofficial convenience mirror of public data. Responses must
 carry extract dates, note the weekly statute freshness reality, and direct
 users to the official publication for filings. It never gives legal
 advice; it retrieves law.
+
+---
+
+# V2 — Version comparison & bill text
+
+*Scoped from the v2 spike ([SPIKE_FINDINGS_V2.md](SPIKE_FINDINGS_V2.md));
+status: approved for build. Motivating pilot feedback: an attorney asked
+the model to redline a statute against a prior version and it struggled —
+LLMs cannot reliably diff two long near-identical legal texts in context.
+V2 computes redlines server-side and hands the model a finished product.
+Supersedes §2's "point-in-time historical statute text" deferral: prior
+versions come from re-enactment-at-length in archived chaptered bills
+(Cal. Const. art. IV, § 9), not the 2013+ law snapshots.*
+
+## 9. V2 scope (agreed)
+
+**In:**
+- Statute version comparison — redline between any two versions of a code
+  section: historical (chaptered re-enactments, 1989+), current law, or
+  as-proposed by a pending bill (decision D2: current law vs. the section
+  text in a pending print — turns `bills_affecting_section` from a
+  watchlist into impact analysis).
+- Bill version comparison — redline between any two prints of one bill
+  (full prints 1999+; pre-1999 archives are chaptered-only).
+- Bill text serving — the stored `bill_version_text` is currently
+  unserved by any tool.
+- One ingest delta: current-session `bill_version_text` in `current.db`.
+
+**Out (recorded decisions):**
+- Marks-based official print redlines (D1). Amended-print XML embeds
+  Legislative Counsel's own redline (`xm-insertion/deletion` PIs), but
+  archive.db stores mark-stripped text; using marks means re-downloading
+  ~8.5 GB, an archive rebuild, and a parser for escaped-markup deletion
+  payloads — for print-exactness invisible in a chat UI. Computed diffs
+  of adjacent prints carry the same content. Revisit only on real user
+  demand.
+- Precomputed diff tables. Extraction + diff is interactive-speed;
+  version pairs are quadratic; nothing to gain.
+- Filing-grade output (Word redline export). Chat markdown only; §8
+  honesty constraints apply to comparisons too.
+
+## 10. Redline engine
+
+Stdlib-only server module(s), ported from `spike/section_diff.py`, with
+the § 54953 version chain (three amending chapters in one session,
+sunset branches, double-jointing) as real-data test fixtures.
+
+Behavioral requirements (the spike's flat-diff failure is the contract's
+reason: naive word-level diff interleaves unrelated provisions on
+wholesale rewrites):
+
+- Whitespace-insensitive word tokenization — sources differ in layout,
+  never in words (spike: zero phantom hunks between chaptered-lob text
+  and law-lob text).
+- Subdivision-anchored alignment: segment before subdivision markers that
+  follow sentence-ending punctuation; align segments; pair replaced
+  segments by similarity (floor 0.5, order-preserving); unpaired
+  segments render as whole-provision strikeout/insert; word-diff only
+  within pairs; absorb equal runs ≤2 tokens between adjacent changes.
+- Output: display-ready markdown — `*italics*` = added, `~~strikeout~~` =
+  deleted (the official bill-print convention; underline does not exist
+  in chat markdown and nothing renders inside code blocks) — plus a
+  structured change list (`edit` / `new_provision` / `deleted_provision`
+  with context) and an envelope note instructing verbatim reproduction:
+  models are unreliable at computing diffs, reliable at copying.
+
+Historical section text is extracted on demand from flattened chaptered
+lobs (no schema change, no precompute): SEC-block split tolerant of
+`SECTION 1.` vs `SEC. 2.` and of headings not preceded by a newline;
+intro line parsed into target (code, section), action, and the lineage
+parenthetical ("as amended by Section 2 of Chapter 285 of the Statutes
+of 2022") — the machine-readable key for ordering the version graph.
+`repealed` blocks carry no body.
+
+## 11. V2 schema delta
+
+`current.db` gains `bill_version_text` (same shape as archive:
+`bill_version_id` PK, `title_text`, `text_zlib`), populated for all
+current-session versions — the nightly build already reads every lob for
+title extraction; it stops discarding the body. Build report gains a
+version-text size line; sanity gate: text present for ≥99% of versions
+with lobs. `archive.db` unchanged.
+
+## 12. V2 tool surface (tools 8–10)
+
+8. `get_bill_text(measure, session?, version?, section_filter?)` — one
+   print's flattened text (title + digest + body), default latest
+   version. Over ~50k chars (tune in Phase 3): return instead a SEC-block
+   index — heading + intro line (≤200 chars; uncodified blocks fall back
+   to first sentence) — plus a note to re-query with `section_filter`
+   (code + section), which scopes both index and full text. The intro
+   line names each block's target section, so the model navigates
+   trailer bills without guessing (decision D3).
+9. `compare_section_versions(code, section, from_ref?, to_ref?)` — refs
+   accept chapter citations ("Stats. 2023, Ch. 534" / year + chapter),
+   `"current"`, or a measure ("AB 405") for pending-proposed text (D2;
+   uses the measure's latest print and names it in the response).
+   Default: prior operative version → current — the zero-argument
+   redline. Resolution rides `get_legislative_history`'s chain +
+   `enacted_bills_citing_section` + block lineage parentheticals.
+   Chaptered bills carrying multiple variants of the section (sunset
+   branches are the norm — § 54953 had three): compare the variant
+   matching the history-note chain, list the others with lineage in
+   notes, never silently pick. Returns redline + change summary + both
+   endpoints' citations and lineage.
+10. `compare_bill_versions(measure, session?, from_version?,
+    to_version?)` — default: latest print vs. its predecessor; any pair
+    allowed (introduced vs. chaptered answers "what changed in the
+    process"). Digest edits appear first and are part of the diff —
+    Legislative Counsel's own summary of the change is signal, not
+    noise. Paired with `get_bill_analyses`' `amendment_date`, this is
+    the "when did this phrase enter, and what did the committee say
+    about it" workflow.
+
+Error behavior (extends §5): endpoints predating the 1989 archive return
+the explicit predates-electronic-records marker (e.g. § 84308's prior
+version is Stats. 1984). Identical endpoints return an affirmative
+"no textual change" — the model must be able to assert sameness, not
+infer it from an empty diff. Ambiguous refs resolve deterministically
+with a warning naming the alternatives (the `chapter_to_bill` idiom).
+Pre-1999 bill-version comparison: unavailable-with-coverage-statement.
+
+## 13. V2 data-handling rules (spike traps)
+
+- The first enacting section prints `SECTION 1.` (no dot after SECTION);
+  later ones `SEC. 2.`; flattened lobs do not reliably newline before
+  headings (`…do enact as follows:SECTION 1.Section 54953…`) — split on
+  headings after `.`/`:` too. Residual risk: literal "SEC. n" inside
+  quoted statutory text mis-splits; log if seen. The recorded robust
+  upgrade is XML-side extraction (`caml:BillSection` +
+  `caml:ActionLine`'s structured target), which needs source zips, not
+  archive.db.
+- Double-jointing fuzz: later bills cite "Section 1 of Chapter 534"
+  while the print's operative block is `SEC. 1.5.` — lineage matching
+  needs tolerance.
+- Statutes-chapter citations in history notes name the post-sunset
+  lineage ("as amended by Stats. 2023, Ch. 534, Sec. 2") — the compare
+  default must follow that chain, not chapter chronology alone.
+
+## 14. V2 build phases
+
+1. **Engine** — port spike redline + extraction into tested server
+   modules; harvest § 54953 chain fixtures (real .lob excerpts under
+   `tests/fixtures/`) from `pubinfo_2023.zip`.
+2. **Ingest delta** — current-session version text, size reporting,
+   sanity-gate extension.
+3. **Tools** — tools 8–10, envelope/notes/error behavior, tests against
+   fixture-built DBs.
+4. **Deploy** — no infra change (current.db grows by one session of
+   compressed bill text); update setup guide; announce to pilot group.
+
+Each phase ends with a working artifact; sprint compliance reviewed
+against this SPEC (see `/plan-review`).
