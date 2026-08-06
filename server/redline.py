@@ -37,7 +37,10 @@ _WORD = re.compile(r"\S+")
 
 # Subdivision markers following sentence-ending punctuation start a new
 # segment: "… of this chapter. (b) Notwithstanding …" splits before "(b)".
-_SEG_MARK = re.compile(r"(?<=[.:;])\s+(?=\([a-zA-Z0-9]{1,4}\)\s)")
+# `\s*` (not `\s+`): flattened bill lobs sometimes glue the marker to the
+# punctuation ("…in Sudan.(2) Investments…") while law lobs space it —
+# both sources must segment identically or identical text redlines dirty.
+_SEG_MARK = re.compile(r"(?<=[.:;])\s*(?=\([a-zA-Z0-9]{1,4}\)\s)")
 
 # Below this similarity ratio, replaced segments are unrelated provisions:
 # render delete + insert, not a word-level edit.
@@ -79,7 +82,10 @@ def _tokens(text: str) -> list[str]:
 
 
 def _segments(text: str) -> list[str]:
-    return _SEG_MARK.split(" ".join(text.split()))
+    """Empty text has no segments — a repealed block's empty body must
+    not become one empty segment and fabricate a phantom change."""
+    flowed = " ".join(text.split())
+    return _SEG_MARK.split(flowed) if flowed else []
 
 
 def _merge_ops(ops: list) -> list:

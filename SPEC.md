@@ -348,9 +348,15 @@ Pre-1999 bill-version comparison: unavailable-with-coverage-statement.
   upgrade is XML-side extraction (`caml:BillSection` +
   `caml:ActionLine`'s structured target), which needs source zips, not
   archive.db.
-- Double-jointing fuzz: later bills cite "Section 1 of Chapter 534"
-  while the print's operative block is `SEC. 1.5.` — lineage matching
-  needs tolerance.
+- Double-jointed prints are contingent, not fuzzy: AB 557 printed both
+  `SECTION 1.` and `SEC. 1.5.`, with SEC. 1.5 operative only if SB 537
+  also amended § 54953 — SB 537 died (gutted into Stats. 2024, ch. 859),
+  so SECTION 1 became operative, and AB 2302's "Section 1 of Chapter
+  534" is a literal citation of it. Lineage citations can be matched
+  literally; what needs care is picking the operative block among a
+  bill's parallel prints, which follows from the history-note chain.
+  (Corrected 2026-08-06 by the Phase 1 verification pass — the spike had
+  misread SEC. 1.5 as the operative print.)
 - Statutes-chapter citations in history notes name the post-sunset
   lineage ("as amended by Stats. 2023, Ch. 534, Sec. 2") — the compare
   default must follow that chain, not chapter chronology alone.

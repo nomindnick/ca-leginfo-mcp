@@ -51,8 +51,9 @@ def test_ab1754_three_variant_blocks(ab1754):
 
 
 def test_ab557_four_blocks_including_double_joint_and_repeal(ab557):
-    """AB 557 prints SECTION 1. (no dot after SECTION), the double-joint
-    variant SEC. 1.5., SEC. 2., and a repealed block."""
+    """AB 557 prints SECTION 1. (no dot after SECTION), the contingent
+    double-joint print SEC. 1.5. (never operative — SB 537 failed its
+    condition), SEC. 2., and a repealed block."""
     assert [b.heading for b in ab557] == [
         "SECTION 1.", "SEC. 1.5.", "SEC. 2.", "SEC. 3."]
     assert [b.action for b in ab557][3] == "repealed"
@@ -88,10 +89,14 @@ def test_body_strips_the_section_number_prefix(ab557):
         assert not b.body.startswith("54953")
 
 
-def test_intro_is_flowed_prose(ab1754):
-    intro = ab1754[1].intro
-    assert intro == " ".join(intro.split())
-    assert intro.startswith("SEC. 89.")
+def test_intro_is_flowed_prose(ab557):
+    """SEC. 1.5.'s raw intro line-wraps mid-lineage in the lob — the
+    normalization must flow it, so this fixture discriminates (a raw
+    slice would carry the newline)."""
+    intro = ab557[1].intro
+    assert "\n" not in intro
+    assert intro.startswith("SEC. 1.5.")
+    assert "as amended by Section 1 of Chapter 285" in intro
     assert intro.rstrip(":").endswith("to read")
 
 
@@ -149,3 +154,20 @@ def test_further_amended_form():
 
 def test_wrong_code_yields_no_blocks():
     assert section_blocks(_DEMO, "Government Code", "5") == []
+
+
+def test_body_citation_of_another_section_is_not_a_match():
+    """A block amending § Y whose re-enacted body opens by citing § X
+    ("Notwithstanding Section X of the Government Code…") must not be
+    returned as a version of § X — the target has to be cited in the
+    intro sentence itself, before the action verb. (Real shape: AB 1222
+    (2011) amends HSC 50904, whose body cites Gov. Code § 1090 ~240
+    chars in, inside any plausible head window.)"""
+    block = ("SECTION 1.Section 50904 of the Health and Safety Code is "
+             "amended to read:50904.The representation of varied interest "
+             "groups on the board is important. Notwithstanding Section "
+             "1090 of the Government Code, a member shall not be deemed "
+             "interested in a contract.")
+    assert section_blocks(block, "Government Code", "1090") == []
+    (b,) = section_blocks(block, "Health and Safety Code", "50904")
+    assert b.body.startswith("The representation")

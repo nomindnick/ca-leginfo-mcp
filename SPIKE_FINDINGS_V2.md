@@ -38,9 +38,14 @@ lob. Findings from real extraction:
   must order the version graph. A compare tool should return all
   matching blocks with lineage and let the caller pick, defaulting to
   the chain named in the section's history note.
-- **Double-jointing fuzz**: AB 557's operative block prints as
-  `SEC. 1.5.` but later bills cite it as "Section 1 of Chapter 534" —
-  lineage matching needs tolerance.
+- **Double-jointing** *(corrected 2026-08-06 — the original finding here
+  misread which block was operative)*: AB 557 printed both `SECTION 1.`
+  and a contingent `SEC. 1.5.` whose operativeness required SB 537 to
+  also amend § 54953. SB 537 was gutted into a memorials bill
+  (Stats. 2024, ch. 859), so SECTION 1 became operative and SEC. 1.5
+  never did; AB 2302's "Section 1 of Chapter 534" is a literal citation.
+  Lineage citations match literally — the real work is resolving which
+  parallel print became operative, via the history-note chain.
 - **No phantom diffs across sources.** Chaptered-lob text vs current-law
   lob text diff clean: quote conventions, whitespace, and subdivision
   layout all normalize away with whitespace-insensitive word

@@ -34,8 +34,9 @@ def chain(fixtures):
     current = (fixtures / "sec54953" / "current_54953.txt").read_text()
     return {
         "AB1754s89__AB557s2": (ab1754[1].body, ab557[2].body),
-        "AB557s1_5__AB2302s1": (ab557[1].body, ab2302[0].body),
+        "AB557s1__AB2302s1": (ab557[0].body, ab2302[0].body),
         "AB557s2__current": (ab557[2].body, current.strip()),
+        "repealed": (ab557[2].body, ab557[3].body),
     }
 
 
@@ -43,7 +44,7 @@ def chain(fixtures):
 
 @pytest.mark.parametrize(("pair", "n_changes"), [
     ("AB1754s89__AB557s2", 46),
-    ("AB557s1_5__AB2302s1", 7),
+    ("AB557s1__AB2302s1", 6),
     ("AB557s2__current", 45),
 ])
 def test_chain_matches_golden(fixtures, chain, pair, n_changes):
@@ -68,20 +69,75 @@ def test_wholesale_rewrite_reads_like_an_attorney_wrote_it(fixtures):
             "following*") in golden
 
 
-def test_whole_provisions_strike_and_insert(chain):
-    """AB 557 SEC. 1.5 → AB 2302: the teleconference caps arrive as whole
-    new provisions; the immunocompromised-household clause strikes out
-    whole."""
-    old, new = chain["AB557s1_5__AB2302s1"]
+def test_whole_provisions_insert(chain):
+    """The operative edge AB 557 SECTION 1 → AB 2302: the teleconference
+    caps arrive as whole new provisions. (The never-operative SEC. 1.5
+    print is deliberately NOT a chain endpoint — redlining against it
+    fabricates changes AB 2302 never made.)"""
+    old, new = chain["AB557s1__AB2302s1"]
     r = redline(old, new)
     kinds = [c.kind for c in r.changes]
     assert kinds.count("new_provision") >= 3
     added = " ".join(c.added or "" for c in r.changes)
     assert "Two meetings per year" in added
     assert "Five meetings per year" in added
+
+
+def test_whole_provisions_strike(chain):
+    """SB 707 repealed the COVID-era teleconference subdivisions: they
+    must strike out as whole provisions, not dissolve into word soup."""
+    old, new = chain["AB557s2__current"]
+    r = redline(old, new)
     deleted = [c.deleted for c in r.changes
                if c.kind == "deleted_provision"]
-    assert any("immunocompromised" in d for d in deleted)
+    assert len(deleted) >= 20
+    assert any(d.startswith("(d) (1) Notwithstanding the provisions "
+                            "relating to a quorum") for d in deleted)
+
+
+def test_real_edit_context_is_pinned(chain):
+    """The change list's context fields are load-bearing for tool output
+    (they locate an edit inside a long section) — pin them on a real
+    hunk, not just a synthetic one."""
+    old, new = chain["AB557s2__current"]
+    r = redline(old, new)
+    (c,) = [c for c in r.changes
+            if c.deleted and "3511.1" in c.deleted]
+    assert c.kind == "edit"
+    assert c.deleted == ("a local agency executive, as defined in "
+                         "subdivision (d) of Section 3511.1,")
+    assert c.added == "either of the following"
+    assert c.context_before == "the form of fringe benefits of"
+    assert c.context_after == "during the open meeting in which"
+
+
+def test_repealed_block_comparison_has_no_phantom_change(chain):
+    """Comparing live text against a repealed block's (correctly) empty
+    body yields only whole-provision deletions — no empty-string change,
+    no stray `**`/`~~~~` emphasis tokens in the markdown."""
+    live, empty = chain["repealed"]
+    assert empty == ""
+    r = redline(live, empty)
+    assert r.changes
+    assert all(c.kind == "deleted_provision" for c in r.changes)
+    assert all(c.deleted for c in r.changes)
+    assert "**" not in r.markdown and "~~~~" not in r.markdown
+    back = redline(empty, live)
+    assert all(c.kind == "new_provision" and c.added for c in back.changes)
+    assert redline("", "").identical
+
+
+def test_glued_subdivision_marker_segments_like_spaced():
+    """Flattened bill lobs sometimes glue a subdivision marker to the
+    preceding sentence ("…in Sudan.(2) Investments…") where law lobs
+    space it — the sources must still compare identical."""
+    glued = ("(1) Investments in a company primarily engaged in supplying "
+             "goods intended to relieve human suffering in Sudan."
+             "(2) Investments in a bank making loans there.")
+    spaced = glued.replace("Sudan.(2)", "Sudan. (2)")
+    r = redline(glued, spaced)
+    assert r.identical
+    assert r.changes == []
 
 
 def test_unamended_prints_are_affirmatively_identical(fixtures):

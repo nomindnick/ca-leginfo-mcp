@@ -49,9 +49,9 @@ _ACTION = re.compile(
 
 _LINEAGE = re.compile(r",\s*(as\s+(?:amended|added)\s+by[^,]{0,200}?),?\s+is")
 
-# Intro sentences run at most a few hundred characters; matching the
-# target inside the block head avoids false hits on "Section N" citations
-# deep in re-enacted body text.
+# Intro sentences run at most a few hundred characters; the action verb
+# is searched only inside this head window so a phrase like "is amended
+# to read" deep in re-enacted body text cannot masquerade as an intro.
 _HEAD_WINDOW = 600
 
 
@@ -81,14 +81,20 @@ def section_blocks(flat_text: str, code_name: str,
         rf"\s+the\s+{re.escape(code_name)}")
     hits: list[SectionBlock] = []
     for block in split_blocks(flat_text):
-        head = block[:_HEAD_WINDOW]
-        if not target.search(head):
-            continue
-        action = _ACTION.search(head)
+        action = _ACTION.search(block[:_HEAD_WINDOW])
         if not action:
             continue
+        # The target (and its lineage parenthetical) must be cited in
+        # the intro sentence itself — before the action verb ends — not
+        # merely near the top of the block: re-enacted bodies routinely
+        # open "Notwithstanding Section N of the X Code…", and matching
+        # that would deliver a different statute's text as a version of
+        # the target.
+        intro_region = block[:action.end()]
+        if not target.search(intro_region):
+            continue
         heading = _SEC_HEAD.match(block)
-        lineage = _LINEAGE.search(head)
+        lineage = _LINEAGE.search(intro_region)
         if action.group(1) == "repealed":
             body = ""  # nothing is re-enacted; only "is repealed." remains
         else:
