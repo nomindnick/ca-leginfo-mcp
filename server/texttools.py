@@ -665,7 +665,12 @@ def _chapter_endpoint(dbs: Databases, con, node: dict, rc: str,
                 picked = b
                 break
     if picked is None:
-        picked = blocks[0]
+        # No hint: prefer the first block that carries text — in a
+        # repeal-and-add print the repealed block prints first with an
+        # empty body, and serving it as "the version" would render the
+        # whole section as newly added (round-2 finding: 17 sections).
+        picked = next((b for b in blocks if b.action != "repealed"),
+                      blocks[0])
         if len(blocks) > 1:
             others = "; ".join(
                 f"{b.heading} ({b.lineage or b.action})"
@@ -689,6 +694,10 @@ def _chapter_endpoint(dbs: Databases, con, node: dict, rc: str,
             f"§ {section}; the history-note chain names act section "
             f"{hint}, so {picked.heading} is the operative variant. "
             f"Others: {others}.")
+    with _bill_store(dbs, con, label) as store:
+        date_row = store.execute(
+            "SELECT action_date FROM bill_version WHERE bill_version_id=?",
+            (vid,)).fetchone()
     endpoint = {
         "citation": citation,
         "measure": summary["measure"],
@@ -697,6 +706,7 @@ def _chapter_endpoint(dbs: Databases, con, node: dict, rc: str,
         "block": picked.heading,
         "action": picked.action,
         "source": "chaptered print",
+        "_date": date_row[0] if date_row else None,
     }
     if picked.lineage:
         endpoint["lineage"] = picked.lineage
@@ -1064,13 +1074,20 @@ def compare_section_versions(dbs: Databases, code: str, section: str,
         if err:
             return envelope(con, err, notes)
 
-        if (from_spec["kind"] == "chapter" and to_spec["kind"] == "chapter"
-                and (from_spec["year"], from_spec["chapter"]) >
-                    (to_spec["year"], to_spec["chapter"])):
-            notes.append(
-                "from_ref cites a later chapter than to_ref; the "
-                "redline reads back-to-front as requested (earlier "
-                "text appears as the additions).")
+        if from_spec["kind"] == "chapter" and to_spec["kind"] == "chapter":
+            # Keyed to chaptered DATES when both are known — chapter
+            # numbers order falsely across same-year sessions (an ex-
+            # session Ch. 3 in November follows regular Ch. 800 in
+            # March). Years alone decide otherwise; a same-year pair
+            # with unknown dates gets no note rather than a guess.
+            fd, td = from_ep.get("_date"), to_ep.get("_date")
+            reversed_pair = (fd > td if fd and td
+                             else from_spec["year"] > to_spec["year"])
+            if reversed_pair:
+                notes.append(
+                    "from_ref cites a later chapter than to_ref; the "
+                    "redline reads back-to-front as requested (earlier "
+                    "text appears as the additions).")
 
         r = redline(from_ep["_text"], to_ep["_text"])
         payload = {
@@ -1184,9 +1201,24 @@ def compare_bill_versions(dbs: Databases, measure: str,
                     "error": f"{summary['measure']} has no recorded "
                              "prints."}, notes)
 
+            def with_era(err_dict):
+                """Pre-1999 archives are chaptered-only: an explicit
+                version request that misses must say WHY the print list
+                is so short (SPEC §12's coverage-statement clause)."""
+                if int(sy[:4]) < 1999:
+                    err_dict["coverage"] = [
+                        ("Pre-1999 sessions are archived chaptered-"
+                         "only: intermediate prints were never "
+                         "published electronically, so bill-version "
+                         "comparison is unavailable for them."),
+                        *era]
+                elif era:
+                    err_dict["coverage"] = era
+                return err_dict
+
             to_v, warn, err = _pick_version(versions, to_version)
             if err:
-                return envelope(con, err, notes)
+                return envelope(con, with_era(err), notes)
             if warn:
                 notes.append(warn)
             if from_version is None:
@@ -1205,7 +1237,7 @@ def compare_bill_versions(dbs: Databases, measure: str,
             else:
                 from_v, warn, err = _pick_version(versions, from_version)
                 if err:
-                    return envelope(con, err, notes)
+                    return envelope(con, with_era(err), notes)
                 if warn:
                     notes.append(warn)
 
@@ -1223,16 +1255,7 @@ def compare_bill_versions(dbs: Databases, measure: str,
                            "available_versions": [
                                _version_label(x) for x in versions
                                if x["has_text"]]}
-                    if int(sy[:4]) < 1999:
-                        err["coverage"] = [
-                            ("Pre-1999 sessions are archived chaptered-"
-                             "only: intermediate prints were never "
-                             "published electronically, so bill-version "
-                             "comparison is unavailable for them."),
-                            *era]
-                    elif era:
-                        err["coverage"] = era
-                    return envelope(con, err, notes)
+                    return envelope(con, with_era(err), notes)
                 texts[v["version_id"]] = flat
 
         old, new = texts[from_v["version_id"]], texts[to_v["version_id"]]

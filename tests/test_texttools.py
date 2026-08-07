@@ -99,9 +99,13 @@ def _inject_chain(current_db: Path, archive_db: Path) -> None:
         ("202120220AB50", "50", "20212022", "2021", "50", "0",
          "20210AB5095CHP", "2021-09-01 00:00:00", True),
         ("201920200AB900", "900", "20192020", "2020", "800", "0",
-         "20190AB90095CHP", "2020-03-01 00:00:00", False),
+         "20190AB90095CHP", "2020-03-01 00:00:00", True),
         ("201920201AB5", "5", "20192020", "2020", "3", "1",
-         "20191AB595CHP", "2020-11-01 00:00:00", False),
+         "20191AB595CHP", "2020-11-01 00:00:00", True),
+        # December chapter with a small number, chaptered AFTER the
+        # same year's Ch. 100 — pins the dated-not-earlier exclusion.
+        ("201920200AB901", "901", "20192020", "2019", "90", "0",
+         "20190AB90195CHP", "2019-12-01 00:00:00", False),
     ]
     for bid, num, sess, cy, cn, cs, vid, date, texted in citing:
         arc.execute(
@@ -144,11 +148,45 @@ def _inject_chain(current_db: Path, archive_db: Path) -> None:
             "repealed."
             "SEC. 2.Section 99999 is added to the Government Code, to "
             "read:99999. New text of the section. (a) Alpha.")
-    for bid, num, sess, cy, cn, vid, date, flat in [
+    ch20 = ("An act to amend Section 99999 of the Government Code. "
+            "The people of the State of California do enact as follows:"
+            "SECTION 1.Section 99999 of the Government Code is amended "
+            "to read:99999. Oldest text of the section. (a) Alpha.")
+    # GOV 99997: BOTH links of its chain are repeal-and-adds whose
+    # repealed blocks carry no lineage — the prior must resolve through
+    # the citing chain to the earlier chapter's ADDED block, never to
+    # the empty repealed sibling (round-2 finding: 17 real sections).
+    ch30 = ("An act to repeal and add Section 99997 of the Government "
+            "Code. The people of the State of California do enact as "
+            "follows:"
+            "SECTION 1.Section 99997 of the Government Code is repealed."
+            "SEC. 2.Section 99997 is added to the Government Code, to "
+            "read:99997. Prior era text. (a) Alpha.")
+    ch60 = ("An act to repeal and add Section 99997 of the Government "
+            "Code. The people of the State of California do enact as "
+            "follows:"
+            "SECTION 1.Section 99997 of the Government Code is repealed."
+            "SEC. 2.Section 99997 is added to the Government Code, to "
+            "read:99997. Newest era text. (a) Alpha.")
+    # GOV 99998.5: an added-only chapter — the chapter-anchored
+    # no-prior-version path.
+    ch40 = ("An act to add Section 99998.5 to the Government Code. "
+            "The people of the State of California do enact as follows:"
+            "SECTION 1.Section 99998.5 is added to the Government Code, "
+            "to read:99998.5. Fresh text. (a) Alpha.")
+    for bid, num, sess, cy, cn, vid, date, flat, sec in [
             ("201720180AB55", "55", "20172018", "2018", "55",
-             "20170AB5595CHP", "2018-08-01 00:00:00", ch55),
+             "20170AB5595CHP", "2018-08-01 00:00:00", ch55, "99999"),
             ("201920200AB77", "77", "20192020", "2020", "77",
-             "20190AB7795CHP", "2020-09-25 00:00:00", ch77)]:
+             "20190AB7795CHP", "2020-09-25 00:00:00", ch77, "99999"),
+            ("201520160AB20", "20", "20152016", "2015", "20",
+             "20150AB2095CHP", "2015-07-01 00:00:00", ch20, "99999"),
+            ("201920200AB30", "30", "20192020", "2019", "30",
+             "20190AB3095CHP", "2019-06-15 00:00:00", ch30, "99997"),
+            ("202120220AB60", "60", "20212022", "2022", "60",
+             "20210AB6095CHP", "2022-08-10 00:00:00", ch60, "99997"),
+            ("201520160AB40", "40", "20152016", "2016", "40",
+             "20150AB4095CHP", "2016-07-01 00:00:00", ch40, "99998.5")]:
         arc.execute(
             """INSERT INTO bill(bill_id, session_year, session_num,
                    measure_type, measure_num, chapter_year, chapter_type,
@@ -166,8 +204,32 @@ def _inject_chain(current_db: Path, archive_db: Path) -> None:
         arc.execute(
             """INSERT INTO bill_section_ref(session_year, bill_version_id,
                    bill_id, action, law_code, section, is_range)
-               VALUES (?, ?, ?, 'amend', 'GOV', '99999', 0)""",
-            (sess[:4], vid, bid))
+               VALUES (?, ?, ?, 'amend', 'GOV', ?, 0)""",
+            (sess[:4], vid, bid, sec))
+    # A 60k-char resolution print with no enacting sections — the
+    # oversize-with-empty-index shape (SCR committee assignments).
+    arc.execute(
+        """INSERT INTO bill(bill_id, session_year, session_num,
+               measure_type, measure_num, current_status,
+               latest_bill_version_id)
+           VALUES ('202320240SCR77', '20232024', '0', 'SCR', '77',
+                   'Chaptered', '20230SCR7795CHP')""")
+    arc.execute(
+        """INSERT INTO bill_version(bill_version_id, bill_id, version_num,
+               action, action_date)
+           VALUES ('20230SCR7795CHP', '202320240SCR77', '95', 'Chaptered',
+                   '2024-06-01 00:00:00')""")
+    arc.execute(
+        "INSERT INTO bill_version_text VALUES (?, NULL, ?)",
+        ("20230SCR7795CHP", zlib.compress(
+            ("Relative to the standing committee assignments of the "
+             "Senate. " * 1000).encode())))
+    # A pubinfo anomaly: a bill record with zero bill_version rows.
+    arc.execute(
+        """INSERT INTO bill(bill_id, session_year, session_num,
+               measure_type, measure_num, current_status)
+           VALUES ('201520160SB999', '20152016', '0', 'SB', '999',
+                   'Chaptered')""")
     arc.commit()
     arc.close()
 
@@ -212,6 +274,14 @@ def _inject_chain(current_db: Path, archive_db: Path) -> None:
                    'Repealed and added by Stats. 2020, Ch. 77, Sec. 2.   '
                    || '(AB 77)   Effective January 1, 2021.',
                    'New text of the section. (a) Alpha.', 'Y')""")
+    # GOV 99997: repeal-and-add whose chain has NO lineage anywhere.
+    cur.execute(
+        """INSERT INTO law_section(law_code, section_num, section_num_norm,
+               history, content_text, active_flg)
+           VALUES ('GOV', '99997.', '99997',
+                   'Repealed and added by Stats. 2022, Ch. 60, Sec. 2.   '
+                   || '(AB 60)   Effective January 1, 2023.',
+                   'Newest era text. (a) Alpha.', 'Y')""")
     # PEN 337p: an "Added by renumbering" note — must NOT claim
     # no-prior-version (renumbered sections have priors under their old
     # numbers).
@@ -300,6 +370,9 @@ def test_ambiguous_version_phrase_warns(dbs):
     r = texttools.get_bill_text(dbs, "AB 831", version="amended")
     assert "text" in r
     assert any("prints match 'amended'" in n for n in r["notes"])
+    # Identity is pinned, not just the warning: the NEWEST match wins
+    # (Legislative Counsel numbers count down, so smallest version_num).
+    assert r["version"]["version_num"] == "96"
 
 
 def test_unknown_version_lists_available(dbs):
@@ -365,6 +438,17 @@ def test_untexted_version_is_explained(dbs):
 def test_v1_artifact_degrades_honestly(v1_dbs):
     r = texttools.get_bill_text(v1_dbs, "AB 831")
     assert "nightly" in r["error"]
+
+
+def test_oversize_resolution_serves_full_text(dbs):
+    """A 60k-char resolution has no enacting sections to index: an empty
+    index with section_filter guidance would make the text unreachable
+    through any argument, so the full text is served (D21)."""
+    r = texttools.get_bill_text(dbs, "SCR 77", session="2023-2024")
+    assert len(r["text"]) > texttools.MAX_FULL_TEXT
+    assert "committee assignments" in r["text"]
+    assert any("no enacting sections" in n for n in r["notes"])
+    assert "sections_index" not in r
 
 
 # =========================================================================
@@ -459,13 +543,17 @@ def test_prior_citing_chapter_orders_by_chaptered_date(dbs):
             ((2025, 623, 0), (2021, 50, 0)),
             ((2021, 50, 0), (2020, 3, 1)),   # ex-session wins on date
             ((2020, 3, 1), (2020, 800, 0)),
-            ((2020, 800, 0), (2019, 100, 0)),
+            ((2020, 800, 0), (2019, 90, 0)),  # December beats September
+            ((2019, 90, 0), (2019, 100, 0)),
         ]
         for before, expect in ladder:
             got = texttools._prior_citing_chapter(
                 dbs, con, "BPC", "17539.1", before=before)
             assert (got["year"], got["chapter"], got["ex"]) == expect, \
                 (before, got)
+        # Ch. 90 is number-smaller than Ch. 100 but chaptered LATER —
+        # the dated-not-earlier exclusion must return None, not resurrect
+        # it through the number-order fallback.
         assert texttools._prior_citing_chapter(
             dbs, con, "BPC", "17539.1", before=(2019, 100, 0)) is None
 
@@ -491,6 +579,78 @@ def test_added_by_renumbering_is_not_no_prior(dbs):
     r = texttools.compare_section_versions(dbs, "PEN", "337p")
     assert "no_prior_version" not in r
     assert "individually extractable" in r["error"]
+
+
+def test_repeal_add_fallback_never_serves_the_empty_repealed_block(dbs):
+    """GOV 99997's chain carries no lineage anywhere, so the prior
+    resolves through the citing chain to Stats. 2019, Ch. 30 — itself a
+    repeal-and-add. The endpoint must be its ADDED block's text, never
+    the empty repealed sibling that prints first (round-2 finding: 17
+    real sections rendered whole-section-as-new)."""
+    r = texttools.compare_section_versions(dbs, "GOV", "99997")
+    assert r["from"]["citation"] == "Stats. 2019, Ch. 30"
+    assert r["from"]["block"] == "SEC. 2."
+    assert r["from"]["action"].startswith("added")
+    assert not r["identical"]
+    deleted = " ".join(c.get("deleted") or "" for c in r["changes"])
+    added = " ".join(c.get("added") or "" for c in r["changes"])
+    assert "Prior" in deleted and "Newest" in added
+    # Never the whole-section-as-new shape:
+    assert not all(c["kind"] == "new_provision" for c in r["changes"])
+
+
+def test_chapter_anchored_default_rides_citing_chain(dbs):
+    """D17: to_ref a chapter, from_ref omitted — the from endpoint is
+    the version THAT chapter amended (here via the citing chain to
+    Stats. 2015, Ch. 20), never the prior of current law."""
+    r = texttools.compare_section_versions(
+        dbs, "GOV", "99999", to_ref="Stats. 2018, Ch. 55")
+    assert r["from"]["citation"] == "Stats. 2015, Ch. 20"
+    assert r["to"]["citation"] == "Stats. 2018, Ch. 55"
+    deleted = " ".join(c.get("deleted") or "" for c in r["changes"])
+    assert "Oldest" in deleted
+
+
+def test_chapter_anchored_readd_uses_sibling_lineage(dbs):
+    """to_ref = the repeal-and-add chapter itself: there is no history
+    note in play, so the repealed-sibling detection alone must route to
+    the pre-repeal text — via the repealed block's lineage naming the
+    SEC. 4 variant."""
+    r = texttools.compare_section_versions(
+        dbs, "GOV", "99999", to_ref="Stats. 2020, Ch. 77")
+    assert r["from"]["citation"] == "Stats. 2018, Ch. 55"
+    assert r["from"]["block"] == "SEC. 4."
+    assert any("repealed and re-added" in n for n in r["notes"])
+
+
+def test_chapter_anchored_added_only_is_no_prior(dbs):
+    r = texttools.compare_section_versions(
+        dbs, "GOV", "99998.5", to_ref="Stats. 2016, Ch. 40")
+    assert r["no_prior_version"] is True
+    assert "was added by Stats. 2016, Ch. 40" in r["statement"]
+
+
+def test_back_to_front_note_keyed_to_chaptered_dates(dbs):
+    """1st Ex. Sess. Ch. 3 was chaptered in November 2020, AFTER regular
+    Ch. 800 (March) despite the smaller number: the back-to-front note
+    must key on dates — present when from is later in time, absent on
+    the forward direction."""
+    r = texttools.compare_section_versions(
+        dbs, "B&P Code", "17539.1",
+        from_ref="Stats. 2020, 1st Ex. Sess., Ch. 3",
+        to_ref="Stats. 2020, Ch. 800")
+    assert any("back-to-front" in n for n in r["notes"])
+    r = texttools.compare_section_versions(
+        dbs, "B&P Code", "17539.1",
+        from_ref="Stats. 2020, Ch. 800",
+        to_ref="Stats. 2020, 1st Ex. Sess., Ch. 3")
+    assert not any("back-to-front" in n for n in r.get("notes", []))
+
+
+def test_zero_version_bill_ref_is_an_error(dbs):
+    r = texttools.compare_section_versions(dbs, "GOV", "54953",
+                                           from_ref="201520160SB999")
+    assert "no recorded prints" in r["error"]
 
 
 def test_simultaneous_current_rows_pick_is_loud(dbs):
@@ -629,6 +789,17 @@ def test_pre_1999_untexted_print_coverage_statement(dbs):
         dbs, "SB 729", session="1989-1990",
         from_version="introduced", to_version="chaptered")
     assert "No text is stored" in r["error"]
+    assert any("chaptered-only" in c for c in r["coverage"])
+
+
+def test_pre_1999_unknown_version_carries_coverage(dbs):
+    """An explicit version request that misses on a pre-1999 bill must
+    explain WHY the print list is one entry long (SPEC §12's coverage-
+    statement clause) — round-1 finding left unaddressed until now."""
+    r = texttools.compare_bill_versions(dbs, "SJR 31",
+                                        session="1989-1990",
+                                        from_version="98")
+    assert "No print of this bill matches" in r["error"]
     assert any("chaptered-only" in c for c in r["coverage"])
 
 
@@ -788,6 +959,52 @@ def test_heading_num_ignores_the_dot_in_sec():
     assert texttools._HEAD_NUM.search("SEC. 1.5.").group(0) == "1.5."
 
 
+def test_pick_version_multi_hit_identity_and_dup_nums():
+    """WHICH print an ambiguous pick resolves to is contractual: the
+    newest match (hits[0] of the newest-first list), for both the
+    action-phrase branch and the duplicate-version_num branch (the
+    archive carries one real duplicate pair, 2003's AB 97)."""
+    versions = [
+        {"version_id": "X90ENR", "version_num": "90", "action": "Enrolled",
+         "date": "2003-01-08", "has_text": True},
+        {"version_id": "X90AMD", "version_num": "90",
+         "action": "Amended Senate", "date": "2004-01-22",
+         "has_text": True},
+        {"version_id": "X99INT", "version_num": "99", "action": "Introduced",
+         "date": "2003-01-08", "has_text": True},
+    ]
+    v, warn, err = texttools._pick_version(versions, "90")
+    assert err is None and v["version_id"] == "X90ENR"
+    assert "2 prints carry version number 90" in warn
+    v, warn, err = texttools._pick_version(versions, "amended")
+    assert err is None and v["version_id"] == "X90AMD" and warn is None
+    v, warn, err = texttools._pick_version(versions, "e")  # ENR + Introduced
+    assert v["version_id"] == "X90ENR"
+    assert warn and "using the newest" in warn
+
+
+def test_section_filter_parse_forms():
+    assert texttools._parse_section_filter(
+        "Government Code Section 54953")[:2] == ("GOV", "54953")
+    assert texttools._parse_section_filter(
+        "GOV 54953(b)")[:2] == ("GOV", "54953")
+    assert texttools._parse_section_filter(
+        "Section 54953(b)(1) of the Government Code")[:2] == \
+        ("GOV", "54953")
+
+
+def test_pair_work_is_a_character_product():
+    """The guard estimates CHARACTER product, not call count: one giant
+    dissimilar segment pair is a single ratio() call but far over the
+    cap — reverting to call counting (or inflating the cap) must fail
+    here, because that exact under-estimate once let a 27-call pair run
+    219 seconds."""
+    a = "alpha " * 8000   # one ~48k-char segment
+    b = "beta " * 8000    # one ~40k-char segment, wholly dissimilar
+    assert texttools._pair_work(a, b) > texttools._MAX_PAIR_WORK
+    assert texttools._pair_work("alpha one.", "alpha two.") < 1000
+
+
 def test_min_redline_chars_bounds():
     assert texttools._min_redline_chars("same words", "same words") == 0
     # Disjoint alphabets: only the space characters can match, so the
@@ -799,11 +1016,16 @@ def test_min_redline_chars_bounds():
 def test_sec_index_logs_suspected_missplit(caplog):
     """A literal 'SEC. n' inside quoted statutory text breaks the
     strictly-increasing heading sequence — log it (SPEC §13 residual
-    risk), never crash."""
+    risk), never crash. The preceding real heading is FRACTIONAL
+    (SEC. 2.5.) so the detector must parse '2.5.' correctly: without
+    the trailing-dot strip the float parse dies and the logger goes
+    silent."""
     flat = ("The people of the State of California do enact as follows:"
             "SECTION 1.Section 5 of the Demo Code is amended to read:"
-            "5. Body quoting: SEC. 2.Section 7 of the Demo Code reads "
-            "oddly here.SEC. 2. Section 7 of the Demo Code is amended to "
+            "5. Alpha."
+            "SEC. 2.5. Section 6 of the Demo Code is amended to read:"
+            "6. Body quoting: SEC. 2.Section 7 of the Demo Code reads "
+            "oddly here.SEC. 3. Section 7 of the Demo Code is amended to "
             "read:7. Real text.")
     with caplog.at_level("WARNING", logger="server.texttools"):
         entries = texttools._sec_index(flat, "TESTVID")

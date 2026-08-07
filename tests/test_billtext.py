@@ -202,14 +202,41 @@ def test_trailing_corrections_apparatus_is_stripped():
     assert b.body == "Alpha text."
 
 
+def test_revisions_and_stacked_apparatus_stripped():
+    """REVISIONS notices are 9x more common than CORRECTIONS (953 of
+    20,525 prints in 2023-24), and the two stack — a stacked tail also
+    defeated round 1's $-anchored CORRECTIONS-only strip."""
+    rev = ("SEC. 2. Section 5 of the Demo Code is amended to read:"
+           "5. Alpha text.\nREVISIONS:\nHeading—Line 2.")
+    (b,) = section_blocks(rev, "Demo Code", "5")
+    assert b.body == "Alpha text."
+    stacked = ("SEC. 2. Section 5 of the Demo Code is amended to read:"
+               "5. Alpha text.\nCORRECTIONS:\nHeading—Line 1.\n"
+               "Digest—Page 1.\nREVISIONS:\nHeading—Line 1.")
+    (b,) = section_blocks(stacked, "Demo Code", "5")
+    assert b.body == "Alpha text."
+    title_line = ("SEC. 2. Section 5 of the Demo Code is amended to read:"
+                  "5. Alpha text.\nCORRECTIONS:\nTitle—Page 1.")
+    (b,) = section_blocks(title_line, "Demo Code", "5")
+    assert b.body == "Alpha text."
+
+
 def test_corrections_like_prose_mid_body_survives():
     """Only the trailing apparatus shape is stripped — statute text that
-    happens to mention corrections is content."""
+    happens to mention corrections is content, and even a real
+    apparatus-shaped string that is NOT at the end of the body must
+    survive (the anchor is load-bearing)."""
     flat = ("SEC. 2. Section 5 of the Demo Code is amended to read:"
             "5. The department shall publish CORRECTIONS: a list of "
             "errata for each edition.")
     (b,) = section_blocks(flat, "Demo Code", "5")
     assert b.body.endswith("errata for each edition.")
+    mid = ("SEC. 2. Section 5 of the Demo Code is amended to read:"
+           "5. Alpha text. CORRECTIONS:Digest—Page 2. More statute "
+           "text follows the shape.")
+    (b,) = section_blocks(mid, "Demo Code", "5")
+    assert b.body.endswith("follows the shape.")
+    assert "CORRECTIONS" in b.body
 
 
 def test_body_citation_of_another_section_is_not_a_match():

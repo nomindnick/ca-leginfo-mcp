@@ -171,6 +171,25 @@ def test_marker_glued_to_following_word_is_not_an_edit():
     assert _segments(cite) == [cite]
 
 
+def test_glue_at_body_start_and_in_marker_chains():
+    """Round 2's neighboring shapes: a marker glued at the very start of
+    a block body (FGC 8041) and a glued marker CHAIN at a segment
+    anchor (WIC 11466's '(f)(1)"Program') must both compare identical
+    to their spaced counterparts."""
+    r = redline("(a)The following persons shall pay the landing fee.",
+                "(a) The following persons shall pay the landing fee.")
+    assert r.identical and r.changes == []
+    r = redline('college. (f)(1)"Program audit" means an audit.',
+                'college. (f) (1) "Program audit" means an audit.')
+    assert r.identical and r.changes == []
+    # And a genuine edit adjacent to de-glued markers still reports.
+    r = redline("college. (f)(1)Program audit means an annual audit.",
+                "college. (f) (1) Program audit means a biennial audit.")
+    assert not r.identical
+    (c,) = r.changes
+    assert (c.deleted, c.added) == ("an annual", "a biennial")
+
+
 def test_unamended_prints_are_affirmatively_identical(fixtures):
     """AB 2302 passed without amendment: its introduced and chaptered
     § 54953 blocks must compare as identical — the tools assert sameness,

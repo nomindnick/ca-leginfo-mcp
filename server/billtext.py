@@ -63,14 +63,22 @@ _ACTION = re.compile(
 
 _LINEAGE = re.compile(r",\s*(as\s+(?:amended|added)\s+by[^,]{0,200}?),?\s+is")
 
-# Legislative Counsel's trailing correction notice ("CORRECTIONS:
-# Digest—Page 2.") is print apparatus, not statute text — but the last
-# enacting block's body runs to end-of-print, so it rides along (104 of
-# 20,525 prints in the 2023–24 session) and would fabricate a redline
-# change claiming the next amendment deleted it.
-_CORRECTIONS = re.compile(
-    r"\s*CORRECTIONS\s*:(?:\s*(?:Digest|Text|Heading)\s*[—–-][^\n]{0,200}"
-    r"\.?)+\s*$")
+# Legislative Counsel's trailing correction/revision notices
+# ("CORRECTIONS:\nDigest—Page 2." / "REVISIONS:\nHeading—Line 1.") are
+# print apparatus, not statute text — but the last enacting block's
+# body runs to end-of-print, so they ride along (REVISIONS alone tails
+# 953 of 20,525 prints in the 2023–24 session; CORRECTIONS 104; the
+# two also stack) and would fabricate a redline change claiming the
+# next amendment deleted them — or, on pending prints, that the bill
+# proposes to enact them.
+# Each apparatus line is a page/line reference ("Digest—Page 2.",
+# "Heading—Lines 1 and 2.") — the reference shape is anchored so prose
+# that merely mentions the words can never match, and only a true
+# trailing notice (nothing after it) strips.
+_APPARATUS = re.compile(
+    r"\s*(?:(?:CORRECTIONS|REVISIONS)\s*:"
+    r"(?:\s*(?:Digest|Text|Heading|Title)\s*[—–-]\s*"
+    r"(?:Page|Pages|Line|Lines)[\s\d,]*(?:and[\s\d,]+)?\.?)+\s*)+$")
 
 # Intro sentences run at most a few hundred characters; the action verb
 # is searched only inside this head window so a phrase like "is amended
@@ -131,7 +139,7 @@ def section_blocks(flat_text: str, code_name: str,
         else:
             body = block[action.end():].lstrip("\n ")
             body = re.sub(rf"^{re.escape(section)}\.\s*", "", body)
-            body = _CORRECTIONS.sub("", body)
+            body = _APPARATUS.sub("", body)
         hits.append(SectionBlock(
             heading=heading.group(0) if heading else "",
             action=action.group(1),

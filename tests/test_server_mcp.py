@@ -67,6 +67,24 @@ def test_call_search_with_defaults(configured):
     assert result.structured_content["results"]
 
 
+def test_version_args_accept_integers(configured):
+    """Version numbers arrive as JSON integers from real clients; the
+    schema must admit them (str | int), not reject at validation."""
+    async def go():
+        async with Client(configured) as client:
+            return await client.call_tool(
+                "compare_bill_versions",
+                {"measure": "AB 831", "from_version": 95,
+                 "to_version": 94})
+
+    result = _run(go)
+    assert not result.is_error
+    data = result.structured_content
+    assert "error" not in data
+    assert data["from"]["version_num"] == "95"
+    assert data["to"]["version_num"] == "94"
+
+
 def test_call_compare_bill_versions_roundtrip(configured):
     """A V2 tool through the MCP client: structured output carries the
     digest-first parts and the envelope."""

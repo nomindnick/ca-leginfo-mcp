@@ -46,11 +46,22 @@ _SEG_MARK = re.compile(r"(?<=[.:;])\s*(?=\([a-zA-Z0-9]{1,4}\)\s)")
 # FOLLOWING word ("(a)The", '(4)"Double-decker') where law lobs space
 # it. Without normalization the glued side neither segments (no
 # whitespace after the marker) nor tokenizes like the spaced side, so
-# word-identical text fabricates whole phantom provisions. De-glue only
-# at segment positions (after sentence punctuation) — mirroring
-# _SEG_MARK — so inline citations like "subdivision (a)(1)" are
-# untouched.
-_DEGLUE = re.compile(r"(?<=[.:;])\s*(\([a-zA-Z0-9]{1,4}\))\s*(?=\S)")
+# word-identical text fabricates whole phantom provisions. Three
+# glue shapes, all observed fabricating real phantoms: after sentence
+# punctuation (RTC 214), at the very start of a block body (FGC
+# 8041's "(a)The …"), and marker CHAINS at those anchors (WIC 11466's
+# '(f)(1)"Program'). The whole run of consecutive markers is
+# re-spaced in one match; mid-sentence citation chains ("subdivision
+# (a)(1) of Section 3") sit after a word, match no anchor, and are
+# reproduced untouched.
+_DEGLUE = re.compile(
+    r"(?:^|(?<=[.:;]))\s*((?:\([a-zA-Z0-9]{1,4}\)\s*)+)(?=\S)")
+_MARK = re.compile(r"\([a-zA-Z0-9]{1,4}\)")
+
+
+def _respace(m: re.Match) -> str:
+    lead = "" if m.start() == 0 else " "
+    return lead + " ".join(_MARK.findall(m.group(1))) + " "
 
 # Below this similarity ratio, replaced segments are unrelated provisions:
 # render delete + insert, not a word-level edit.
@@ -105,7 +116,7 @@ def _segments(text: str) -> list[str]:
     """Empty text has no segments — a repealed block's empty body must
     not become one empty segment and fabricate a phantom change."""
     flowed = " ".join(text.translate(_FOLDS).split())
-    flowed = _DEGLUE.sub(r" \1 ", flowed)
+    flowed = _DEGLUE.sub(_respace, flowed)
     return _SEG_MARK.split(flowed) if flowed else []
 
 
