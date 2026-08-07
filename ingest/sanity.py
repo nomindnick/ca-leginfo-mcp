@@ -24,8 +24,8 @@ _SPOT_CHECKS = (
     ("CONS", "Art. I, Sec. 1", "inalienable"),
 )
 
-_PREV_TABLES = ("law_section", "bill", "bill_version", "bill_history",
-                "bill_analysis", "bill_section_ref")
+_PREV_TABLES = ("law_section", "bill", "bill_version", "bill_version_text",
+                "bill_history", "bill_analysis", "bill_section_ref")
 
 
 @dataclass
@@ -79,9 +79,9 @@ def check_db(db: Path, previous: Path | None = None,
 
         # -- absolute floors ------------------------------------------
         floors = {"law_section": 160_000, "bill": 1_000,
-                  "bill_version": 1_000, "bill_history": 10_000,
-                  "bill_analysis": 1_000, "bill_section_ref": 20_000,
-                  "bill_version_authors": 1_000}
+                  "bill_version": 1_000, "bill_version_text": 1_000,
+                  "bill_history": 10_000, "bill_analysis": 1_000,
+                  "bill_section_ref": 20_000, "bill_version_authors": 1_000}
         counts: dict[str, int] = {}
         for table, floor in floors.items():
             n = counts[table] = count(table) if table in tables else -1
@@ -155,6 +155,19 @@ def check_db(db: Path, previous: Path | None = None,
             add(Check("title extraction >= 99%", "warn",
                       with_lob == 0 or titled >= 0.99 * with_lob,
                       f"{titled}/{with_lob}"))
+            # V2 (SPEC §11): tools 8–10 serve bill text out of
+            # bill_version_text — an artifact that silently lost it must
+            # never ship. Absence of the table itself trips the
+            # bill_version_text floor above.
+            if "bill_version_text" in tables:
+                with_text = con.execute(
+                    """SELECT count(*) FROM bill_version v
+                       JOIN bill_version_text t USING (bill_version_id)
+                       WHERE v.lob_file IS NOT NULL
+                         AND t.text_zlib IS NOT NULL""").fetchone()[0]
+                add(Check("version text >= 99% of versions with lobs",
+                          "fail", with_lob == 0 or with_text >= 0.99 * with_lob,
+                          f"{with_text}/{with_lob}"))
 
         # -- title parse coverage -------------------------------------
         if meta.get("title_coverage"):

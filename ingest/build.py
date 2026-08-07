@@ -21,6 +21,7 @@ and renamed over ``out`` only after indexes, FTS, and meta are complete.
 from __future__ import annotations
 
 import collections
+import concurrent.futures
 import datetime
 import json
 import logging
@@ -33,6 +34,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from ingest import __version__, analyses, caml, datfile, titles
+from ingest.archive import _bill_text_worker
 from ingest.normalize import law_section_key
 from ingest.tables import ALL_TABLES, LAW_TABLES, Table
 
@@ -55,6 +57,7 @@ class BuildReport:
     bad_rows: dict[str, int] = field(default_factory=dict)
     statute_lobs: int = 0
     title_lobs: int = 0
+    version_text_bytes: int = 0
     title_coverage: dict[str, int] = field(default_factory=dict)
     refs: int = 0
     refs_missing_current: int = 0
@@ -84,6 +87,7 @@ def build_current_db(
     fts: bool = True,
     analysis_text: bool = True,
     residue_cap: int = 50,
+    workers: int = 4,
 ) -> BuildReport:
     t0 = time.time()
     report = BuildReport(out_path=str(out))
@@ -103,7 +107,7 @@ def build_current_db(
             try:
                 _load_tables(con, report, zf_law, zf_bill, zf_inc)
                 _extract_statute_text(con, report, zf_law, zf_inc)
-                _extract_titles(con, report, zf_bill or zf_law)
+                _extract_bill_text(con, report, zf_bill or zf_law, workers)
                 _build_section_refs(con, report, residue_cap)
                 if analysis_text:
                     _extract_analysis_text(con, report, zf_bill or zf_law)
@@ -232,20 +236,54 @@ def _extract_statute_text(con, report: BuildReport, zf_law, zf_inc) -> None:
              time.time() - t)
 
 
-def _extract_titles(con, report: BuildReport, zf) -> None:
+def _extract_bill_text(con, report: BuildReport, zf, workers: int) -> None:
+    """Title + full flattened text for every bill version with a lob.
+
+    ``title_text`` stays a bill_version column (ref building and tools
+    1–7 read it); the flattened body lands zlib-compressed in
+    ``bill_version_text``, same shape as archive.db's, so the V2 tools
+    read version text identically from either DB (SPEC §11). Reuses the
+    archive builder's worker — one code path may not drift from the
+    other's extraction or error handling.
+    """
     t = time.time()
     con.execute("ALTER TABLE bill_version ADD COLUMN title_text")
+    con.execute("""CREATE TABLE bill_version_text(
+        bill_version_id PRIMARY KEY, title_text, text_zlib)""")
     names = set(zf.namelist())
-    updates = []
-    for lob, rowid in con.execute(
-            "SELECT lob_file, rowid FROM bill_version").fetchall():
-        if lob and lob in names:
-            xml = zf.read(lob).decode("utf-8", errors="replace")
-            updates.append((caml.extract_title(xml), rowid))
-    con.executemany(
-        "UPDATE bill_version SET title_text=? WHERE rowid=?", updates)
-    report.title_lobs = len(updates)
-    log.info("bill titles: %d lobs in %.0fs", len(updates), time.time() - t)
+    rows = con.execute("SELECT bill_version_id, lob_file, rowid"
+                       " FROM bill_version").fetchall()
+    # vid -> [rowid, ...]: duplicate bill_version_ids would be a source
+    # anomaly, but every row must still get its title (this corpus has
+    # taught us not to assume source keys are unique).
+    rowids_of: dict[str, list[int]] = {}
+    for vid, _lob, rowid in rows:
+        rowids_of.setdefault(vid, []).append(rowid)
+    todo = [(vid, lob) for vid, lob, _rowid in rows if lob and lob in names]
+    missing = sum(1 for _vid, lob, _rowid in rows if lob) - len(todo)
+    if missing:
+        report.warnings.append(f"{missing} bill version lobs absent from zip")
+    chunks = [todo[i:i + 400] for i in range(0, len(todo), 400)]
+    errors = 0
+    with concurrent.futures.ProcessPoolExecutor(max_workers=workers) as ex:
+        for out in ex.map(_bill_text_worker, [zf.filename] * len(chunks),
+                          chunks, [True] * len(chunks)):
+            ok = [r for r in out if len(r) == 3]
+            errors += len(out) - len(ok)
+            con.executemany(
+                "INSERT OR REPLACE INTO bill_version_text VALUES (?,?,?)", ok)
+            con.executemany(
+                "UPDATE bill_version SET title_text=? WHERE rowid=?",
+                [(title, rid) for vid, title, _z in ok
+                 for rid in rowids_of[vid]])
+            report.version_text_bytes += sum(
+                len(z) for _vid, _title, z in ok if z is not None)
+            report.title_lobs += len(ok)
+    if errors:
+        report.warnings.append(f"{errors} bill version lobs failed extraction")
+    log.info("bill text: %d lobs, %.0f MB compressed in %.0fs",
+             report.title_lobs, report.version_text_bytes / 1e6,
+             time.time() - t)
 
 
 def _build_section_refs(con, report: BuildReport, residue_cap: int) -> None:

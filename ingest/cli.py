@@ -39,6 +39,7 @@ def main(argv: list[str] | None = None) -> int:
     b.add_argument("--out", type=Path, required=True)
     b.add_argument("--no-fts", action="store_true")
     b.add_argument("--no-analysis-text", action="store_true")
+    b.add_argument("--workers", type=int, default=4)
     b.add_argument("--report", type=Path, help="write build report JSON here")
 
     a = sub.add_parser("build-archive",
@@ -77,7 +78,8 @@ def main(argv: list[str] | None = None) -> int:
             bill_zip=args.bill_zip,
             incremental_zip=args.incremental,
             fts=not args.no_fts,
-            analysis_text=not args.no_analysis_text)
+            analysis_text=not args.no_analysis_text,
+            workers=args.workers)
         if args.report:
             args.report.write_text(report.to_json())
         print(report.to_json())

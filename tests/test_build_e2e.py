@@ -78,6 +78,28 @@ def test_analysis_text_roundtrip(built):
     assert fmt == "docx" and len(text) > 200
 
 
+def test_bill_version_text_roundtrip(built):
+    """V2 (SPEC §11): every version with a lob gets a bill_version_text
+    row — title duplicated alongside (same shape as archive.db, so the
+    V2 tools read either DB identically) and the full flattened text
+    zlib-compressed, not just the title."""
+    con, report, _ = built
+    n_lob, = con.execute(
+        """SELECT count(*) FROM bill_version
+           WHERE lob_file IS NOT NULL""").fetchone()
+    rows = con.execute(
+        """SELECT v.title_text, t.title_text, t.text_zlib
+           FROM bill_version v
+           JOIN bill_version_text t USING (bill_version_id)""").fetchall()
+    assert len(rows) == n_lob == report.title_lobs > 0
+    for v_title, t_title, blob in rows:
+        assert t_title == v_title
+        text = zlib.decompress(blob).decode()
+        assert "do enact as follows" in text  # body present, not just title
+        assert len(text) > len(t_title)
+    assert report.version_text_bytes == sum(len(r[2]) for r in rows) > 0
+
+
 def test_veto_message_row(built):
     con, _, _ = built
     n, = con.execute("SELECT count(*) FROM veto_message").fetchone()

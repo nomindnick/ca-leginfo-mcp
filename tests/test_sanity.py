@@ -68,8 +68,9 @@ def test_gate_fails_on_mini_floors(base_report):
 def test_all_bill_floors_fail_too(base_report):
     checks = by_name(base_report)
     for name in ("bill >= 1000", "bill_version >= 1000",
-                 "bill_history >= 10000", "bill_analysis >= 1000",
-                 "bill_section_ref >= 20000", "bill_version_authors >= 1000"):
+                 "bill_version_text >= 1000", "bill_history >= 10000",
+                 "bill_analysis >= 1000", "bill_section_ref >= 20000",
+                 "bill_version_authors >= 1000"):
         assert not checks[name].ok, name
 
 
@@ -129,8 +130,8 @@ def test_meta_present(base_report):
 
 PREV_COUNT_CHECKS = tuple(
     f"{t} >= 98% of previous"
-    for t in ("law_section", "bill", "bill_version", "bill_history",
-              "bill_analysis", "bill_section_ref"))
+    for t in ("law_section", "bill", "bill_version", "bill_version_text",
+              "bill_history", "bill_analysis", "bill_section_ref"))
 PREV_DATE_CHECKS = ("law_extract_date not older than previous",
                     "bill_extract_date not older than previous")
 
@@ -172,6 +173,48 @@ def test_no_previous_means_no_regression_checks(base_report):
     checks = by_name(base_report)
     for name in PREV_COUNT_CHECKS + PREV_DATE_CHECKS:
         assert name not in checks
+
+
+# -- bill version text (V2, SPEC §11) -------------------------------------
+
+VERSION_TEXT_CHECK = "version text >= 99% of versions with lobs"
+
+
+def test_version_text_coverage_passes(base_report):
+    check = by_name(base_report)[VERSION_TEXT_CHECK]
+    assert check.level == "fail" and check.ok, check.detail
+
+
+def test_gutted_version_text_trips_the_gate(mini_db, tmp_path):
+    """Rows present but text_zlib silently lost (the failure the check
+    exists for — tools 8–10 would serve nothing) must block upload."""
+    db = tmp_path / "gutted.db"
+    shutil.copy(mini_db, db)
+    con = sqlite3.connect(db)
+    try:
+        con.execute("UPDATE bill_version_text SET text_zlib=NULL")
+        con.commit()
+    finally:
+        con.close()
+    check = by_name(check_db(db))[VERSION_TEXT_CHECK]
+    assert check.level == "fail" and not check.ok
+
+
+def test_v1_artifact_without_version_text_table(mini_db, tmp_path):
+    """A pre-V2 artifact trips the gate via the floor check; the
+    coverage check must skip, not crash, on the missing table."""
+    db = tmp_path / "v1.db"
+    shutil.copy(mini_db, db)
+    con = sqlite3.connect(db)
+    try:
+        con.execute("DROP TABLE bill_version_text")
+        con.commit()
+    finally:
+        con.close()
+    checks = by_name(check_db(db))
+    floor = checks["bill_version_text >= 1000"]
+    assert floor.level == "fail" and not floor.ok
+    assert VERSION_TEXT_CHECK not in checks
 
 
 # -- freshness (now= parameter) -------------------------------------------
