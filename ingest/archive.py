@@ -244,25 +244,28 @@ def _load_one(con, zf, names: set[str], table: Table,
 
 # --- bill version text -----------------------------------------------------
 
-def _bill_text_worker(zip_path: str, items: list[tuple[str, str]],
+def _bill_text_worker(zip_path: str, items: list[tuple[object, str]],
                       store_text: bool) -> list[tuple]:
-    """Runs in a worker process: (bill_version_id, lob) -> extracted rows.
+    """Runs in a worker process: (key, lob) -> extracted rows.
 
-    Workers open the zip themselves — shipping lob names through IPC is
-    cheap, shipping gigabytes of XML is not. With store_text=False only
-    the title is extracted (refs still need titles).
+    The key is echoed back untouched — this builder passes
+    bill_version_id, build.py passes bill_version ROWIDs, and its
+    duplicate-key defense depends on that opaqueness. Workers open the
+    zip themselves — shipping lob names through IPC is cheap, shipping
+    gigabytes of XML is not. With store_text=False only the title is
+    extracted (refs still need titles).
     """
     out = []
     with zipfile.ZipFile(zip_path) as zf:
-        for vid, lob in items:
+        for key, lob in items:
             try:
                 xml = zf.read(lob).decode("utf-8", errors="replace")
                 title = caml.extract_title(xml)
                 ztext = (zlib.compress(caml.bill_text(xml).encode(),
                                        _ZLIB_LEVEL) if store_text else None)
-                out.append((vid, title, ztext))
+                out.append((key, title, ztext))
             except Exception as e:  # noqa: BLE001 — count, never crash
-                out.append((vid, None, None, repr(e)))
+                out.append((key, None, None, repr(e)))
     return out
 
 

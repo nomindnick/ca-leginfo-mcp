@@ -8,6 +8,8 @@ from pathlib import Path
 
 import pytest
 
+from ingest import cli
+from ingest.build import BuildReport
 from ingest.cli import main
 
 # Field offsets in LAW_SECTION_TBL.dat (see ingest.tables LAW_SECTION_TBL).
@@ -66,6 +68,23 @@ def test_build_no_fts_no_analysis_writes_report(mini_zip, tmp_path, capsys):
 
     tables = _tables(out)
     assert "law_fts" not in tables and "analysis_text" not in tables
+
+
+def test_workers_flag_reaches_the_builder(mini_zip, tmp_path, monkeypatch):
+    """--workers must actually reach build_current_db: argv acceptance
+    plus artifact assertions can't prove the plumbing, since a dropped
+    kwarg builds identically at the default."""
+    seen = {}
+
+    def spy(*args, **kwargs):
+        seen.update(kwargs)
+        return BuildReport()
+
+    monkeypatch.setattr(cli, "build_current_db", spy)
+    rc = main(["build", "--law-zip", str(mini_zip),
+               "--out", str(tmp_path / "w.db"), "--workers", "3"])
+    assert rc == 0
+    assert seen["workers"] == 3
 
 
 # -- sanity ---------------------------------------------------------------
