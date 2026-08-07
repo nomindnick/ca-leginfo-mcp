@@ -9,6 +9,7 @@ coverage, key normalization) still pass on the real records it contains.
 import datetime
 import shutil
 import sqlite3
+import zlib
 from pathlib import Path
 
 import pytest
@@ -186,18 +187,78 @@ def test_version_text_coverage_passes(base_report):
 
 
 def test_gutted_version_text_trips_the_gate(mini_db, tmp_path):
-    """Rows present but text_zlib silently lost (the failure the check
-    exists for — tools 8–10 would serve nothing) must block upload."""
+    """Rows present but every body extracted to nothing — the state the
+    builder actually produces under an extractor regression, since it
+    stores zlib.compress(b"") (8 non-NULL bytes), never NULL — must
+    block upload: tools 8–10 would serve nothing."""
     db = tmp_path / "gutted.db"
     shutil.copy(mini_db, db)
     con = sqlite3.connect(db)
     try:
-        con.execute("UPDATE bill_version_text SET text_zlib=NULL")
+        con.execute("UPDATE bill_version_text SET text_zlib=?",
+                    (zlib.compress(b""),))
         con.commit()
     finally:
         con.close()
     check = by_name(check_db(db))[VERSION_TEXT_CHECK]
     assert check.level == "fail" and not check.ok
+
+
+def test_one_lost_body_is_enough_to_trip_the_gate(mini_db, tmp_path):
+    """15/16 = 93.75% sits between 0.9 and 0.99 — this pins the actual
+    SPEC §11 threshold, which the 0%/100% cases alone do not."""
+    db = tmp_path / "one_lost.db"
+    shutil.copy(mini_db, db)
+    con = sqlite3.connect(db)
+    try:
+        con.execute("""UPDATE bill_version_text SET text_zlib=NULL
+                       WHERE rowid = (SELECT min(rowid)
+                                      FROM bill_version_text)""")
+        con.commit()
+    finally:
+        con.close()
+    check = by_name(check_db(db))[VERSION_TEXT_CHECK]
+    assert not check.ok
+    assert check.detail == "15/16"
+
+
+def test_rekeyed_version_text_does_not_count(mini_db, tmp_path):
+    """Coverage is per lobbed VERSION, joined on bill_version_id — a
+    table full of blobs under keys that match nothing must count zero,
+    pinning the join against a bare row-count regression."""
+    db = tmp_path / "rekeyed.db"
+    shutil.copy(mini_db, db)
+    con = sqlite3.connect(db)
+    try:
+        con.execute("""UPDATE bill_version_text
+                       SET bill_version_id = bill_version_id || 'X'""")
+        con.commit()
+    finally:
+        con.close()
+    check = by_name(check_db(db))[VERSION_TEXT_CHECK]
+    assert not check.ok
+    assert check.detail == "0/16"
+
+
+def test_first_night_previous_artifact_lacks_the_table(mini_db, tmp_path):
+    """The first post-V2-deploy nightly gates against a previous
+    artifact that predates bill_version_text: that must surface as the
+    warn-level 'missing in previous' note, never block the upload."""
+    prev = tmp_path / "previous.db"
+    shutil.copy(mini_db, prev)
+    con = sqlite3.connect(prev)
+    try:
+        con.execute("DROP TABLE bill_version_text")
+        con.commit()
+    finally:
+        con.close()
+    checks = by_name(check_db(mini_db, previous=prev))
+    transition = checks["bill_version_text >= 98% of previous"]
+    assert transition.level == "warn" and not transition.ok
+    assert "missing in previous" in transition.detail
+    for name in PREV_COUNT_CHECKS + PREV_DATE_CHECKS:
+        if name != "bill_version_text >= 98% of previous":
+            assert checks[name].ok, f"{name}: {checks[name].detail}"
 
 
 def test_v1_artifact_without_version_text_table(mini_db, tmp_path):

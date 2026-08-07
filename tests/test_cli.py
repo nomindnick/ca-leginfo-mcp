@@ -51,7 +51,7 @@ def test_build_no_fts_no_analysis_writes_report(mini_zip, tmp_path, capsys):
     report_path = tmp_path / "report.json"
     capsys.readouterr()  # drain anything from fixture setup
     rc = main(["build", "--law-zip", str(mini_zip), "--out", str(out),
-               "--no-fts", "--no-analysis-text",
+               "--no-fts", "--no-analysis-text", "--workers", "2",
                "--report", str(report_path)])
     assert rc == 0
     assert out.exists()
@@ -60,6 +60,7 @@ def test_build_no_fts_no_analysis_writes_report(mini_zip, tmp_path, capsys):
     report = json.loads(report_path.read_text())
     assert report["table_rows"]["law_section"] > 0
     assert report["law_tables_from_incremental"] == []
+    assert report["version_text_bytes"] > 0  # the §11 size line, plumbed
     stdout_report = json.loads(capsys.readouterr().out)
     assert stdout_report["table_rows"] == report["table_rows"]
 

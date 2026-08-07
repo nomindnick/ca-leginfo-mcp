@@ -253,14 +253,18 @@ def _extract_bill_text(con, report: BuildReport, zf, workers: int) -> None:
     names = set(zf.namelist())
     rows = con.execute("SELECT bill_version_id, lob_file, rowid"
                        " FROM bill_version").fetchall()
-    # vid -> [rowid, ...]: duplicate bill_version_ids would be a source
-    # anomaly, but every row must still get its title (this corpus has
-    # taught us not to assume source keys are unique).
-    rowids_of: dict[str, list[int]] = {}
-    for vid, _lob, rowid in rows:
-        rowids_of.setdefault(vid, []).append(rowid)
-    todo = [(vid, lob) for vid, lob, _rowid in rows if lob and lob in names]
-    missing = sum(1 for _vid, lob, _rowid in rows if lob) - len(todo)
+    vid_of = {rowid: vid for vid, _lob, rowid in rows}
+    # Work is keyed by rowid, not bill_version_id (the worker passes the
+    # key through opaquely): should a source ever duplicate a version id
+    # across different lobs, each row must still be titled from its OWN
+    # lob, exactly as the pre-V2 title pass did. `is not None`, not
+    # truthiness: build, archive, and the sanity gate must partition on
+    # the same predicate, or an empty-string lob_file would sit in the
+    # gate's denominator with no build-report account of it.
+    todo = [(rowid, lob) for _vid, lob, rowid in rows
+            if lob is not None and lob in names]
+    missing = sum(1 for _vid, lob, _rowid in rows
+                  if lob is not None) - len(todo)
     if missing:
         report.warnings.append(f"{missing} bill version lobs absent from zip")
     chunks = [todo[i:i + 400] for i in range(0, len(todo), 400)]
@@ -271,14 +275,17 @@ def _extract_bill_text(con, report: BuildReport, zf, workers: int) -> None:
             ok = [r for r in out if len(r) == 3]
             errors += len(out) - len(ok)
             con.executemany(
-                "INSERT OR REPLACE INTO bill_version_text VALUES (?,?,?)", ok)
+                "INSERT OR REPLACE INTO bill_version_text VALUES (?,?,?)",
+                [(vid_of[rid], title, z) for rid, title, z in ok])
             con.executemany(
                 "UPDATE bill_version SET title_text=? WHERE rowid=?",
-                [(title, rid) for vid, title, _z in ok
-                 for rid in rowids_of[vid]])
-            report.version_text_bytes += sum(
-                len(z) for _vid, _title, z in ok if z is not None)
+                [(title, rid) for rid, title, _z in ok])
             report.title_lobs += len(ok)
+    # Measured from the table so duplicate-key re-extraction can never
+    # double-count: the size line reports bytes actually stored.
+    report.version_text_bytes = con.execute(
+        "SELECT coalesce(sum(length(text_zlib)), 0)"
+        " FROM bill_version_text").fetchone()[0]
     if errors:
         report.warnings.append(f"{errors} bill version lobs failed extraction")
     log.info("bill text: %d lobs, %.0f MB compressed in %.0fs",

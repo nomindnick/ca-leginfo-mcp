@@ -158,13 +158,18 @@ def check_db(db: Path, previous: Path | None = None,
             # V2 (SPEC §11): tools 8–10 serve bill text out of
             # bill_version_text — an artifact that silently lost it must
             # never ship. Absence of the table itself trips the
-            # bill_version_text floor above.
+            # bill_version_text floor above. length() > 32, like the
+            # sibling content checks: the builder stores non-NULL
+            # unconditionally (zlib.compress(b"") is 8 bytes), so a
+            # NULL-only predicate would be blind to an extractor
+            # regression that flattens every body to "". Smallest real
+            # blob across the 283k-row archive corpus: 43 bytes.
             if "bill_version_text" in tables:
                 with_text = con.execute(
                     """SELECT count(*) FROM bill_version v
                        JOIN bill_version_text t USING (bill_version_id)
                        WHERE v.lob_file IS NOT NULL
-                         AND t.text_zlib IS NOT NULL""").fetchone()[0]
+                         AND length(t.text_zlib) > 32""").fetchone()[0]
                 add(Check("version text >= 99% of versions with lobs",
                           "fail", with_lob == 0 or with_text >= 0.99 * with_lob,
                           f"{with_text}/{with_lob}"))

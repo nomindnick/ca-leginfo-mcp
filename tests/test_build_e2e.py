@@ -2,11 +2,14 @@
 against real records (real .dat lines, real CAML lobs, real docx analyses)."""
 
 import json
+import shutil
 import sqlite3
+import zipfile
 import zlib
 
 import pytest
 
+from ingest import caml
 from ingest.build import build_current_db
 
 
@@ -96,8 +99,77 @@ def test_bill_version_text_roundtrip(built):
         assert t_title == v_title
         text = zlib.decompress(blob).decode()
         assert "do enact as follows" in text  # body present, not just title
-        assert len(text) > len(t_title)
+        # Flattened text opens with the title: ties each stored body to
+        # the version it came from — a vid→body mis-pairing (worker
+        # output misalignment) would satisfy any per-row content check.
+        assert text.startswith(t_title)
     assert report.version_text_bytes == sum(len(r[2]) for r in rows) > 0
+    # Same shape as archive.db (SPEC §11) — name order and PK pinned.
+    cols = con.execute("PRAGMA table_info(bill_version_text)").fetchall()
+    assert [(c[1], c[5]) for c in cols] == [
+        ("bill_version_id", 1), ("title_text", 0), ("text_zlib", 0)]
+
+
+def test_duplicate_vid_and_absent_lob(fixtures, tmp_path):
+    """Source anomalies the extraction stage defends against, both absent
+    from the clean corpus: a duplicated bill_version_id must leave every
+    bill_version row titled from its OWN lob (not whichever extraction
+    landed last), and a lob named in the .dat but absent from the zip
+    must surface in the report warnings — it is in the sanity gate's
+    coverage denominator, so the report must account for it."""
+    tree = tmp_path / "tree"
+    shutil.copytree(fixtures / "mini", tree)
+    dat = tree / "BILL_VERSION_TBL.dat"
+    lines = [ln for ln in dat.read_text().splitlines() if ln.strip()]
+
+    def field(ln: str, i: int) -> str:
+        return ln.split("\t")[i].strip("`")
+
+    # Append a row duplicating row 0's version id but carrying a
+    # different bill's lob (their titles differ, so a fan-out that lets
+    # one extraction overwrite the other is observable).
+    other = next(ln for ln in lines[1:] if field(ln, 1) != field(lines[0], 1))
+    dup = lines[0].split("\t")
+    dup[1] = other.split("\t")[1]
+    dup[14] = other.split("\t")[14]
+    # And strand a third row: keep its .dat row, delete its lob file.
+    gone = next(field(ln, 14) for ln in lines
+                if field(ln, 14) not in (field(lines[0], 14), field(other, 14)))
+    (tree / gone).unlink()
+    dat.write_text("\n".join([*lines, "\t".join(dup)]) + "\n")
+
+    z = tmp_path / "pubinfo_mini.zip"
+    with zipfile.ZipFile(z, "w") as zf:
+        for f in sorted(tree.rglob("*")):
+            if f.is_file():
+                zf.write(f, f.relative_to(tree).as_posix())
+    out = tmp_path / "current.db"
+    report = build_current_db(z, out, fts=False, analysis_text=False)
+    assert "1 bill version lobs absent from zip" in report.warnings
+
+    con = sqlite3.connect(out)
+    try:
+        with zipfile.ZipFile(z) as zf:
+            names = set(zf.namelist())
+            rows = con.execute(
+                "SELECT bill_version_id, lob_file, title_text"
+                " FROM bill_version").fetchall()
+            for _vid, lob, title in rows:
+                if lob in names:
+                    xml = zf.read(lob).decode("utf-8", errors="replace")
+                    assert title == caml.extract_title(xml)
+                else:
+                    assert title is None  # stranded row: no phantom title
+        covered = {vid for vid, lob, _t in rows if lob in names}
+        n_text, = con.execute(
+            "SELECT count(*) FROM bill_version_text").fetchone()
+        assert n_text == len(covered)  # one row per distinct covered vid
+        stored, = con.execute(
+            """SELECT coalesce(sum(length(text_zlib)), 0)
+               FROM bill_version_text""").fetchone()
+        assert report.version_text_bytes == stored  # no double-count
+    finally:
+        con.close()
 
 
 def test_veto_message_row(built):
