@@ -127,6 +127,20 @@ def test_repealed_block_comparison_has_no_phantom_change(chain):
     assert redline("", "").identical
 
 
+def test_unicode_typography_folds_never_redline_dirty():
+    """Mid-2000s bill lobs print non-breaking hyphens (U+2011) and curly
+    quotes where law lobs print ASCII — character-identical text must
+    compare identical, not emit `~~full‑time~~ *full-time*`. (Real
+    shape: BPC 1640.3 vs its chapter's lob, AB 1143 (2005).)"""
+    bill = "(a) A person approved as a full‑time professor of " \
+           "“dentistry” at the board’s discretion."
+    law = "(a) A person approved as a full-time professor of " \
+          "\"dentistry\" at the board's discretion."
+    r = redline(bill, law)
+    assert r.identical
+    assert r.changes == []
+
+
 def test_glued_subdivision_marker_segments_like_spaced():
     """Flattened bill lobs sometimes glue a subdivision marker to the
     preceding sentence ("…in Sudan.(2) Investments…") where law lobs

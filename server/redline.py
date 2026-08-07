@@ -81,10 +81,20 @@ def _tokens(text: str) -> list[str]:
     return _WORD.findall(text)
 
 
+# Typography folds: mid-2000s bill lobs print U+2011 non-breaking
+# hyphens and curly quotes where law lobs print ASCII — character-
+# identical statute text must never redline dirty (~0.5% of real
+# cross-source pairs otherwise show phantom edits like
+# `~~full‑time~~ *full-time*`).
+_FOLDS = str.maketrans({"‐": "-", "‑": "-",
+                        "‘": "'", "’": "'",
+                        "“": '"', "”": '"'})
+
+
 def _segments(text: str) -> list[str]:
     """Empty text has no segments — a repealed block's empty body must
     not become one empty segment and fabricate a phantom change."""
-    flowed = " ".join(text.split())
+    flowed = " ".join(text.translate(_FOLDS).split())
     return _SEG_MARK.split(flowed) if flowed else []
 
 

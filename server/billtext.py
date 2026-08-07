@@ -12,17 +12,22 @@ lobs):
   the rest `SEC. 2.` — both forms split and match.
 - Flattened lobs do not reliably newline before headings
   (`…do enact as follows:SECTION 1.Section 54953…`), so a heading
-  directly after `.` or `:` splits too. Residual risk: a literal
-  "SEC. n" inside quoted statutory text would mis-split; the recorded
-  robust upgrade is XML-side extraction (`caml:BillSection` +
+  directly after `.` or `:` splits too — and a block amending a
+  *structural heading* ends with the unterminated new title, gluing the
+  next `SEC. n.` to arbitrary text, so a heading followed by a genuine
+  intro shape splits at any position. Residual risk: a literal "SEC. n"
+  inside quoted statutory text would mis-split; the recorded robust
+  upgrade is XML-side extraction (`caml:BillSection` +
   `caml:ActionLine`), which needs source zips rather than the DBs.
 - Sunset/operative-date branches are the norm: one bill can carry
   several blocks for the same section (§ 54953 had four in AB 557).
   Callers get every matching block, each with its lineage parenthetical
   ("as amended by Section 2 of Chapter 285 of the Statutes of 2022") —
   the machine-readable key for ordering the version graph. Lineage
-  matching needs double-jointing tolerance: later bills cite
-  "Section 1 of Chapter 534" for the block that printed as `SEC. 1.5.`.
+  citations are literal; double-jointed prints are *contingent* (AB
+  557's `SEC. 1.5.` never became operative — SB 537 failed its
+  condition — so "Section 1 of Chapter 534" cites `SECTION 1.`), and
+  picking the operative block follows the history-note chain.
 - `repealed` blocks carry no body.
 
 Contract fixtures: tests/fixtures/sec54953/ (see its README), pinned by
@@ -35,8 +40,17 @@ import re
 from dataclasses import dataclass
 
 # Split before enacting-section headings; see module docstring for the
-# two heading forms and the missing-newline trap.
-_SEC_SPLIT = re.compile(r"(?:\n|(?<=[.:]))(?=SEC\.\s*\d|SECTION\s+\d)")
+# two heading forms and the missing-newline trap. Second alternative:
+# a block amending a *structural heading* ends with the new heading
+# title, which has no terminal punctuation ("…is amended to
+# read:6.4.COUNTY HEALTH INITIATIVE MATCHING FUNDSEC. 33.Section
+# 12699.50…"), so a heading glued to arbitrary text must split too —
+# but only when followed by a genuine intro shape ("Section N …" /
+# "The heading of"), or quoted "SEC. n" in body text would mis-split.
+_SEC_SPLIT = re.compile(
+    r"(?:\n|(?<=[.:]))(?=SEC\.\s*\d|SECTION\s+\d)"
+    r"|(?=(?:SEC\.|SECTION)\s*\d[\d.]*\s*"
+    r"(?:Section\s+\d|The\s+heading\s+of\s))")
 _SEC_HEAD = re.compile(r"(?:SEC\.|SECTION)\s*[\d.]+")
 
 # The intro sentence's operative verb phrase: "… is amended to read:",

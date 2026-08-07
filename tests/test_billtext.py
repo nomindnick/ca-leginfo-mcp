@@ -64,8 +64,8 @@ def test_ab557_four_blocks_including_double_joint_and_repeal(ab557):
 
 def test_lineage_is_whitespace_normalized(ab557):
     """The lob wraps 'Section 1\\nof Chapter 285' mid-parenthetical; the
-    lineage key must come back flowed — it is matched against citations
-    in later bills ('Section 1 of Chapter 534' for the SEC. 1.5. print)."""
+    lineage key must come back flowed — later bills cite it literally in
+    their intros, so the key must match without line-wrap noise."""
     for b in ab557:
         assert "\n" not in (b.lineage or "")
     assert ab557[1].lineage == \
@@ -154,6 +154,35 @@ def test_further_amended_form():
 
 def test_wrong_code_yields_no_blocks():
     assert section_blocks(_DEMO, "Government Code", "5") == []
+
+
+def test_glued_heading_amendment_still_splits():
+    """A block amending a structural heading ends with the unterminated
+    new title, gluing the next SEC. onto arbitrary text — the section it
+    introduces must still be retrievable. (Real shape: AB 1762 (2003),
+    whose Part-heading amendment swallowed SEC. 33 / Ins. Code
+    § 12699.50; same class cost AB 731 (2015) its § 6254 amendment.)"""
+    flat = ("The people of the State of California do enact as follows:"
+            "SEC. 32.The heading of Part 6.4 (commencing with Section "
+            "12699.50) of Division 2 of the Insurance Code is amended to "
+            "read:6.4.COUNTY HEALTH INITIATIVE MATCHING FUND"
+            "SEC. 33.Section 12699.50 of the Insurance Code is amended to "
+            "read:12699.50.This part shall be known as the fund.")
+    (b,) = section_blocks(flat, "Insurance Code", "12699.50")
+    assert b.heading == "SEC. 33."
+    assert b.body == "This part shall be known as the fund."
+
+
+def test_lineage_comes_from_the_intro_not_the_body():
+    """Lineage-shaped prose inside the re-enacted body (legislative
+    findings love '…this section, as amended by this act, is…') must not
+    be read as the intro's lineage parenthetical. (Real shape: AB 189
+    (1991), Fish & Game Code § 8692.5.)"""
+    flat = ("SEC. 14. Section 8692.5 of the Fish and Game Code is amended "
+            "to read:8692.5. The Legislature finds that this section, as "
+            "amended by this act, is more restrictive than federal law.")
+    (b,) = section_blocks(flat, "Fish and Game Code", "8692.5")
+    assert b.lineage is None
 
 
 def test_body_citation_of_another_section_is_not_a_match():
