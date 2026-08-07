@@ -1,4 +1,4 @@
-"""MCP-layer tests: the seven tools registered and callable through an
+"""MCP-layer tests: the ten tools registered and callable through an
 in-memory client session (mcp 2.0's Client connects directly to an
 MCPServer instance)."""
 
@@ -13,7 +13,8 @@ from server.db import Databases
 EXPECTED_TOOLS = {
     "get_section", "search_sections", "bills_affecting_section",
     "get_bill", "get_bill_analyses", "get_legislative_history",
-    "chapter_to_bill",
+    "chapter_to_bill", "get_bill_text", "compare_section_versions",
+    "compare_bill_versions",
 }
 
 
@@ -64,6 +65,23 @@ def test_call_search_with_defaults(configured):
     result = _run(go)
     assert not result.is_error
     assert result.structured_content["results"]
+
+
+def test_call_compare_bill_versions_roundtrip(configured):
+    """A V2 tool through the MCP client: structured output carries the
+    digest-first parts and the envelope."""
+    async def go():
+        async with Client(configured) as client:
+            return await client.call_tool(
+                "compare_bill_versions", {"measure": "AB 831"})
+
+    result = _run(go)
+    assert not result.is_error
+    data = result.structured_content
+    assert data["measure"] == "AB 831"
+    assert data["law_extract_date"]
+    assert "title_and_digest" in data and "body" in data
+    assert isinstance(data["identical"], bool)
 
 
 def test_error_payloads_are_structured_not_exceptions(configured):

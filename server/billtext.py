@@ -82,8 +82,16 @@ class SectionBlock:
 
 def split_blocks(flat_text: str) -> list[str]:
     """Raw enacting-section blocks of a flattened bill lob. The first
-    element is the pre-enactment prefix (title, digest, enacting clause)."""
-    return _SEC_SPLIT.split(flat_text)
+    element is the pre-enactment prefix (title, digest, enacting clause).
+
+    A heading that is both newline-preceded and glued to a genuine intro
+    shape satisfies two _SEC_SPLIT alternatives at adjacent positions
+    (the ``\\n`` branch consumes, then the zero-width branch fires), so
+    the raw split yields an empty string between them; those are noise,
+    never content, and are dropped (the prefix is kept even when empty
+    so callers can rely on its position)."""
+    parts = _SEC_SPLIT.split(flat_text)
+    return [parts[0]] + [p for p in parts[1:] if p]
 
 
 def section_blocks(flat_text: str, code_name: str,

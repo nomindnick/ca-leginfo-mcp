@@ -1,9 +1,9 @@
-"""FastMCP wiring for the seven tools (SPEC §5).
+"""FastMCP wiring for the ten tools (SPEC §5, §12).
 
-Tool logic lives in server/tools.py as plain functions; this module only
-declares the MCP surface (names, parameter schemas, descriptions the
-calling AI reads) and the transports: stdio for local use, streamable
-HTTP for the Railway deployment.
+Tool logic lives in server/tools.py and server/texttools.py as plain
+functions; this module only declares the MCP surface (names, parameter
+schemas, descriptions the calling AI reads) and the transports: stdio
+for local use, streamable HTTP for the Railway deployment.
 
 Database paths come from CA_LEGINFO_CURRENT_DB / CA_LEGINFO_ARCHIVE_DB
 (defaults: ./current.db, ./archive.db; a missing archive degrades the
@@ -19,7 +19,7 @@ from typing import Any
 
 from mcp.server.mcpserver import MCPServer
 
-from server import __version__, tools
+from server import __version__, texttools, tools
 from server.db import ARCHIVE_DB_ENV, CURRENT_DB_ENV, Databases
 
 log = logging.getLogger("server.app")
@@ -52,9 +52,14 @@ mcp = MCPServer(
         "committee and floor analyses, veto messages, and floor/committee "
         "vote summaries on archived bills via get_bill "
         "(get_legislative_history, get_bill, get_bill_analyses, "
-        "chapter_to_bill). Every response carries law/bill extract dates "
-        "and a source note; this is an unofficial mirror — direct users "
-        "to the official publication for court filings."
+        "chapter_to_bill). Read any bill print's full text "
+        "(get_bill_text) and compute display-ready redlines between "
+        "versions of a code section — historical, current, or as a "
+        "pending bill proposes (compare_section_versions) — or between "
+        "two prints of one bill (compare_bill_versions). Every response "
+        "carries law/bill extract dates and a source note; this is an "
+        "unofficial mirror — direct users to the official publication "
+        "for court filings."
     ),
 )
 
@@ -156,6 +161,66 @@ def chapter_to_bill(year: int, chapter: int, kind: str = "statutes",
     """
     return tools.chapter_to_bill(_get_dbs(), year, chapter, kind,
                                  ex_session)
+
+
+@mcp.tool(structured_output=True)
+def get_bill_text(measure: str, session: str | None = None,
+                  version: str | None = None,
+                  section_filter: str | None = None) -> dict[str, Any]:
+    """Full flattened text of one bill print (title + digest + body),
+    default the latest version.
+
+    Oversized prints (>50k chars — omnibus/budget bills) return an index
+    of enacting sections instead, each intro line naming the code section
+    it operates on; re-query with `section_filter` ("GOV 54953") for
+    those blocks' full text, including sunset/operative-date variants
+    with their lineage. `version` accepts a version number, an action
+    phrase ("introduced", "chaptered", "amended assembly"), a date, or a
+    bill_version_id. Works across current session and archive (1989+;
+    pre-1999 sessions store chaptered prints only).
+    """
+    return texttools.get_bill_text(_get_dbs(), measure, session, version,
+                                   section_filter)
+
+
+@mcp.tool(structured_output=True)
+def compare_section_versions(code: str, section: str,
+                             from_ref: str | None = None,
+                             to_ref: str | None = None) -> dict[str, Any]:
+    """Redline between two versions of a California code section —
+    display-ready markdown (*italics* = added, ~~strikeout~~ = deleted)
+    plus a structured change list. Reproduce the markdown verbatim.
+
+    Refs accept a chapter citation ("Stats. 2023, Ch. 534"), "current",
+    or a measure ("AB 405") for a pending bill's proposed text. Defaults:
+    prior operative version → current law (the zero-argument redline);
+    with only to_ref a measure, current law → its proposed text. Sunset
+    branches resolve via the section's history-note chain; parallel
+    variants are always listed, never silently picked. Identical
+    endpoints return an affirmative no-change statement.
+    """
+    return texttools.compare_section_versions(_get_dbs(), code, section,
+                                              from_ref, to_ref)
+
+
+@mcp.tool(structured_output=True)
+def compare_bill_versions(measure: str, session: str | None = None,
+                          from_version: str | None = None,
+                          to_version: str | None = None) -> dict[str, Any]:
+    """Redline between two prints of one bill — what changed as it moved
+    through the process. Reproduce the markdown verbatim.
+
+    Defaults to the latest print vs. its predecessor; any pair works
+    (introduced vs. chaptered answers "what changed overall"). Title +
+    digest edits come first as their own part — Legislative Counsel's
+    own summary of the change — then the body redline. Version args as
+    in get_bill_text. Pair with get_bill_analyses' amendment_date for
+    "when did this phrase enter and what did the committee say".
+    Pre-1999 archive sessions are chaptered-only, so no version pairs
+    exist there.
+    """
+    return texttools.compare_bill_versions(_get_dbs(), measure, session,
+                                           from_version, to_version)
 
 
 @mcp.custom_route("/health", methods=["GET"])
