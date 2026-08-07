@@ -166,8 +166,11 @@ def parse_section(code: str, text: str) -> tuple[str, str | None]:
 
 # --- measures and sessions ----------------------------------------------
 
-_BILL_ID = re.compile(r"^\s*(\d{8})(\d)([A-Z]{1,4})(\d+)\s*$")
-_MEASURE = re.compile(r"^\s*([A-Za-z]{1,4})[\s.\-]*(\d+)\s*$")
+# Measure numbers are bounded ({1,6}): int() on an unbounded digit run
+# raises ValueError past 4300 digits (CPython 3.11+), and these regexes
+# see raw user input via every tool's measure/ref arguments.
+_BILL_ID = re.compile(r"^\s*(\d{8})(\d)([A-Z]{1,4})(\d{1,6})\s*$")
+_MEASURE = re.compile(r"^\s*([A-Za-z]{1,4})[\s.\-]*(\d{1,6})\s*$")
 
 
 def parse_measure(text: str) -> dict | None:

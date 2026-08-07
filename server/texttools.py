@@ -68,12 +68,17 @@ MAX_FULL_TEXT = 50_000
 
 # Whole-bill comparison guards. Size is NOT the cost driver — measured:
 # a near-identical 1.8M-char budget-bill pair redlines in 0.3s, while a
-# 6k→535k gut-and-amend takes 17s — the quadratic segment pairing inside
-# replace ranges is. _MAX_PAIR_WORK caps estimated ratio() calls
-# (~140µs each measured, so ~7s worst); _MAX_REDLINE_CHARS caps the body
-# redline served (a redline longer than a servable print is unreadable
-# in chat) — the digest redline is always served either way.
-_MAX_PAIR_WORK = 50_000
+# 6k→535k gut-and-amend takes 17s — the pairing pass inside replace
+# ranges is. Nor is the CALL COUNT: each pairing call is a character-
+# level SequenceMatcher over whole segments, and budget prints carry
+# 100k+-char segments, so 27 calls once ran 219s (round-1 finding).
+# _MAX_PAIR_WORK therefore caps the CHARACTER PRODUCT of replace
+# ranges (chars_old × chars_new summed per range): the 219s pair
+# measures ~4e10, so 1e9 bounds the worst admitted diff near ~5s.
+# _MAX_REDLINE_CHARS caps the body redline served (a redline longer
+# than a servable print is unreadable in chat) — the digest redline is
+# always served either way.
+_MAX_PAIR_WORK = 1_000_000_000
 _MAX_REDLINE_CHARS = MAX_FULL_TEXT
 
 # SEC-index intro lines are clipped here (SPEC §12: ≤200 chars).
@@ -96,21 +101,25 @@ _MEASURE_TYPES = frozenset({
     "AB", "SB", "ACA", "SCA", "ACR", "SCR", "AJR", "SJR", "HR", "SR"})
 
 # "Stats. 2023, Ch. 534, Sec. 1" — the history-note citation form; the
-# trailing act-section number is the variant hint (optional).
+# trailing act-section number is the variant hint (optional). Chapter
+# digits are bounded ({1,5}): int() on an unbounded user-supplied digit
+# run raises ValueError past 4300 digits (CPython 3.11+), and no real
+# chapter needs more than five.
 _STATS_SEC = re.compile(
     rf"Stats\.?\s*(\d{{4}})\s*,\s*(?:{_EX_SESS}\s*,\s*)?"
-    rf"Ch\.?\s*(\d+)(?:\s*,\s*Sec\.\s*([\d.]+?)\.?(?=\s|\)|,|$))?")
+    rf"Ch\.?\s*(\d{{1,5}})(?!\d)(?:\s*,\s*Sec\.\s*([\d.]+?)\.?(?=\s|\)|,|$))?")
 
 # "Section 1 of Chapter 534 of the Statutes of 2023" — the lineage-
 # parenthetical form Legislative Counsel prints in bill intros.
 _SEC_OF_CH = re.compile(
-    r"(?:Section\s+([\d.]+)\s+of\s+)?Chapter\s+(\d+)\s+of\s+the\s+"
+    r"(?:Section\s+([\d.]+)\s+of\s+)?Chapter\s+(\d{1,5})(?!\d)\s+of\s+the\s+"
     r"Statutes\s+of\s+(\d{4})", re.IGNORECASE)
 
 # Loose chapter forms: "Ch. 534, 2023" / "2023 ch 534" / "chapter 534 of 2023".
 _LOOSE_CH = re.compile(
-    r"^(?:(\d{4})\s*[,/ ]\s*ch(?:apter)?\.?\s*(\d+)"
-    r"|ch(?:apter)?\.?\s*(\d+)\s*(?:[,/ ]|of)\s*(\d{4}))\s*$", re.IGNORECASE)
+    r"^(?:(\d{4})\s*[,/ ]\s*ch(?:apter)?\.?\s*(\d{1,5})"
+    r"|ch(?:apter)?\.?\s*(\d{1,5})\s*(?:[,/ ]|of)\s*(\d{4}))\s*$",
+    re.IGNORECASE)
 
 _ENACTING_CLAUSE = re.compile(
     r"do\s+enact\s+as\s+follows\s*:", re.IGNORECASE)
@@ -123,6 +132,19 @@ _HEAD_NUM = re.compile(r"\d[\d.]*")
 class _NoVersionText(Exception):
     """bill_version_text is absent from this store (a pre-V2 current.db:
     the deployed artifact refreshes nightly, code can precede data)."""
+
+
+class _CorruptText(Exception):
+    """A stored text_zlib blob failed to decompress."""
+
+    def __init__(self, version_id: str):
+        self.version_id = version_id
+        super().__init__(version_id)
+
+
+def _corrupt_error(e: _CorruptText) -> dict:
+    return {"error": f"The stored text for print {e.version_id} is "
+                     "corrupt in this artifact and cannot be served."}
 
 
 _NO_TEXT_ERROR = (
@@ -146,7 +168,10 @@ def _load_text(con, version_id: str) -> tuple[str | None, str | None]:
         raise _NoVersionText from e
     if not row or row[1] is None:
         return None, None
-    return row[0], zlib.decompress(row[1]).decode()
+    try:
+        return row[0], zlib.decompress(row[1]).decode()
+    except zlib.error as e:
+        raise _CorruptText(version_id) from e
 
 
 def _version_rows(con, bill_id: str) -> list[dict]:
@@ -190,8 +215,16 @@ def _pick_version(versions: list[dict], spec) -> tuple[dict | None,
             return v, None, None
     if s.isdigit():
         hits = [v for v in versions if v["version_num"] == s]
-        if hits:
+        if len(hits) == 1:
             return hits[0], None, None
+        if hits:
+            # Duplicate version_num rows exist in the real archive
+            # (pubinfo anomaly): same idiom as the phrase branch.
+            return hits[0], (
+                f"{len(hits)} prints carry version number {s}: "
+                + "; ".join(_version_label(v) for v in hits)
+                + f" — using {_version_label(hits[0])}. Pass a "
+                  "bill_version_id to pick another."), None
     else:
         if re.fullmatch(r"\d{4}-\d{2}-\d{2}", s):
             hits = [v for v in versions
@@ -266,19 +299,27 @@ def _sec_index(flat: str, version_id: str) -> list[dict]:
     return entries
 
 
+# A trailing subdivision citation ("(a)", "(b)(1)") is below the level
+# bills' enacting sections operate at — accept and ignore it.
+_TRAILING_SUBD = r"(?:\s*\([a-zA-Z0-9]{1,3}\))*"
+
+
 def _parse_section_filter(text: str) -> tuple[str | None, str | None,
                                               dict | None]:
     """'GOV 54953' / 'Gov. Code 54953' / 'Section 54953 of the Government
     Code' -> (code, section_key, None), or (None, None, error)."""
     s = str(text).strip()
     m = re.match(
-        r"^(?:§+|sec(?:tion)?\.?)?\s*([0-9][\w.]*)\s+of\s+(?:the\s+)?(.+)$",
+        rf"^(?:§+|sec(?:tion)?\.?)?\s*([0-9][\w.]*){_TRAILING_SUBD}"
+        rf"\s+of\s+(?:the\s+)?(.+)$",
         s, re.IGNORECASE)
     if m:
         code_part, sec_part = m.group(2), m.group(1)
     else:
-        m = re.match(r"^(.*?)[\s,]+(?:§+|sec(?:tion)?\.?)?\s*([0-9][\w.]*)$",
-                     s)
+        m = re.match(
+            rf"^(.*?)[\s,]+(?:§+|sec(?:tion)?\.?)?\s*([0-9][\w.]*)"
+            rf"{_TRAILING_SUBD}\s*$",
+            s, re.IGNORECASE)
         if not m:
             return None, None, {
                 "error": f"Could not parse section_filter {text!r}.",
@@ -343,6 +384,8 @@ def get_bill_text(dbs: Databases, measure: str, session: str | None = None,
                 title, flat = _load_text(store, picked["version_id"])
             except _NoVersionText:
                 return envelope(con, {"error": _NO_TEXT_ERROR}, notes)
+            except _CorruptText as e:
+                return envelope(con, _corrupt_error(e), notes)
             if flat is None:
                 err = {"error": f"No text is stored for "
                                 f"{_version_label(picked)}.",
@@ -395,6 +438,18 @@ def get_bill_text(dbs: Databases, measure: str, session: str | None = None,
 
             if len(flat) > MAX_FULL_TEXT:
                 index = _sec_index(flat, picked["version_id"])
+                if not index:
+                    # Long resolutions (committee assignments, memorials)
+                    # have no enacting sections: an empty index with
+                    # section_filter guidance would make the text
+                    # unreachable through any argument (round-1
+                    # finding). Serving whole is the only honest option.
+                    notes.append(
+                        f"This print is {len(flat):,} characters and has "
+                        "no enacting sections to index (resolutions "
+                        "don't amend code sections) — serving the full "
+                        "text.")
+                    return envelope(con, {**payload, "text": flat}, notes)
                 notes.append(
                     f"This print is {len(flat):,} characters — over the "
                     f"{MAX_FULL_TEXT:,}-character serving limit — so this "
@@ -466,28 +521,59 @@ def _lineage_node(lineage: str | None) -> dict | None:
 
 
 def _prior_citing_chapter(dbs: Databases, con_current, rc: str, key: str,
-                          before: tuple[int, int]) -> dict | None:
-    """The newest chapter strictly before `before` (year, chapter) whose
-    enacted bill's final title cites the section — the title-based
-    lineage leg of SPEC §12's resolution chain, for the common case
-    where neither the history note nor the print names the predecessor
-    (lineage parentheticals only exist for parallel-version sections)."""
-    sql = """SELECT b.chapter_year, b.chapter_num, b.chapter_session_num
+                          before: tuple[int, int, int]) -> dict | None:
+    """The most recently CHAPTERED chapter strictly before `before`
+    (year, chapter, ex_session) whose enacted bill's final title cites
+    the section — the title-based lineage leg of SPEC §12's resolution
+    chain, for the common case where neither the history note nor the
+    print names the predecessor (lineage parentheticals only exist for
+    parallel-version sections).
+
+    Ordered by the chaptered print's action_date, NOT chapter number:
+    extraordinary-session chapters are numbered independently of the
+    regular session, so a same-year ex-session chapter with a small
+    number can be months newer (round-1 finding: WIC 13600's true prior
+    was 1989 1st Ex. Sess. Ch. 2, five weeks after regular Ch. 1123).
+    (year, chapter) ordering remains only as the date-less fallback."""
+    sql = """SELECT b.chapter_year, b.chapter_num, b.chapter_session_num,
+                    v.action_date
              FROM bill_section_ref r
              JOIN bill b ON b.bill_id = r.bill_id
               AND r.bill_version_id = b.latest_bill_version_id
+             LEFT JOIN bill_version v
+               ON v.bill_version_id = b.latest_bill_version_id
              WHERE r.law_code=? AND r.section=?
                AND b.chapter_num IS NOT NULL AND b.chapter_type='CHP'"""
     rows = list(con_current.execute(sql, (rc, key)))
     if dbs.has_archive:
         with dbs.archive() as arc:
             rows.extend(arc.execute(sql, (rc, key)))
-    cands = sorted({(int(cy), int(cn), int(cs or 0))
-                    for cy, cn, cs in rows if cy and cn})
+    cands: dict[tuple[int, int, int], str | None] = {}
+    for cy, cn, cs, date in rows:
+        if cy and cn:
+            k = (int(cy), int(cn), int(cs or 0))
+            cands[k] = cands.get(k) or date
+    op_date = cands.get(tuple(before))
+    y0, n0 = before[0], before[1]
     prior = None
-    for y, n, s in cands:
-        if (y, n) < before:
-            prior = (y, n, s)
+    if op_date:
+        dated = [(d, k) for k, d in cands.items() if d and d < op_date]
+        if dated:
+            # Same-date ties (two chapters signed the same day) break
+            # deterministically on the (year, chapter, ex) tuple.
+            _d, prior = max(dated)
+        else:
+            # Only date-less rows may fall back to number order — a
+            # dated row that isn't earlier is genuinely not earlier.
+            undated = [k for k, d in cands.items()
+                       if not d and (k[0], k[1]) < (y0, n0)]
+            prior = max(undated) if undated else None
+    else:
+        # The op chapter isn't in the citing index (or carries no
+        # date): number order within the year is all we have.
+        for k in sorted(cands):
+            if (k[0], k[1]) < (y0, n0):
+                prior = k
     if prior is None:
         return None
     return {"year": prior[0], "chapter": prior[1], "ex": prior[2],
@@ -546,6 +632,8 @@ def _chapter_endpoint(dbs: Databases, con, node: dict, rc: str,
             _title, flat = _load_text(store, vid)
         except _NoVersionText:
             return None, {"error": _NO_TEXT_ERROR}
+        except _CorruptText as e:
+            return None, _corrupt_error(e)
     citation = _chapter_cite("CHP", str(node["year"]), str(node["chapter"]),
                              str(node["ex"]))
     if flat is None:
@@ -615,7 +703,11 @@ def _chapter_endpoint(dbs: Databases, con, node: dict, rc: str,
     if picked.action == "repealed":
         notes.append(f"{citation}'s block {picked.heading} repealed "
                      f"§ {section}; its text is empty.")
-    return {**endpoint, "_text": picked.body}, None
+    return {**endpoint, "_text": picked.body,
+            "_sibling_actions": [b.action for b in blocks],
+            "_repealed_lineage": next(
+                (b.lineage for b in blocks
+                 if b.action == "repealed" and b.lineage), None)}, None
 
 
 def _walk_hints(dbs: Databases, con, rc: str, section: str, start: dict,
@@ -686,12 +778,17 @@ def _measure_endpoint(dbs: Databases, con, ref: str, rc: str, section: str,
     with _bill_store(dbs, con, db_label) as store:
         try:
             versions = _version_rows(store, summary["bill_id"])
+            if not versions:
+                return None, {"error": f"{summary['measure']} has no "
+                                       "recorded prints."}
             picked, _warn, err = _pick_version(versions, None)
             if err:
                 return None, err
             _title, flat = _load_text(store, picked["version_id"])
         except _NoVersionText:
             return None, {"error": _NO_TEXT_ERROR}
+        except _CorruptText as e:
+            return None, _corrupt_error(e)
     if flat is None:
         return None, {
             "error": f"No text is stored for {summary['measure']}'s "
@@ -852,7 +949,21 @@ def compare_section_versions(dbs: Databases, code: str, section: str,
                                         notes)
             if err:
                 return None, err
-            if ep["action"].startswith("added"):
+            return _prior_of_endpoint(ep, node, note_text)
+
+        def _prior_of_endpoint(ep: dict, ep_node: dict,
+                               note_text: str = "") -> tuple[dict | None,
+                                                             dict | None]:
+            """The predecessor of a resolved chapter endpoint: its
+            block's lineage, else the citing-bills chain before it. An
+            "added" block means no prior — UNLESS the same act repealed
+            the old section (a repealed sibling block, or a history note
+            opening "Repealed and added"): a repeal-and-add replaces a
+            section that existed, and claiming otherwise falsifies the
+            note's own record (round-1 finding, 5,146 such notes)."""
+            readd = (re.match(r"\s*Repealed\b", note_text or "")
+                     or "repealed" in ep.get("_sibling_actions", []))
+            if ep["action"].startswith("added") and not readd:
                 return None, {
                     "no_prior_version": True,
                     "statement": f"{naming.CODE_ALIASES[rc][0]} § {key} "
@@ -860,21 +971,35 @@ def compare_section_versions(dbs: Databases, code: str, section: str,
                                  f"({ep['measure']}); no prior version "
                                  "exists to compare.",
                 }
+            if ep["action"].startswith("added") and readd:
+                notes.append(
+                    f"§ {key} was repealed and re-added by "
+                    f"{ep['citation']}; the prior version is the "
+                    "pre-repeal text.")
+                # The repealed sibling block's own lineage parenthetical
+                # names exactly the version that was repealed — the
+                # act's citation beats the title-based guess.
+                nxt = _lineage_node(ep.get("_repealed_lineage"))
+                if nxt:
+                    return nxt, None
             nxt = _lineage_node(ep.get("lineage"))
             if nxt:
                 return nxt, None
             # The ordinary case: a single-version section's print names
             # no lineage. Fall back to the title-based citing-bills
             # chain (SPEC §12's third resolution leg).
-            nxt = _prior_citing_chapter(dbs, con, rc, key,
-                                        (ev.year, ev.chapter))
+            nxt = _prior_citing_chapter(
+                dbs, con, rc, key,
+                (ep_node["year"], ep_node["chapter"], ep_node["ex"]))
             if nxt:
+                cite = _chapter_cite("CHP", str(nxt["year"]),
+                                     str(nxt["chapter"]), str(nxt["ex"]))
                 notes.append(
                     f"The prior version was located through enacted "
                     f"bills citing § {key} (title-based lineage, "
-                    f"1989-present): Stats. {nxt['year']}, "
-                    f"Ch. {nxt['chapter']} is the newest chapter before "
-                    f"{ep['citation']} to touch the section.")
+                    f"1989-present): {cite} is the most recently "
+                    f"chaptered enactment before {ep['citation']} to "
+                    "touch the section.")
                 return nxt, None
             # Nothing after 1989 touched the section before the
             # operative chapter — the prior version almost certainly
@@ -924,9 +1049,28 @@ def compare_section_versions(dbs: Databases, code: str, section: str,
         to_ep, err = resolve(to_spec)
         if err:
             return envelope(con, err, notes)
-        from_ep, err = resolve(from_spec)
+        if from_spec["kind"] == "prior" and to_spec["kind"] == "chapter":
+            # "What did this chapter change?" — the omitted from_ref is
+            # the version THAT chapter amended, not the prior of current
+            # law (which is typically newer and would silently render
+            # the redline back-to-front — round-1 finding).
+            node, err = _prior_of_endpoint(to_ep, to_spec)
+            if err:
+                return envelope(con, err, notes)
+            from_ep, err = _chapter_endpoint(dbs, con, node, rc, key,
+                                             hints, notes)
+        else:
+            from_ep, err = resolve(from_spec)
         if err:
             return envelope(con, err, notes)
+
+        if (from_spec["kind"] == "chapter" and to_spec["kind"] == "chapter"
+                and (from_spec["year"], from_spec["chapter"]) >
+                    (to_spec["year"], to_spec["chapter"])):
+            notes.append(
+                "from_ref cites a later chapter than to_ref; the "
+                "redline reads back-to-front as requested (earlier "
+                "text appears as the additions).")
 
         r = redline(from_ep["_text"], to_ep["_text"])
         payload = {
@@ -963,11 +1107,14 @@ def _split_at_enacting_clause(flat: str) -> tuple[str, str]:
 
 
 def _pair_work(old: str, new: str) -> int:
-    """Estimated ratio() calls the redline's segment pairer would make:
-    the product of segment counts inside each top-level replace range."""
-    sm = difflib.SequenceMatcher(a=_segments(old), b=_segments(new),
-                                 autojunk=False)
-    return sum((i2 - i1) * (j2 - j1)
+    """Estimated character workload of the redline's pairing pass: the
+    product of the two sides' character counts inside each top-level
+    replace range (each old segment is ratio()'d against each new
+    segment, and ratio() is superlinear in segment length — counting
+    calls alone let a 27-call budget-bill pair run 219s)."""
+    A, B = _segments(old), _segments(new)
+    sm = difflib.SequenceMatcher(a=A, b=B, autojunk=False)
+    return sum(sum(len(s) for s in A[i1:i2]) * sum(len(s) for s in B[j1:j2])
                for tag, i1, i2, j1, j2 in sm.get_opcodes()
                if tag == "replace")
 
@@ -1068,6 +1215,8 @@ def compare_bill_versions(dbs: Databases, measure: str,
                     _title, flat = _load_text(store, v["version_id"])
                 except _NoVersionText:
                     return envelope(con, {"error": _NO_TEXT_ERROR}, notes)
+                except _CorruptText as e:
+                    return envelope(con, _corrupt_error(e), notes)
                 if flat is None:
                     err = {"error": f"No text is stored for "
                                     f"{_version_label(v)}.",
@@ -1129,9 +1278,17 @@ def compare_bill_versions(dbs: Databases, measure: str,
             body_part = _part(old_body, new_body)
             md = body_part.get("redline_markdown", "")
             if len(md) > _MAX_REDLINE_CHARS:
+                # The markdown reproduces the whole print with marks, so
+                # a giant bill with modest edits busts the cap even
+                # though its CHANGES are small — and the change list is
+                # precisely the useful part then. Serve it when it fits.
+                changes = body_part.get("changes", [])
                 counts: dict[str, int] = {}
-                for c in body_part.get("changes", []):
+                for c in changes:
                     counts[c["kind"]] = counts.get(c["kind"], 0) + 1
+                changed_chars = sum(
+                    len(c.get("deleted") or "") + len(c.get("added") or "")
+                    for c in changes)
                 body_part = {
                     **_refused_body(
                         f"The body redline runs {len(md):,} characters — "
@@ -1140,6 +1297,11 @@ def compare_bill_versions(dbs: Databases, measure: str,
                         summary["measure"]),
                     "change_counts": counts,
                 }
+                if changed_chars <= 30_000:
+                    body_part["changes"] = changes
+                    body_part["statement"] += (
+                        " The structured change list itself is small and "
+                        "is included in full under 'changes'.")
         identical = head_part["identical"] and body_part["identical"]
         payload = {
             "measure": summary["measure"],

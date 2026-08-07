@@ -42,6 +42,16 @@ _WORD = re.compile(r"\S+")
 # both sources must segment identically or identical text redlines dirty.
 _SEG_MARK = re.compile(r"(?<=[.:;])\s*(?=\([a-zA-Z0-9]{1,4}\)\s)")
 
+# The complementary glue: bill lobs also print the marker glued to the
+# FOLLOWING word ("(a)The", '(4)"Double-decker') where law lobs space
+# it. Without normalization the glued side neither segments (no
+# whitespace after the marker) nor tokenizes like the spaced side, so
+# word-identical text fabricates whole phantom provisions. De-glue only
+# at segment positions (after sentence punctuation) — mirroring
+# _SEG_MARK — so inline citations like "subdivision (a)(1)" are
+# untouched.
+_DEGLUE = re.compile(r"(?<=[.:;])\s*(\([a-zA-Z0-9]{1,4}\))\s*(?=\S)")
+
 # Below this similarity ratio, replaced segments are unrelated provisions:
 # render delete + insert, not a word-level edit.
 _PAIR_FLOOR = 0.5
@@ -95,6 +105,7 @@ def _segments(text: str) -> list[str]:
     """Empty text has no segments — a repealed block's empty body must
     not become one empty segment and fabricate a phantom change."""
     flowed = " ".join(text.translate(_FOLDS).split())
+    flowed = _DEGLUE.sub(r" \1 ", flowed)
     return _SEG_MARK.split(flowed) if flowed else []
 
 

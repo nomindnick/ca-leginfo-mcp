@@ -154,6 +154,23 @@ def test_glued_subdivision_marker_segments_like_spaced():
     assert r.changes == []
 
 
+def test_marker_glued_to_following_word_is_not_an_edit():
+    """The complementary glue: bill lobs print '(ib)This' where law lobs
+    print '(ib) This' — word-identical text must compare identical, not
+    fabricate a phantom provision. (Real shape: RTC 214, Stats. 2023,
+    Ch. 734 vs current law; four more sections confirmed in round 1.)"""
+    bill = "size. (ib)This subclause shall only be operative."
+    law = "size. (ib) This subclause shall only be operative."
+    r = redline(bill, law)
+    assert r.identical
+    assert r.changes == []
+    # De-gluing happens only at segment positions: an inline citation's
+    # markers are untouched and never fabricate a change either.
+    cite = "pursuant to subdivision (a)(1) of Section 3, the clerk acts."
+    assert redline(cite, cite).identical
+    assert _segments(cite) == [cite]
+
+
 def test_unamended_prints_are_affirmatively_identical(fixtures):
     """AB 2302 passed without amendment: its introduced and chaptered
     § 54953 blocks must compare as identical — the tools assert sameness,

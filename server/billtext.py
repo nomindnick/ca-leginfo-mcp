@@ -63,6 +63,15 @@ _ACTION = re.compile(
 
 _LINEAGE = re.compile(r",\s*(as\s+(?:amended|added)\s+by[^,]{0,200}?),?\s+is")
 
+# Legislative Counsel's trailing correction notice ("CORRECTIONS:
+# Digest—Page 2.") is print apparatus, not statute text — but the last
+# enacting block's body runs to end-of-print, so it rides along (104 of
+# 20,525 prints in the 2023–24 session) and would fabricate a redline
+# change claiming the next amendment deleted it.
+_CORRECTIONS = re.compile(
+    r"\s*CORRECTIONS\s*:(?:\s*(?:Digest|Text|Heading)\s*[—–-][^\n]{0,200}"
+    r"\.?)+\s*$")
+
 # Intro sentences run at most a few hundred characters; the action verb
 # is searched only inside this head window so a phrase like "is amended
 # to read" deep in re-enacted body text cannot masquerade as an intro.
@@ -122,6 +131,7 @@ def section_blocks(flat_text: str, code_name: str,
         else:
             body = block[action.end():].lstrip("\n ")
             body = re.sub(rf"^{re.escape(section)}\.\s*", "", body)
+            body = _CORRECTIONS.sub("", body)
         hits.append(SectionBlock(
             heading=heading.group(0) if heading else "",
             action=action.group(1),

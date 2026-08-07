@@ -51,7 +51,10 @@ class ParsedHistory:
     events: list[HistoryEvent] = field(default_factory=list)
 
 
-_EX_SESS = r"(\d{1,2})(?:st|nd|rd|th)\s+Ex(?:\.|traordinary)?\s*Sess\.?"
+# "Sess." is optional: real notes cite both "1st Ex. Sess., Ch. 9" and
+# the shorter "1st Ex., Ch. 9" (eight current-law notes carry the short
+# form, six inside the authoritative prior-version parenthetical).
+_EX_SESS = r"(\d{1,2})(?:st|nd|rd|th)\s+Ex(?:\.|traordinary)?(?:\s*Sess\.?)?"
 
 _STATS = re.compile(
     rf"Stats\.?\s*(\d{{4}})\s*,\s*(?:{_EX_SESS}\s*,\s*)?Ch\.?\s*(\d+)")

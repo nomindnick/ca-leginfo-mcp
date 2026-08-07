@@ -52,8 +52,9 @@ mcp = MCPServer(
         "committee and floor analyses, veto messages, and floor/committee "
         "vote summaries on archived bills via get_bill "
         "(get_legislative_history, get_bill, get_bill_analyses, "
-        "chapter_to_bill). Read any bill print's full text "
-        "(get_bill_text) and compute display-ready redlines between "
+        "chapter_to_bill). Read bill print text (get_bill_text; "
+        "oversized prints return a per-section index instead) and "
+        "compute display-ready redlines between "
         "versions of a code section — historical, current, or as a "
         "pending bill proposes (compare_section_versions) — or between "
         "two prints of one bill (compare_bill_versions). Every response "
@@ -165,7 +166,7 @@ def chapter_to_bill(year: int, chapter: int, kind: str = "statutes",
 
 @mcp.tool(structured_output=True)
 def get_bill_text(measure: str, session: str | None = None,
-                  version: str | None = None,
+                  version: str | int | None = None,
                   section_filter: str | None = None) -> dict[str, Any]:
     """Full flattened text of one bill print (title + digest + body),
     default the latest version.
@@ -205,8 +206,8 @@ def compare_section_versions(code: str, section: str,
 
 @mcp.tool(structured_output=True)
 def compare_bill_versions(measure: str, session: str | None = None,
-                          from_version: str | None = None,
-                          to_version: str | None = None) -> dict[str, Any]:
+                          from_version: str | int | None = None,
+                          to_version: str | int | None = None) -> dict[str, Any]:
     """Redline between two prints of one bill — what changed as it moved
     through the process. Reproduce the markdown verbatim.
 

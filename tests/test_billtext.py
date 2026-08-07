@@ -185,6 +185,33 @@ def test_lineage_comes_from_the_intro_not_the_body():
     assert b.lineage is None
 
 
+def test_trailing_corrections_apparatus_is_stripped():
+    """Legislative Counsel's correction notice rides the last block's
+    body (104 of 20,525 prints in the 2023-24 session) — it is print
+    apparatus, not statute text, and would fabricate a redline change
+    claiming the next amendment deleted it."""
+    flat = ("SEC. 2. Section 5 of the Demo Code is amended to read:"
+            "5. Alpha text remains the law.\nCORRECTIONS:\n"
+            "Digest—Page 2.\n")
+    (b,) = section_blocks(flat, "Demo Code", "5")
+    assert b.body == "Alpha text remains the law."
+    multi = ("SEC. 2. Section 5 of the Demo Code is amended to read:"
+             "5. Alpha text.CORRECTIONS:Digest—Pages 2 and 3.\n"
+             "Text—Page 5.")
+    (b,) = section_blocks(multi, "Demo Code", "5")
+    assert b.body == "Alpha text."
+
+
+def test_corrections_like_prose_mid_body_survives():
+    """Only the trailing apparatus shape is stripped — statute text that
+    happens to mention corrections is content."""
+    flat = ("SEC. 2. Section 5 of the Demo Code is amended to read:"
+            "5. The department shall publish CORRECTIONS: a list of "
+            "errata for each edition.")
+    (b,) = section_blocks(flat, "Demo Code", "5")
+    assert b.body.endswith("errata for each edition.")
+
+
 def test_body_citation_of_another_section_is_not_a_match():
     """A block amending § Y whose re-enacted body opens by citing § X
     ("Notwithstanding Section X of the Government Code…") must not be

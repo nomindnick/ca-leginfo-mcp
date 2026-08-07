@@ -149,3 +149,20 @@ def test_initiative_date_not_stolen_from_stats_citation():
     init = next(e for e in ph.events if e.kind == "initiative")
     assert init.date == "June 5, 1990"
     assert init.proposition == "115"
+
+
+def test_short_ex_session_form_without_sess():
+    """Real notes cite extraordinary sessions both as '1st Ex. Sess.,
+    Ch. 9' and the shorter '1st Ex., Ch. 9' (RTC 6362.7's prior-version
+    parenthetical carries the short form; eight current-law notes do).
+    Both must parse, or the authoritative parenthetical is silently
+    dropped and prior-version resolution degrades to a guess."""
+    p = parse_history(
+        "Amended (as amended by Stats. 1991, 1st Ex., Ch. 9) by "
+        "Stats. 1992, Ch. 903, Sec. 1.   (AB 2645)")
+    ops = [e for e in p.events if e.role == "operative"]
+    priors = [e for e in p.events if e.role == "prior_version"]
+    assert (ops[0].year, ops[0].chapter, ops[0].ex_session) == \
+        (1992, 903, 0)
+    assert (priors[0].year, priors[0].chapter, priors[0].ex_session) == \
+        (1991, 9, 1)
